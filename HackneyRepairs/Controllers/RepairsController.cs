@@ -33,7 +33,7 @@ namespace HackneyRepairs.Controllers
             _repairRequestValidator = new RepairRequestValidator();
             _loggerAdapter = loggerAdapter;
         }
-
+            
         /// <summary>
         /// Creates a repair request
         /// </summary>

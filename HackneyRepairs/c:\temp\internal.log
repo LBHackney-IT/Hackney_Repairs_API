@@ -610,3 +610,21 @@
    at NLog.Config.XmlLoggingConfiguration.Initialize(XmlReader reader, String fileName, Boolean ignoreErrors)
    --- End of inner exception stack trace ---
 2018-06-25 10:47:27.2016 Warn Failed loading config from /Users/spreston/Projects/Hackney_Repairs_API/HackneyRepairs/NLog.config. Invalid XML?
+2018-07-12 14:44:21.7443 Error Parsing configuration from /Users/fschultesz/repos/dotnetcore/Hackney_Repairs_API/HackneyRepairs/bin/Debug/netcoreapp2.1/NLog.config failed. Exception: NLog.NLogConfigurationException: Exception when parsing /Users/fschultesz/repos/dotnetcore/Hackney_Repairs_API/HackneyRepairs/bin/Debug/netcoreapp2.1/NLog.config.  ---> System.NotSupportedException: Parameter connectionStringName not supported on DatabaseTarget
+   at NLog.Internal.PropertyHelper.SetPropertyFromString(Object obj, String propertyName, String value, ConfigurationItemFactory configurationItemFactory)
+   at NLog.Config.XmlLoggingConfiguration.SetPropertyFromElement(Object o, NLogXmlElement element)
+   at NLog.Config.XmlLoggingConfiguration.ParseTargetElement(Target target, NLogXmlElement targetElement, Dictionary`2 typeNameToDefaultTargetParameters)
+   at NLog.Config.XmlLoggingConfiguration.ParseTargetsElement(NLogXmlElement targetsElement)
+   at NLog.Config.XmlLoggingConfiguration.ParseNLogElement(NLogXmlElement nlogElement, String filePath, Boolean autoReloadDefault)
+   at NLog.Config.XmlLoggingConfiguration.Initialize(XmlReader reader, String fileName, Boolean ignoreErrors)
+   --- End of inner exception stack trace ---
+2018-07-12 14:44:21.7472 Warn Failed loading config from /Users/fschultesz/repos/dotnetcore/Hackney_Repairs_API/HackneyRepairs/bin/Debug/netcoreapp2.1/NLog.config. Invalid XML?
+2018-07-12 14:44:23.1496 Error Parsing configuration from /Users/fschultesz/repos/dotnetcore/Hackney_Repairs_API/HackneyRepairs/NLog.config failed. Exception: NLog.NLogConfigurationException: Exception when parsing /Users/fschultesz/repos/dotnetcore/Hackney_Repairs_API/HackneyRepairs/NLog.config.  ---> System.NotSupportedException: Parameter connectionStringName not supported on DatabaseTarget
+   at NLog.Internal.PropertyHelper.SetPropertyFromString(Object obj, String propertyName, String value, ConfigurationItemFactory configurationItemFactory)
+   at NLog.Config.XmlLoggingConfiguration.SetPropertyFromElement(Object o, NLogXmlElement element)
+   at NLog.Config.XmlLoggingConfiguration.ParseTargetElement(Target target, NLogXmlElement targetElement, Dictionary`2 typeNameToDefaultTargetParameters)
+   at NLog.Config.XmlLoggingConfiguration.ParseTargetsElement(NLogXmlElement targetsElement)
+   at NLog.Config.XmlLoggingConfiguration.ParseNLogElement(NLogXmlElement nlogElement, String filePath, Boolean autoReloadDefault)
+   at NLog.Config.XmlLoggingConfiguration.Initialize(XmlReader reader, String fileName, Boolean ignoreErrors)
+   --- End of inner exception stack trace ---
+2018-07-12 14:44:23.1529 Warn Failed loading config from /Users/fschultesz/repos/dotnetcore/Hackney_Repairs_API/HackneyRepairs/NLog.config. Invalid XML?
