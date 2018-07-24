@@ -37,6 +37,13 @@ namespace HackneyRepairs.Tests.Integration
 			var result = await _client.GetAsync("v1/workorders/99999999");
             Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);
         }
+
+		[Fact]
+        public async Task return_an_exception_when_work_order_not_found()
+        {
+            var result = await _client.GetAsync("v1/workorders/99999999");
+            Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);
+        }
         #endregion      
     }
 }

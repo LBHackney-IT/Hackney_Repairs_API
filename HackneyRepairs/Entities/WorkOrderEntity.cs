@@ -55,7 +55,7 @@ namespace HackneyRepairs.Entities
 		public bool? advice_n { get; set; }
 		public bool? caller_n { get; set; }
 		public string tensatcomments { get; set; }
-		public bool? tstamp { get; set; }
+		public Byte[] tstamp { get; set; }
 		public bool? hasfeedback { get; set; }
 		public DateTime? fbcardsentdate { get; set; }
 		public int fbcardsissued { get; set; }

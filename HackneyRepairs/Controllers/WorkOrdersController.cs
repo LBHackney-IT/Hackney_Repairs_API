@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
+using HackneyRepairs.Actions;
 using HackneyRepairs.Entities;
+using HackneyRepairs.Factories;
+using HackneyRepairs.Interfaces;
 using HackneyRepairs.Models;
+using HackneyRepairs.Repository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HackneyRepairs.Controllers
@@ -10,24 +14,45 @@ namespace HackneyRepairs.Controllers
     [Route("v1/workorders")]
 	public class WorkOrdersController : Controller
     {
-        public WorkOrdersController()
-        {
-        }
+		private IHackneyWorkOrdersService _workOrdersService;
+		private ILoggerAdapter<WorkOrdersActions> _loggerAdapter;
 
+		public WorkOrdersController(ILoggerAdapter<WorkOrdersActions> loggerAdapter, IUhtRepository uhtRepository)
+        {
+			_loggerAdapter = loggerAdapter;
+			var factory = new HackneyWorkOrdersServiceFactory();
+			_workOrdersService = factory.build(uhtRepository, _loggerAdapter);
+        }
+        
 		[HttpGet("{workOrderReference}")]
 		public async Task<JsonResult> Get(string workOrderReference)
 		{
-			var json = Json(new WorkOrderEntity());
-			if (workOrderReference == "99999999")
+			var workOrdersActions = new WorkOrdersActions(_workOrdersService, _loggerAdapter);
+			WorkOrderEntity result = new WorkOrderEntity();
+			try
 			{
-				
-				json.StatusCode = 404;
+				result = await workOrdersActions.GetWorkOrderByReference(workOrderReference);
 			}
-			else
+			catch (MissingWorkOrderException ex)
 			{
-				
-                json.StatusCode = 200;
+				var error = new ApiErrorMessage
+				{
+					developerMessage = ex.Message,
+					userMessage = @"Cannot find repair."
+				};
+				return Json(error);
 			}
+			catch (UhtRepositoryException ex)
+			{
+				var error = new ApiErrorMessage
+                {
+                    developerMessage = ex.Message,
+                    userMessage = @"We had issues with connecting to the data source."
+                };
+                return Json(error);
+			}
+			var json = Json(result);
+            json.StatusCode = 200;
             return json;
 		}
     }
