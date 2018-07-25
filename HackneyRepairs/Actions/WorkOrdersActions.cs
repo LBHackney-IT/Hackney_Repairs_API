@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using HackneyRepairs.Entities;
 using HackneyRepairs.Interfaces;
+using HackneyRepairs.Repository;
 
 namespace HackneyRepairs.Actions
 {
@@ -19,7 +20,7 @@ namespace HackneyRepairs.Actions
 		public async Task<WorkOrderEntity> GetWorkOrderByReference(string workOrderReference)
 		{
 			_logger.LogInformation($"Finding work order details for reference: {workOrderReference}");
-			var result = await _workOrdersService.GetWorkOrderByReference(workOrderReference);
+		    var result = await _workOrdersService.GetWorkOrderByReference(workOrderReference);            
             if (result == null)
 			{
 				_logger.LogError($"Work order not found for reference: {workOrderReference}");

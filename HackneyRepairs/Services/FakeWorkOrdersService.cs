@@ -9,6 +9,10 @@ namespace HackneyRepairs.Services
     {      
 		public Task<WorkOrderEntity> GetWorkOrderByReference(string reference)
 		{
+			if (string.Equals(reference, "9999999999"))
+			{
+				return Task.Run(() => (WorkOrderEntity)null);
+			}
 			var workOrderEntity = new WorkOrderEntity
 			{
 				wo_ref = reference

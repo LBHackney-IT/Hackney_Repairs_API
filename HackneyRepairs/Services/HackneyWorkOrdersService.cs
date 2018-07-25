@@ -22,7 +22,7 @@ namespace HackneyRepairs.Services
 			_logger.LogInformation($"HackneyWorkOrdersService/GetWorkOrderByReference(): Sent request to UhtRepository (WorkOrder reference: {workOrderReference})");
 			var response = _uhtRepository.GetWorkOrder(workOrderReference);
 			_logger.LogInformation($"HackneyWorkOrdersService/GetWorkOrderByReference(): Work order details returned for: {workOrderReference})");
-            return response;
+			return response;
 		}
 	}
 }

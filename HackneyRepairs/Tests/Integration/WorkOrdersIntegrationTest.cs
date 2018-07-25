@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Xunit;
 using System.Net.Http;
@@ -24,9 +23,13 @@ namespace HackneyRepairs.Tests.Integration
 
 		#region Get WorkOrders Tests
         [Fact]
-        public async Task return_a_200_result_for_valid_request_by_reference()
+        public async Task return_a_200_result_with_workOrder_json_for_valid_request_by_reference()
         {
             var result = await _client.GetAsync("v1/workorders/12345678");
+			var jsonResult = await result.Content.ReadAsStringAsync();
+            var workOrder = JsonConvert.DeserializeObject<WorkOrderEntity>(jsonResult);
+
+			Assert.IsType<WorkOrderEntity>(workOrder);
             Assert.Equal(HttpStatusCode.OK, result.StatusCode);
             Assert.Equal("application/json", result.Content.Headers.ContentType.MediaType);
         }
@@ -34,14 +37,7 @@ namespace HackneyRepairs.Tests.Integration
 		[Fact]
         public async Task return_a_404_result_for_no_workorder_matching_reference()
         {
-			var result = await _client.GetAsync("v1/workorders/99999999");
-            Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);
-        }
-
-		[Fact]
-        public async Task return_an_exception_when_work_order_not_found()
-        {
-            var result = await _client.GetAsync("v1/workorders/99999999");
+			var result = await _client.GetAsync("v1/workorders/9999999999");
             Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);
         }
         #endregion      

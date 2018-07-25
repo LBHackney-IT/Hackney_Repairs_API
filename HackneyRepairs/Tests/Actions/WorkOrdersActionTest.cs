@@ -44,7 +44,7 @@ namespace HackneyRepairs.Tests.Actions
 			{
 				wo_ref = randomReference
 			};
-
+            
 			Assert.Equal(response.wo_ref, expected.wo_ref);
 		}
 
@@ -52,15 +52,12 @@ namespace HackneyRepairs.Tests.Actions
 		public async Task get_work_orders_throws_not_found_excpetion_when_no_work_order_found()
 		{
 			Random rnd = new Random();
-			string randomReference = rnd.Next(10000000, 99999999).ToString();
+            string randomReference = rnd.Next(100000000, 999999990).ToString();
 			Mock<IHackneyWorkOrdersService> _workOrderService = new Mock<IHackneyWorkOrdersService>();
 			_workOrderService.Setup(service => service.GetWorkOrderByReference(randomReference))
-							 .Returns(Task.FromResult(new WorkOrderEntity()));
-			WorkOrdersActions workOrdersActions = new WorkOrdersActions(_workOrderService.Object, _mockLogger.Object);
-
-			var response = await workOrdersActions.GetWorkOrderByReference(randomReference);
-
-			//await Assert.ThrowsAsync<MissingWorkOrderException>(async () => await workOrdersActions.GetWorkOrderByReference(request));
+			                 .Returns(Task.FromResult( (WorkOrderEntity) null));
+			WorkOrdersActions workOrdersActions = new WorkOrdersActions(_workOrderService.Object, _mockLogger.Object);         
+			await Assert.ThrowsAsync<MissingWorkOrderException>(async () => await workOrdersActions.GetWorkOrderByReference(randomReference));
 		}
 	}
 }

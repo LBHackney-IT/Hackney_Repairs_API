@@ -32,15 +32,20 @@ namespace HackneyRepairs.Controllers
 			try
 			{
 				result = await workOrdersActions.GetWorkOrderByReference(workOrderReference);
+				var json = Json(result);
+                json.StatusCode = 200;
+                return json;
 			}
 			catch (MissingWorkOrderException ex)
 			{
 				var error = new ApiErrorMessage
 				{
 					developerMessage = ex.Message,
-					userMessage = @"Cannot find repair."
+					userMessage = @"Cannot find work order."
 				};
-				return Json(error);
+				var jsonResponse = Json(error);
+                jsonResponse.StatusCode = 404;
+				return jsonResponse;
 			}
 			catch (UhtRepositoryException ex)
 			{
@@ -49,11 +54,10 @@ namespace HackneyRepairs.Controllers
                     developerMessage = ex.Message,
                     userMessage = @"We had issues with connecting to the data source."
                 };
-                return Json(error);
+				var jsonResponse = Json(error);
+                jsonResponse.StatusCode = 500;
+                return jsonResponse;
 			}
-			var json = Json(result);
-            json.StatusCode = 200;
-            return json;
 		}
     }
 }
