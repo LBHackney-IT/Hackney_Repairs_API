@@ -6,7 +6,7 @@ namespace HackneyRepairs.Factories
 {
     public class HackneyWorkOrdersServiceFactory
     {
-		public IHackneyWorkOrdersService build(IUhtRepository uhtRepository, ILoggerAdapter<WorkOrdersActions> logger)
+	public IHackneyWorkOrdersService build(IUhtRepository uhtRepository, ILoggerAdapter<WorkOrdersActions> logger)
         {
             if (TestStatus.IsRunningInTests == false)
             {
@@ -14,7 +14,7 @@ namespace HackneyRepairs.Factories
             }
             else
             {
-				return new Services.FakeWorkOrdersService();
+		return new Services.FakeWorkOrdersService();
             }
         }
     }
