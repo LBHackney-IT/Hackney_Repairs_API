@@ -262,11 +262,11 @@ namespace HackneyRepairs.Tests.Actions
             var workOrderService = new Mock<IHackneyWorkOrdersService>();
 
             workOrderService
-                .Setup(service => service.GetWorkOrdersByPropertyReferences(propReferences))
+                .Setup(service => service.GetWorkOrdersByPropertyReferences(propReferences, null, null))
                 .Returns(Task.FromResult<IEnumerable<UHWorkOrder>>(expectedWorkOrders));
 
             var workOrderActions = new WorkOrdersActions(workOrderService.Object, _mockLogger.Object);
-            var workOrders = await workOrderActions.GetWorkOrdersByPropertyReferences(propReferences);
+            var workOrders = await workOrderActions.GetWorkOrdersByPropertyReferences(propReferences, null, null);
 
             Assert.Equal(expectedWorkOrders, workOrders);
         }

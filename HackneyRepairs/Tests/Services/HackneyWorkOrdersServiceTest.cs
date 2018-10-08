@@ -82,7 +82,7 @@ namespace HackneyRepairs.Tests.Services
                 .WithUHWarehouseWorkOrdersForPropertyRefs(propertyRefs, uhwWorkOrders)
                 .Service;
 
-            var workOrders = await service.GetWorkOrdersByPropertyReferences(propertyRefs);
+            var workOrders = await service.GetWorkOrdersByPropertyReferences(propertyRefs, null, null);
 
             Assert.Contains(uhtWorkOrders[0], workOrders);
             Assert.Contains(uhtWorkOrders[1], workOrders);
@@ -104,7 +104,7 @@ namespace HackneyRepairs.Tests.Services
                 .WithUHWarehousePropertyDetails("00000020", property)
                 .Service;
 
-            var workOrders = await service.GetWorkOrdersByPropertyReferences(new string[] { "00000020", "00000021" });
+            var workOrders = await service.GetWorkOrdersByPropertyReferences(new string[] { "00000020", "00000021" }, null, null);
 
             Assert.Empty(workOrders);
         }
@@ -130,7 +130,7 @@ namespace HackneyRepairs.Tests.Services
 
             public HackneyWorkOrdersServiceTestBuilder WithUhtWorkOrdersForPropertyRefs(string[] propertyRefs, UHWorkOrder[] workOrders)
             {
-                _uhtRepositoryMock.Setup(repo => repo.GetWorkOrdersByPropertyReferences(propertyRefs)).Returns(Task.FromResult<IEnumerable<UHWorkOrder>>(workOrders));
+                _uhtRepositoryMock.Setup(repo => repo.GetWorkOrdersByPropertyReferences(propertyRefs, DateTime.Now, DateTime.Now)).Returns(Task.FromResult<IEnumerable<UHWorkOrder>>(workOrders));
                 return this;
             }
 
@@ -142,7 +142,7 @@ namespace HackneyRepairs.Tests.Services
 
             public HackneyWorkOrdersServiceTestBuilder WithUHWarehouseWorkOrdersForPropertyRefs(string[] propertyRefs, UHWorkOrder[] workOrders)
             {
-                _uhWarehouseRepositoryMock.Setup(repo => repo.GetWorkOrdersByPropertyReferences(propertyRefs)).Returns(Task.FromResult<IEnumerable<UHWorkOrder>>(workOrders));
+                _uhWarehouseRepositoryMock.Setup(repo => repo.GetWorkOrdersByPropertyReferences(propertyRefs, DateTime.Now, DateTime.Now)).Returns(Task.FromResult<IEnumerable<UHWorkOrder>>(workOrders));
                 return this;
             }
 

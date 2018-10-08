@@ -131,6 +131,22 @@ namespace HackneyRepairs.Tests.Integration
             Assert.Equal(HttpStatusCode.OK, result.StatusCode);
             Assert.Equal("[]", jsonResult);
         }
+
+        [Fact]
+        public async Task returns_a_200_response_when_valid_datetime_parameters_are_passed()
+        {
+            var result = await _client.GetAsync("v1/work_orders?propertyreference=0?since=2018-01-01?until=2018-09-01");
+            Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+        }
+
+        [Fact]
+        public async Task returns_a_200_response_when_invalid_datetime_parameters_are_passed()
+        {
+            var result = await _client.GetAsync("v1/work_orders?propertyreference=0?since=2018a-01-01?until=12345");
+            Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+        }
+
+
         #endregion
 
         #region GET Work order notes test

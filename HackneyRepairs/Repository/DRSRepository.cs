@@ -32,46 +32,46 @@ namespace HackneyRepairs.Repository
 			{
 				using (var connection = new MySqlConnection(_context.Database.GetDbConnection().ConnectionString))
 				{
-					string query = $@"
-                        (
-                            SELECT
-                                s_job.NAME AS Id
-                            FROM
-                                s_serviceorder
-                            INNER JOIN s_job ON s_job.PARENTID = s_serviceorder.USERID
-                            WHERE
-                                s_serviceorder.NAME = '{workOrderReference}')
-                        UNION (
-                            SELECT
-                                p_job.NAME AS Id
-                            FROM
-                                p_serviceorder
-                            INNER JOIN p_job ON p_job.PARENTID = p_serviceorder.USERID
-                            WHERE
-                                p_serviceorder.NAME = '{workOrderReference}')
-                        UNION (
-                            SELECT
-                                s_job.NAME AS Id
-                            FROM
-                                p_serviceorder
-                            INNER JOIN s_job ON s_job.PARENTID = p_serviceorder.USERID
-                            WHERE
-                                p_serviceorder.NAME = '{workOrderReference}')";
+					//string query = $@"
+     //                   (
+     //                       SELECT
+     //                           s_job.NAME AS Id
+     //                       FROM
+     //                           s_serviceorder
+     //                       INNER JOIN s_job ON s_job.PARENTID = s_serviceorder.USERID
+     //                       WHERE
+     //                           s_serviceorder.NAME = '{workOrderReference}')
+     //                   UNION (
+     //                       SELECT
+     //                           p_job.NAME AS Id
+     //                       FROM
+     //                           p_serviceorder
+     //                       INNER JOIN p_job ON p_job.PARENTID = p_serviceorder.USERID
+     //                       WHERE
+     //                           p_serviceorder.NAME = '{workOrderReference}')
+     //                   UNION (
+     //                       SELECT
+     //                           s_job.NAME AS Id
+     //                       FROM
+     //                           p_serviceorder
+     //                       INNER JOIN s_job ON s_job.PARENTID = p_serviceorder.USERID
+     //                       WHERE
+     //                           p_serviceorder.NAME = '{workOrderReference}')";
 
-					appointmentReferences = connection.Query<string>(query).ToArray();
+					//appointmentReferences = connection.Query<string>(query).ToArray();
 
-					if (appointmentReferences.Length == 0)
-					{
-						return new List<DetailedAppointment>();
-					}
-                    string sAppointmenReferences = "";
-					for (int i = 0; i < appointmentReferences.Length - 1; i++)
-					{
-						sAppointmenReferences += "'" + appointmentReferences[i] + "',";
-					}
-					sAppointmenReferences += "'" + appointmentReferences[appointmentReferences.Length-1] + "'";
+					//if (appointmentReferences.Length == 0)
+					//{
+					//	return new List<DetailedAppointment>();
+					//}
+     //               string sAppointmenReferences = "";
+					//for (int i = 0; i < appointmentReferences.Length - 1; i++)
+					//{
+					//	sAppointmenReferences += "'" + appointmentReferences[i] + "',";
+					//}
+					//sAppointmenReferences += "'" + appointmentReferences[appointmentReferences.Length-1] + "'";
 
-					query = $@"SELECT
+					var query = $@"SELECT
                                     jobs.Id,
                                     jobs.BeginDate,
                                     jobs.EndDate,
@@ -95,7 +95,7 @@ namespace HackneyRepairs.Repository
                                     FROM
                                         s_job
                                     WHERE
-                                        s_job.NAME IN ({sAppointmenReferences}))
+                                        s_job.NAME = '{workOrderReference}')
                                 UNION (
                                     SELECT
                                         p_job.NAME AS Id,
@@ -109,7 +109,7 @@ namespace HackneyRepairs.Repository
                                     FROM
                                         p_job
                                     WHERE
-                                        p_job.NAME IN ({sAppointmenReferences}))) AS jobs
+                                        p_job.NAME = '{workOrderReference}')) AS jobs
                                         
                                 INNER JOIN s_worker ON jobs.AssignedWorker = s_worker.name";
 					appointments = connection.Query<DetailedAppointment>(query).ToList();

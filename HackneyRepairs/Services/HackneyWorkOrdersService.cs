@@ -73,16 +73,26 @@ namespace HackneyRepairs.Services
             return result;
         }
 
-        public async Task<IEnumerable<UHWorkOrder>> GetWorkOrdersByPropertyReferences(string[] propertyReferences)
+        public async Task<IEnumerable<UHWorkOrder>> GetWorkOrdersByPropertyReferences(string[] propertyReferences, DateTime? since, DateTime? until)
         {
+            if (since == null)
+            {
+                since = DateTime.Now.AddYears(-2);
+            }
+            if (until == null)
+            {
+                until = DateTime.Now;
+            }
+
             _logger.LogInformation($"HackneyWorkOrdersService/GetWorkOrdersByPropertyReferences(): Sent request to _UhtRepository to get data from live for {propertyReferences}");
-            var liveData = await _uhtRepository.GetWorkOrdersByPropertyReferences(propertyReferences);
+            var liveData = await _uhtRepository.GetWorkOrdersByPropertyReferences(propertyReferences, since.Value, until.Value);
             var result = liveData.ToList();
             _logger.LogInformation($"HackneyWorkOrdersService/GetWorkOrdersByPropertyReferences(): {result.Count} work orders returned for {propertyReferences}");
 
             _logger.LogInformation($"HackneyWorkOrdersService/GetWorkOrdersByPropertyReferences(): Sent request to _UHWarehouseRepository to get data from warehouse for {propertyReferences}");
-            var warehouseData = await _uhWarehouseRepository.GetWorkOrdersByPropertyReferences(propertyReferences);
+            var warehouseData = await _uhWarehouseRepository.GetWorkOrdersByPropertyReferences(propertyReferences, since.Value, until.Value);
             var lWarehouseData = warehouseData.ToList();
+
             result.InsertRange(0, lWarehouseData);
             _logger.LogInformation($"HackneyWorkOrdersService/GetWorkOrdersByPropertyReferences(): {lWarehouseData.Count} work orders returned for {propertyReferences}");
 

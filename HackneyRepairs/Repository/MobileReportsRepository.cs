@@ -13,7 +13,7 @@ namespace HackneyRepairs.Repository
         public static IEnumerable<string> GetReports(string servitorReference)
         {
             EnsureResourceAccess();
-
+            
             // If there are mobile reports, the first one will be in the Processed directory. 
             // Subsequent reports will be stored in the Unprocessed directory
             var processedReport = new FileInfo(MountedPath + "Processed/" + $"Works Order_{servitorReference}.pdf");
@@ -35,10 +35,11 @@ namespace HackneyRepairs.Repository
 
         static IEnumerable<string> FormatReportStrings(IEnumerable<string> mobileReports)
         {
+            var mountpoint = Environment.GetEnvironmentVariable("SystemMountpointName");
             var formattedMobileReportStrings = new List<string>();
             foreach (string report in mobileReports.ToList())
             {
-                formattedMobileReportStrings.Add(report.Replace("/", @"\").Replace("volumes", "\\" + ServerName));
+                formattedMobileReportStrings.Add(report.Replace("/", @"\").Replace(mountpoint, "\\" + ServerName));
             }
             return formattedMobileReportStrings;
         }

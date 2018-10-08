@@ -116,7 +116,7 @@ namespace HackneyRepairs.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-		public async Task<JsonResult> GetWorkOrderByPropertyReference(string[] propertyReference)
+        public async Task<JsonResult> GetWorkOrderByPropertyReference(string[] propertyReference, DateTime? since = null, DateTime? until = null)
         {
             if (propertyReference == null || propertyReference.Length == 0)
             {
@@ -127,14 +127,14 @@ namespace HackneyRepairs.Controllers
                 };
                 var jsonResponse = Json(error);
                 jsonResponse.StatusCode = 400;
-                return jsonResponse; 
+                return jsonResponse;
             }
 
 			var workOrdersActions = new WorkOrdersActions(_workOrdersService, _workOrderLoggerAdapter);
 			var result = new List<UHWorkOrder>();
             try
             {
-                result = (await workOrdersActions.GetWorkOrdersByPropertyReferences(propertyReference)).ToList();
+                result = (await workOrdersActions.GetWorkOrdersByPropertyReferences(propertyReference, since, until)).ToList();
                 var json = Json(result);
                 json.StatusCode = 200;
                 return json;
