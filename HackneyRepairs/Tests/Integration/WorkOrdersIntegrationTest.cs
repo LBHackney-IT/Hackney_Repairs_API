@@ -180,6 +180,36 @@ namespace HackneyRepairs.Tests.Integration
             Assert.Equal(HttpStatusCode.OK, result.StatusCode);
             Assert.Equal("[]", jsonResult);
         }
+
+        [Fact]
+        public async Task returns_a_200_response_when_valid_since_parameter_is_passed()
+        {
+            var result = await _client.GetAsync("v1/work_orders?propertyreference=12345678&since=01-01-2018");
+            Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+        }
+
+        [Fact]
+        public async Task returns_a_200_response_when_valid_until_parameter_is_passed()
+        {
+            var result = await _client.GetAsync("v1/work_orders?propertyreference=12345678&until=01-01-2018");
+            Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+        }
+
+        [Fact]
+        public async Task returns_a_200_response_when_invalid_since_parameter_is_passed()
+        {
+            var result = await _client.GetAsync("v1/work_orders?propertyreference=12345678&since=2018a-01-01");
+            Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
+        }
+
+        [Fact]
+        public async Task returns_a_200_response_when_invalid_until_parameter_is_passed()
+        {
+            var result = await _client.GetAsync("v1/work_orders?propertyreference=12345678&until=2018a-01-01");
+            Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
+        }
+
+
         #endregion
 
         #region GET Work order notes test

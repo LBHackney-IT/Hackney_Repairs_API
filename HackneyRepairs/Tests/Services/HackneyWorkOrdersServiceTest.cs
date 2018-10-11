@@ -143,8 +143,8 @@ namespace HackneyRepairs.Tests.Services
                 .WithUhtWorkOrdersForPropertyRefs(propertyRefs, uhtWorkOrders)
                 .WithUHWarehouseWorkOrdersForPropertyRefs(propertyRefs, uhwWorkOrders)
                 .Service;
-
-            var workOrders = await service.GetWorkOrdersByPropertyReferences(propertyRefs);
+            var date = DateTime.Now;
+            var workOrders = await service.GetWorkOrdersByPropertyReferences(propertyRefs, date, date);
 
             Assert.Contains(uhtWorkOrders[0], workOrders);
             Assert.Contains(uhtWorkOrders[1], workOrders);
@@ -166,7 +166,8 @@ namespace HackneyRepairs.Tests.Services
                 .WithUHWarehousePropertyDetails("00000020", property)
                 .Service;
 
-            var workOrders = await service.GetWorkOrdersByPropertyReferences(new string[] { "00000020", "00000021" });
+            DateTime date = DateTime.Now;
+            var workOrders = await service.GetWorkOrdersByPropertyReferences(new string[] { "00000020", "00000021" }, date, date);
 
             Assert.Empty(workOrders);
         }
@@ -204,7 +205,7 @@ namespace HackneyRepairs.Tests.Services
 
             public HackneyWorkOrdersServiceTestBuilder WithUhtWorkOrdersForPropertyRefs(string[] propertyRefs, UHWorkOrder[] workOrders)
             {
-                _uhtRepositoryMock.Setup(repo => repo.GetWorkOrdersByPropertyReferences(propertyRefs)).Returns(Task.FromResult<IEnumerable<UHWorkOrder>>(workOrders));
+                _uhtRepositoryMock.Setup(repo => repo.GetWorkOrdersByPropertyReferences(propertyRefs, It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(Task.FromResult<IEnumerable<UHWorkOrder>>(workOrders));
                 return this;
             }
 
@@ -216,7 +217,7 @@ namespace HackneyRepairs.Tests.Services
 
             public HackneyWorkOrdersServiceTestBuilder WithUHWarehouseWorkOrdersForPropertyRefs(string[] propertyRefs, UHWorkOrder[] workOrders)
             {
-                _uhWarehouseRepositoryMock.Setup(repo => repo.GetWorkOrdersByPropertyReferences(propertyRefs)).Returns(Task.FromResult<IEnumerable<UHWorkOrder>>(workOrders));
+                _uhWarehouseRepositoryMock.Setup(repo => repo.GetWorkOrdersByPropertyReferences(propertyRefs, It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(Task.FromResult<IEnumerable<UHWorkOrder>>(workOrders));
                 return this;
             }
 

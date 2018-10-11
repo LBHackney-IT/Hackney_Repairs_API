@@ -322,7 +322,7 @@ namespace HackneyRepairs.Repository
 			return workOrders;
         }
 
-        public async Task<IEnumerable<UHWorkOrder>> GetWorkOrdersByPropertyReferences(string[] propertyReferences)
+        public async Task<IEnumerable<UHWorkOrder>> GetWorkOrdersByPropertyReferences(string[] propertyReferences, DateTime since, DateTime until)
         {
             IEnumerable<UHWorkOrder> workOrders;
 
@@ -353,8 +353,9 @@ namespace HackneyRepairs.Repository
                                        INNER JOIN rmreqst r ON wo.rq_ref = r.rq_ref
                                        INNER JOIN rmtask t ON wo.rq_ref = t.rq_ref
                                        INNER JOIN rmtrade tr ON t.trade = tr.trade
-                                       WHERE wo.created > '{GetCutoffTime()}' AND wo.prop_ref IN('{String.Join("','", propertyReferences)}') AND t.task_no = 1; ";
-
+                                       WHERE wo.created > '{GetCutoffTime()}' AND wo.created <= '{until.ToString("yyyy-MM-dd HH:mm:ss")}'
+                                       AND wo.created >= '{since.ToString("yyyy-MM-dd HH:mm:ss")}' 
+                                       AND wo.prop_ref IN('{String.Join("','", propertyReferences)}') AND t.task_no = 1";
                     workOrders = await connection.QueryAsync<UHWorkOrder>(query);
                 }
             }
@@ -367,7 +368,7 @@ namespace HackneyRepairs.Repository
             return workOrders;
         }
 
-		public async Task<IEnumerable<UHWorkOrder>> GetWorkOrderByBlockReference(string blockReference, string trade)
+        public async Task<IEnumerable<UHWorkOrder>> GetWorkOrderByBlockReference(string blockReference, string trade, DateTime since, DateTime until)
         {
             IEnumerable<UHWorkOrder> workOrders;
             try
@@ -398,7 +399,9 @@ namespace HackneyRepairs.Repository
                                        INNER JOIN rmtask t ON wo.rq_ref = t.rq_ref
                                        INNER JOIN rmtrade tr ON t.trade = tr.trade
                                        INNER JOIN property p ON p.prop_ref = wo.prop_ref
-                                       WHERE wo.created > '{GetCutoffTime()}' AND p.u_block = '{blockReference}' AND tr.trade_desc = '{trade}' AND t.task_no = 1;";
+                                       WHERE wo.created > '{GetCutoffTime()}' AND wo.created <= '{until.ToString("yyyy-MM-dd HH:mm:ss")}'
+                                       AND wo.created >= '{since.ToString("yyyy-MM-dd HH:mm:ss")}'  
+                                       AND p.u_block = '{blockReference}' AND tr.trade_desc = '{trade}' AND t.task_no = 1;";
                     workOrders = await connection.QueryAsync<UHWorkOrder>(query);
                 }
             }

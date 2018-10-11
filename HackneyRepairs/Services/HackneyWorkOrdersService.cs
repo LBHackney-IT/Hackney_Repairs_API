@@ -99,16 +99,17 @@ namespace HackneyRepairs.Services
             return result;
         }
 
-        public async Task<IEnumerable<UHWorkOrder>> GetWorkOrdersByPropertyReferences(string[] propertyReferences)
+        public async Task<IEnumerable<UHWorkOrder>> GetWorkOrdersByPropertyReferences(string[] propertyReferences, DateTime since, DateTime until)
         {
             _logger.LogInformation($"HackneyWorkOrdersService/GetWorkOrdersByPropertyReferences(): Sent request to _UhtRepository to get data from live for {GenericFormatter.CommaSeparate(propertyReferences)}");
-            var liveData = await _uhtRepository.GetWorkOrdersByPropertyReferences(propertyReferences);
+            var liveData = await _uhtRepository.GetWorkOrdersByPropertyReferences(propertyReferences, since, until);
             var result = liveData.ToList();
             _logger.LogInformation($"HackneyWorkOrdersService/GetWorkOrdersByPropertyReferences(): {result.Count} work orders returned for {GenericFormatter.CommaSeparate(propertyReferences)}");
 
             _logger.LogInformation($"HackneyWorkOrdersService/GetWorkOrdersByPropertyReferences(): Sent request to _UHWarehouseRepository to get data from warehouse for {GenericFormatter.CommaSeparate(propertyReferences)}");
-            var warehouseData = await _uhWarehouseRepository.GetWorkOrdersByPropertyReferences(propertyReferences);
+            var warehouseData = await _uhWarehouseRepository.GetWorkOrdersByPropertyReferences(propertyReferences, since, until);
             var lWarehouseData = warehouseData.ToList();
+
             result.InsertRange(0, lWarehouseData);
             _logger.LogInformation($"HackneyWorkOrdersService/GetWorkOrdersByPropertyReferences(): {lWarehouseData.Count} work orders returned for {GenericFormatter.CommaSeparate(propertyReferences)}");
 
@@ -116,15 +117,15 @@ namespace HackneyRepairs.Services
             return result;
         }
 
-        public async Task<IEnumerable<UHWorkOrder>> GetWorkOrderByBlockReference(string blockReference, string trade)
+        public async Task<IEnumerable<UHWorkOrder>> GetWorkOrderByBlockReference(string blockReference, string trade, DateTime since, DateTime until)
         {
             _logger.LogInformation($"HackneyWorkOrdersService/GetWorkOrderByBlockReferences(): Sent request to _UhtRepository to get data from live for block reference: {blockReference}");
-            var liveData = await _uhtRepository.GetWorkOrderByBlockReference(blockReference, trade);
+            var liveData = await _uhtRepository.GetWorkOrderByBlockReference(blockReference, trade, since, until);
             var result = (List<UHWorkOrder>)liveData;
             _logger.LogInformation($"HackneyWorkOrdersService/GetWorkOrderByBlockReferences(): {result.Count} work orders returned for block reference: {blockReference}");
 
             _logger.LogInformation($"HackneyWorkOrdersService/GetWorkOrderByBlockReferences(): Sent request to _UHWarehouseRepository to get data from warehouse for block reference: {blockReference}");
-            var warehouseData = await _uhWarehouseRepository.GetWorkOrderByBlockReference(blockReference, trade);
+            var warehouseData = await _uhWarehouseRepository.GetWorkOrderByBlockReference(blockReference, trade, since, until);
             var lWarehouseData = (List<UHWorkOrder>)warehouseData;
             _logger.LogInformation($"HackneyWorkOrdersService/GetWorkOrderByBlockReferences(): {lWarehouseData.Count} work orders returned for block reference: {blockReference}");
             _logger.LogInformation($"HackneyWorkOrdersService/GetWorkOrderByBlockReferences(): Merging list from repositories to a single list");

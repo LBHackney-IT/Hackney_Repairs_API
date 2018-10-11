@@ -104,10 +104,10 @@ namespace HackneyRepairs.Actions
 			return result;
 		}
 
-        public async Task<IEnumerable<UHWorkOrder>> GetWorkOrdersByPropertyReferences(string[] propertyReferences)
+        public async Task<IEnumerable<UHWorkOrder>> GetWorkOrdersByPropertyReferences(string[] propertyReferences, DateTime since, DateTime until)
         {
             _logger.LogInformation($"Finding work order details for property references: {GenericFormatter.CommaSeparate(propertyReferences)}");
-            var result = await _workOrdersService.GetWorkOrdersByPropertyReferences(propertyReferences);
+            var result = await _workOrdersService.GetWorkOrdersByPropertyReferences(propertyReferences, since, until);
 
             if ((result.ToList()).Count == 0)
             {

@@ -26,7 +26,7 @@ namespace HackneyRepairs.Actions
             _logger = logger;
         }
         
-		public async Task<IEnumerable<UHWorkOrder>> GetWorkOrdersForBlock(string propertyReference, string trade)
+        public async Task<IEnumerable<UHWorkOrder>> GetWorkOrdersForBlock(string propertyReference, string trade, DateTime since, DateTime until)
 		{
 			if (string.IsNullOrEmpty(trade) || string.IsNullOrEmpty(propertyReference))
 			{
@@ -51,7 +51,7 @@ namespace HackneyRepairs.Actions
                                      select prop.PropertyReference).FirstOrDefault();
    
 			_logger.LogInformation($"Finding work order details for block reference (including children): {blockReference}, trade: {trade}");
-			var blockResult = await _workordersService.GetWorkOrderByBlockReference(blockReference, trade);
+            var blockResult = await _workordersService.GetWorkOrderByBlockReference(blockReference, trade, since, until);
 			if ((blockResult.ToList()).Count == 0)
 			{
 				_logger.LogError($"Work orders not found for block reference (including children): {blockReference}, trade: {trade}");

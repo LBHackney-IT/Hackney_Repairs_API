@@ -12,6 +12,7 @@ using HackneyRepairs.Formatters;
 using HackneyRepairs.Services;
 using HackneyRepairs.Validators;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 
 namespace HackneyRepairs.Controllers
 {
@@ -245,17 +246,52 @@ namespace HackneyRepairs.Controllers
         /// </summary>
 		/// <param name="propertyReference">Property reference, the level of the property cannot be higher than block.</param>
 		/// <param name="trade">Trade of the work order to filter the results (Required).</param>
+        /// <param name="since">A string with the format dd-MM-yyyy (Optional).</param>
+        /// <param name="until">A string with the format dd-MM-yyyy (Optional).</param>
         /// <returns>Details of the block the requested property belongs to</returns>
 		/// <response code="200">Returns work orders raised against a block and all properties in it</response>
+        /// <response code="400">If trade parameter is missing or since or until do not have the right datetime format</response>   
         /// <response code="404">If the property was not found</response>   
         /// <response code="500">If any errors are encountered</response> 
         [HttpGet("{propertyReference}/block/work_orders")]
-		public async Task<JsonResult> GetWorkOrdersForBlockByPropertyReference(string propertyReference, string trade)
+		public async Task<JsonResult> GetWorkOrdersForBlockByPropertyReference(string propertyReference, string trade, string since, string until)
         {
             try
             {
+                DateTime validSince = DateTime.Now.AddYears(-2);
+                if (since != null)
+                {
+                    if (!DateTime.TryParseExact(since, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out validSince))
+                    {
+                        var error = new ApiErrorMessage
+                        {
+                            developerMessage = "parameter is not a valid DateTime",
+                            userMessage = "Invalid parameter value - since"
+                        };
+                        var jsonResponse = Json(error);
+                        jsonResponse.StatusCode = 400;
+                        return jsonResponse;
+                    }
+                }
+
+                DateTime validUntil = DateTime.Now;
+                if (until != null)
+                {
+                    if (!DateTime.TryParseExact(until, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out validUntil))
+                    {
+                        var error = new ApiErrorMessage
+                        {
+                            developerMessage = "parameter is not a valid DateTime",
+                            userMessage = "Invalid parameter value - until"
+                        };
+                        var jsonResponse = Json(error);
+                        jsonResponse.StatusCode = 400;
+                        return jsonResponse;
+                    }
+                }
+
 				PropertyActions actions = new PropertyActions(_propertyService, _propertyServiceRequestBuilder, _workordersService, _propertyLoggerAdapter);
-				var result = await actions.GetWorkOrdersForBlock(propertyReference, trade);
+                var result = await actions.GetWorkOrdersForBlock(propertyReference, trade, validSince, validUntil);
                 var json = Json(result);
                 json.StatusCode = 200;
                 json.ContentType = "application/json";
@@ -285,11 +321,11 @@ namespace HackneyRepairs.Controllers
 			}
             catch (Exception ex)
             {
-                var errors = new List<ApiErrorMessage>()
+                var errors = new List<ApiErrorMessage>
                 {
                     new ApiErrorMessage
                     {
-						developerMessage = "API Internal Error",
+                        developerMessage = "API Internal Error",
                         userMessage = "API Internal Error"
                     }
                 };

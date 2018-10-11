@@ -334,11 +334,11 @@ namespace HackneyRepairs.Tests.Actions
             var workOrderService = new Mock<IHackneyWorkOrdersService>();
 
             workOrderService
-                .Setup(service => service.GetWorkOrdersByPropertyReferences(propReferences))
+                .Setup(service => service.GetWorkOrdersByPropertyReferences(propReferences, It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                 .Returns(Task.FromResult<IEnumerable<UHWorkOrder>>(expectedWorkOrders));
 
             var workOrderActions = new WorkOrdersActions(workOrderService.Object, _mockLogger.Object);
-            var workOrders = await workOrderActions.GetWorkOrdersByPropertyReferences(propReferences);
+            var workOrders = await workOrderActions.GetWorkOrdersByPropertyReferences(propReferences, It.IsAny<DateTime>(), It.IsAny<DateTime>());
 
             Assert.Equal(expectedWorkOrders, workOrders);
         }

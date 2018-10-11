@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using HackneyRepairs.Models;
 using HackneyRepairs.Services;
 using System.Collections.Generic;
+using System;
 
 namespace HackneyRepairs.Tests.Actions
 {
@@ -326,13 +327,14 @@ namespace HackneyRepairs.Tests.Actions
 				}
 			};
 
-			mockWorkordersService.Setup(service => service.GetWorkOrderByBlockReference("00074866", "Plumbing"))
+            mockWorkordersService.Setup(service => service.GetWorkOrderByBlockReference("00074866", "Plumbing", It.IsAny<DateTime>(), It.IsAny<DateTime>()))
 			                     .Returns(Task.FromResult<IEnumerable<UHWorkOrder>>(workOrders));
 			var mockRequestBuilder = new Mock<IHackneyPropertyServiceRequestBuilder>();
 
 			PropertyActions propertyActions = new PropertyActions(mockPropertyService.Object, mockRequestBuilder.Object, mockWorkordersService.Object, mockLogger.Object);
 
-			var response = await propertyActions.GetWorkOrdersForBlock("00079999", "Plumbing");
+            DateTime date = DateTime.Now;
+            var response = await propertyActions.GetWorkOrdersForBlock("00079999", "Plumbing", date, date);
 
 			Assert.True(response is IEnumerable<UHWorkOrder>);
 			Assert.IsType(new List<UHWorkOrder>().GetType(), response);
@@ -384,13 +386,14 @@ namespace HackneyRepairs.Tests.Actions
             mockPropertyService.Setup(service => service.GetPropertyLevelInfo("00087086"))
                    .Returns(Task.FromResult<PropertyLevelModel>(null));
 
-            mockWorkordersService.Setup(service => service.GetWorkOrderByBlockReference("00074866", "Plumbing"))
+            mockWorkordersService.Setup(service => service.GetWorkOrderByBlockReference("00074866", "Plumbing", It.IsAny<DateTime>(), It.IsAny<DateTime>()))
 			                     .Returns(Task.FromResult<IEnumerable<UHWorkOrder>>(new List<UHWorkOrder>()));
             var mockRequestBuilder = new Mock<IHackneyPropertyServiceRequestBuilder>();
 
             PropertyActions propertyActions = new PropertyActions(mockPropertyService.Object, mockRequestBuilder.Object, mockWorkordersService.Object, mockLogger.Object);
 
-            var response = await propertyActions.GetWorkOrdersForBlock("00079999", "Plumbing");
+            DateTime date = DateTime.Now;
+            var response = await propertyActions.GetWorkOrdersForBlock("00079999", "Plumbing", date, date);
 
             Assert.True(response is IEnumerable<UHWorkOrder>);
             Assert.IsType(new List<UHWorkOrder>().GetType(), response);
@@ -410,8 +413,9 @@ namespace HackneyRepairs.Tests.Actions
             var mockRequestBuilder = new Mock<IHackneyPropertyServiceRequestBuilder>();
 
             PropertyActions propertyActions = new PropertyActions(mockPropertyService.Object, mockRequestBuilder.Object, mockWorkordersService.Object, mockLogger.Object);
-                     
-			await Assert.ThrowsAsync<MissingPropertyException>(async () => await propertyActions.GetWorkOrdersForBlock("00079999", "Plumbing"));
+            DateTime date = DateTime.Now;
+
+			await Assert.ThrowsAsync<MissingPropertyException>(async () => await propertyActions.GetWorkOrdersForBlock("00079999", "Plumbing", date, date));
         }
 
 		[Fact]
@@ -463,8 +467,9 @@ namespace HackneyRepairs.Tests.Actions
             var mockRequestBuilder = new Mock<IHackneyPropertyServiceRequestBuilder>();
 
             PropertyActions propertyActions = new PropertyActions(mockPropertyService.Object, mockRequestBuilder.Object, mockWorkordersService.Object, mockLogger.Object);
+            DateTime date = DateTime.Now;
 
-			await Assert.ThrowsAsync<InvalidParameterException>(async () => await propertyActions.GetWorkOrdersForBlock("00078556", "Plumbing"));
+			await Assert.ThrowsAsync<InvalidParameterException>(async () => await propertyActions.GetWorkOrdersForBlock("00078556", "Plumbing", date, date));
         }
 
 		[Fact]
@@ -516,8 +521,9 @@ namespace HackneyRepairs.Tests.Actions
             var mockRequestBuilder = new Mock<IHackneyPropertyServiceRequestBuilder>();
 
             PropertyActions propertyActions = new PropertyActions(mockPropertyService.Object, mockRequestBuilder.Object, mockWorkordersService.Object, mockLogger.Object);
+            DateTime date = DateTime.Now;
 
-			await Assert.ThrowsAsync<InvalidParameterException>(async () => await propertyActions.GetWorkOrdersForBlock("00079999", ""));
+			await Assert.ThrowsAsync<InvalidParameterException>(async () => await propertyActions.GetWorkOrdersForBlock("00079999", "", date, date));
         }
   
         #endregion

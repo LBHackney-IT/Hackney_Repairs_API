@@ -251,7 +251,6 @@ namespace HackneyRepairs.Tests
             json.Append("}");
             Assert.Equal(json.ToString(), resultString);
         }
-
         #endregion
 
 		#region GET Property's block related work orders tests
@@ -289,6 +288,34 @@ namespace HackneyRepairs.Tests
         {
             var result = await _client.GetAsync("v1/properties/66666666/block/work_orders?trade=Plumbing");
             Assert.Equal(HttpStatusCode.InternalServerError, result.StatusCode);
+        }
+
+        [Fact]
+        public async Task return_a_200_result_for_request_when_since_parameter_has_correct_format()
+        {
+            var result = await _client.GetAsync("v1/properties/00079999/block/work_orders?trade=Plumbing&since=01-01-2000");
+            Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+        }
+
+        [Fact]
+        public async Task return_a_200_result_for_request_when_until_parameter_has_correct_format()
+        {
+            var result = await _client.GetAsync("v1/properties/00079999/block/work_orders?trade=Plumbing&until=01-01-2000");
+            Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+        }
+
+        [Fact]
+        public async Task return_a_400_result_for_request_when_since_parameter_has_incorrect_format()
+        {
+            var result = await _client.GetAsync("v1/properties/66666666/block/work_orders?trade=Plumbing&since=01-011-2000");
+            Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
+        }
+
+        [Fact]
+        public async Task return_a_400_result_for_request_when_until_parameter_has_incorrect_format()
+        {
+            var result = await _client.GetAsync("v1/properties/66666666/block/work_orders?trade=Plumbing&until=011-01-2000");
+            Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
         }
 
         [Fact]
