@@ -62,6 +62,7 @@ namespace HackneyRepairs.Controllers
 		[Route("v1/work_orders/{workOrderReference}/available_appointments")]
 		public async Task<JsonResult> Get(string workOrderReference)
 		{
+			var disableSentry = Environment.GetEnvironmentVariable("DISABLE_SENTRY");
 			try
 			{
                 if (string.IsNullOrWhiteSpace(workOrderReference))
@@ -75,7 +76,7 @@ namespace HackneyRepairs.Controllers
             }
 			catch (NoAvailableAppointmentsException ex)
 			{
-				if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+				if (disableSentry != "true")
 				{
 					_sentryLogger.CaptureException(ex);
 				}
@@ -83,7 +84,7 @@ namespace HackneyRepairs.Controllers
 			}
             catch (InvalidWorkOrderInUHException ex)
             {
-	            if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+	            if (disableSentry != "true")
 	            {
 		            _sentryLogger.CaptureException(ex);
 	            }
@@ -91,7 +92,7 @@ namespace HackneyRepairs.Controllers
             }
 			catch (Exception ex)
 			{
-				if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+				if (disableSentry != "true")
 				{
 					_sentryLogger.CaptureException(ex);
 				}
@@ -110,6 +111,7 @@ namespace HackneyRepairs.Controllers
 		[Route("v1/work_orders/{workOrderReference}/appointments")]
 		public async Task<JsonResult> Post(string workOrderReference, [FromBody]ScheduleAppointmentRequest request)
 		{
+			var disableSentry = Environment.GetEnvironmentVariable("DISABLE_SENTRY");
 			try
 			{
 				var validationResult = _scheduleBookingRequestValidator.Validate(workOrderReference, request);
@@ -134,7 +136,7 @@ namespace HackneyRepairs.Controllers
 			}
 			catch (Exception ex)
 			{
-				if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+				if (disableSentry != "true")
 				{
 					_sentryLogger.CaptureException(ex);
 				}
@@ -157,6 +159,7 @@ namespace HackneyRepairs.Controllers
         [ProducesResponseType(500)]
         public async Task<JsonResult> GetAppointmentsByWorkOrderReference(string workOrderReference)
         {
+	        var disableSentry = Environment.GetEnvironmentVariable("DISABLE_SENTRY");
             var appointmentsActions = new AppointmentActions(_loggerAdapter, _appointmentsService, _serviceRequestBuilder, _repairsService, _repairsServiceRequestBuilder, _configBuilder.getConfiguration());
             IEnumerable<DetailedAppointment> result;
             try
@@ -166,7 +169,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (MissingAppointmentsException ex)
             {
-	            if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+	            if (disableSentry != "true")
 	            {
 		            _sentryLogger.CaptureException(ex);
 	            }
@@ -174,7 +177,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (InvalidWorkOrderInUHException ex)
             {
-	            if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+	            if (disableSentry != "true")
 	            {
 		            _sentryLogger.CaptureException(ex);
 	            }
@@ -182,7 +185,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (UhtRepositoryException ex)
             {
-	            if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+	            if (disableSentry != "true")
 	            {
 		            _sentryLogger.CaptureException(ex);
 	            }
@@ -190,7 +193,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
-	            if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+	            if (disableSentry != "true")
 	            {
 		            _sentryLogger.CaptureException(ex);
 	            }
@@ -213,6 +216,7 @@ namespace HackneyRepairs.Controllers
         [ProducesResponseType(500)]
         public async Task<JsonResult> GetLatestAppointmentByWorkOrderReference(string workOrderReference)
         {
+	        var disableSentry = Environment.GetEnvironmentVariable("DISABLE_SENTRY");
             var appointmentsActions = new AppointmentActions(_loggerAdapter, _appointmentsService, _serviceRequestBuilder, _repairsService, _repairsServiceRequestBuilder, _configBuilder.getConfiguration());
             DetailedAppointment result;
             try
@@ -222,7 +226,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (MissingAppointmentException ex)
             {
-	            if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+	            if (disableSentry != "true")
 	            {
 		            _sentryLogger.CaptureException(ex);
 	            }
@@ -230,7 +234,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (InvalidWorkOrderInUHException ex)
             {
-	            if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+	            if (disableSentry != "true")
 	            {
 		            _sentryLogger.CaptureException(ex);
 	            }
@@ -238,7 +242,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (UhtRepositoryException ex)
             {
-	            if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+	            if (disableSentry != "true")
 	            {
 		            _sentryLogger.CaptureException(ex);
 	            }
@@ -246,7 +250,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
-	            if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+	            if (disableSentry != "true")
 	            {
 		            _sentryLogger.CaptureException(ex);
 	            }

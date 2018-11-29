@@ -57,6 +57,7 @@ namespace HackneyRepairs.Controllers
         [ProducesResponseType(500)]
         public async Task<JsonResult> GetFeedNotes(int startId, string noteTarget, int resultSize = 0)
         {
+            var disableSentry = Environment.GetEnvironmentVariable("DISABLE_SENTRY");
             if (startId < 1)
             {
                 return ResponseBuilder.Error(400, "Invalid parameter - Please use a valid startId", "Invalid parameter - Please use a valid startId");
@@ -74,7 +75,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
-                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                if (disableSentry != "true")
                 {
                     _sentryLogger.CaptureException(ex);
                 }
@@ -107,6 +108,7 @@ namespace HackneyRepairs.Controllers
         [ProducesResponseType(500)]
         public async Task<IActionResult> AddNote([FromBody] NoteRequest request)
         {
+            var disableSentry = Environment.GetEnvironmentVariable("DISABLE_SENTRY");
             var validationObj = new NoteRequestValidator();
             var validationResult = validationObj.Validate(request);
 
@@ -128,7 +130,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
-                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                if (disableSentry != "true")
                 {
                     _sentryLogger.CaptureException(ex);
                 }

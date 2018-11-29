@@ -47,6 +47,7 @@ namespace HackneyRepairs.Controllers
         [ProducesResponseType(500)]
         public async Task<JsonResult> GetWorkOrdersByWorkOrderReferences(string[] reference, string include = "")
         {  
+            var disableSentry = Environment.GetEnvironmentVariable("DISABLE_SENTRY");
             if (reference.Length == 0)
             {
                 return ResponseBuilder.Error(400, "Bad request", "Bad Request - Missing reference parameter");
@@ -63,7 +64,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
-                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                if (disableSentry != "true")
                 {
                     _sentryLogger.CaptureException(ex);
                 }
@@ -99,6 +100,7 @@ namespace HackneyRepairs.Controllers
 		[ProducesResponseType(500)]
         public async Task<JsonResult> GetWorkOrder(string workOrderReference, string include = null)
 		{
+		    var disableSentry = Environment.GetEnvironmentVariable("DISABLE_SENTRY");
             var workOrdersActions = new WorkOrdersActions(_workOrdersService, _workOrderLoggerAdapter);
 			try
 			{
@@ -119,7 +121,7 @@ namespace HackneyRepairs.Controllers
 			}
             catch (Exception ex)
             {
-                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                if (disableSentry != "true")
                 {
                     _sentryLogger.CaptureException(ex);
                 }
@@ -157,6 +159,7 @@ namespace HackneyRepairs.Controllers
         [ProducesResponseType(500)]
         public async Task<JsonResult> GetWorkOrderByPropertyReference(string[] propertyReference, string since, string until)
         {
+            var disableSentry = Environment.GetEnvironmentVariable("DISABLE_SENTRY");
             if (propertyReference == null || propertyReference.Length == 0)
             {
                 return ResponseBuilder.Error(400, "Bad request", "Bad request - Missing parameter");
@@ -190,7 +193,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
-                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                if (disableSentry != "true")
                 {
                     _sentryLogger.CaptureException(ex);
                 }
@@ -221,6 +224,7 @@ namespace HackneyRepairs.Controllers
         [ProducesResponseType(500)]
         public async Task<JsonResult> GetNotesForWorkOrder(string workOrderReference)
         {
+            var disableSentry = Environment.GetEnvironmentVariable("DISABLE_SENTRY");
 			var workOrdersActions = new WorkOrdersActions(_workOrdersService, _workOrderLoggerAdapter);
             IEnumerable<Note> result = new List<Note>();
             try
@@ -230,7 +234,7 @@ namespace HackneyRepairs.Controllers
             }
 			catch (MissingWorkOrderException ex)
             {
-                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                if (disableSentry != "true")
                 {
                     _sentryLogger.CaptureException(ex);
                 }
@@ -238,7 +242,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (UhtRepositoryException ex)
             {
-                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                if (disableSentry != "true")
                 {
                     _sentryLogger.CaptureException(ex);
                 }
@@ -246,7 +250,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
-                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                if (disableSentry != "true")
                 {
                     _sentryLogger.CaptureException(ex);
                 }
@@ -270,6 +274,7 @@ namespace HackneyRepairs.Controllers
         [ProducesResponseType(500)]
         public async Task<JsonResult> getWorkOrderFeed(string startId, int resultSize = 0)
         {
+            var disableSentry = Environment.GetEnvironmentVariable("DISABLE_SENTRY");
             if (string.IsNullOrWhiteSpace(startId))
             {
                 return ResponseBuilder.Error(400, "Bad request", "Missing parameter - startId");
@@ -283,7 +288,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
-                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                if (disableSentry != "true")
                 {
                     _sentryLogger.CaptureException(ex);
                 }

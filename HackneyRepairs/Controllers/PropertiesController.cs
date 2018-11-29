@@ -56,6 +56,7 @@ namespace HackneyRepairs.Controllers
         [HttpGet("{propertyReference}/hierarchy")]
         public async Task<JsonResult> GetPropertyHierarchy(string propertyReference)
         {
+            var disableSentry = Environment.GetEnvironmentVariable("DISABLE_SENTRY");
             try
             {
 	        PropertyActions actions = new PropertyActions(_propertyService, _propertyServiceRequestBuilder, _workordersService, _propertyLoggerAdapter);
@@ -64,7 +65,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (MissingPropertyException ex)
             {
-                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                if (disableSentry != "true")
                 {
                     _sentryLogger.CaptureException(ex);
                 }
@@ -72,7 +73,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
-                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                if (disableSentry != "true")
                 {
                     _sentryLogger.CaptureException(ex);
                 }
@@ -94,6 +95,7 @@ namespace HackneyRepairs.Controllers
         [HttpGet]
         public async Task<JsonResult> Get([FromQuery]string postcode, int? max_level = null, int? min_level = null)
         {
+            var disableSentry = Environment.GetEnvironmentVariable("DISABLE_SENTRY");
             try
             {
                 if (min_level < max_level || max_level > 8 || max_level < 0 || min_level > 8 || min_level < 0)
@@ -112,7 +114,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
-                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                if (disableSentry != "true")
                 {
                     _sentryLogger.CaptureException(ex);
                 }
@@ -132,6 +134,7 @@ namespace HackneyRepairs.Controllers
         [HttpGet("{reference}")]
         public async Task<JsonResult> GetByReference(string reference)
         {
+            var disableSentry = Environment.GetEnvironmentVariable("DISABLE_SENTRY");
             try
             {
 				PropertyActions actions = new PropertyActions(_propertyService, _propertyServiceRequestBuilder, _workordersService, _propertyLoggerAdapter);
@@ -140,7 +143,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (MissingPropertyException ex)
             {
-                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                if (disableSentry != "true")
                 {
                     _sentryLogger.CaptureException(ex);
                 }
@@ -148,7 +151,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
-                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                if (disableSentry != "true")
                 {
                     _sentryLogger.CaptureException(ex);
                 }
@@ -168,6 +171,7 @@ namespace HackneyRepairs.Controllers
         [HttpGet("by_references")]
         public async Task<JsonResult> GetByReferences(string[] reference)
         {
+            var disableSentry = Environment.GetEnvironmentVariable("DISABLE_SENTRY");
             try
             {
                 PropertyActions actions = new PropertyActions(_propertyService, _propertyServiceRequestBuilder, _workordersService, _propertyLoggerAdapter);
@@ -176,7 +180,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (MissingPropertyException ex)
             {
-                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                if (disableSentry != "true")
                 {
                     _sentryLogger.CaptureException(ex);
                 }
@@ -184,7 +188,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
-                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                if (disableSentry != "true")
                 {
                     _sentryLogger.CaptureException(ex);
                 }
@@ -204,6 +208,7 @@ namespace HackneyRepairs.Controllers
         [HttpGet("{reference}/block")]
         public async Task<JsonResult> GetBlockByReference(string reference)
         {
+            var disableSentry = Environment.GetEnvironmentVariable("DISABLE_SENTRY");
             try
             {
                 PropertyActions actions = new PropertyActions(_propertyService, _propertyServiceRequestBuilder, _workordersService, _propertyLoggerAdapter);
@@ -212,7 +217,7 @@ namespace HackneyRepairs.Controllers
             }
             catch(MissingPropertyException ex)
             {
-                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                if (disableSentry != "true")
                 {
                     _sentryLogger.CaptureException(ex);
                 }
@@ -220,7 +225,7 @@ namespace HackneyRepairs.Controllers
             }
             catch(Exception ex)
             {
-                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                if (disableSentry != "true")
                 {
                     _sentryLogger.CaptureException(ex);
                 }
@@ -244,6 +249,7 @@ namespace HackneyRepairs.Controllers
         [HttpGet("{propertyReference}/block/work_orders")]
         public async Task<JsonResult> GetWorkOrdersForBlockByPropertyReference(string propertyReference, string trade, string since, string until)
         {
+            var disableSentry = Environment.GetEnvironmentVariable("DISABLE_SENTRY");
             try
             {
                 DateTime validSince = DateTime.Now.AddYears(-2);
@@ -271,7 +277,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (MissingPropertyException ex)
             {
-                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                if (disableSentry != "true")
                 {
                     _sentryLogger.CaptureException(ex);
                 }
@@ -279,7 +285,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (InvalidParameterException ex)
             {
-                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                if (disableSentry != "true")
                 {
                     _sentryLogger.CaptureException(ex);
                 }
@@ -287,7 +293,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
-                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                if (disableSentry != "true")
                 {
                     _sentryLogger.CaptureException(ex);
                 }
@@ -307,6 +313,7 @@ namespace HackneyRepairs.Controllers
         [HttpGet("{reference}/estate")]
         public async Task<JsonResult> GetEstateByReference(string reference)
         {
+            var disableSentry = Environment.GetEnvironmentVariable("DISABLE_SENTRY");
             try
             {
                 PropertyActions actions = new PropertyActions(_propertyService, _propertyServiceRequestBuilder, _workordersService, _propertyLoggerAdapter);
@@ -319,7 +326,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (MissingPropertyException ex)
             {
-                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                if (disableSentry != "true")
                 {
                     _sentryLogger.CaptureException(ex);
                 }
@@ -327,7 +334,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
-                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                if (disableSentry != "true")
                 {
                     _sentryLogger.CaptureException(ex);
                 }
