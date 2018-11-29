@@ -24,6 +24,8 @@ namespace HackneyRepairs.Tests.Integration
             Environment.SetEnvironmentVariable("UhtDb", "database=Test");
             Environment.SetEnvironmentVariable("UhwDb", "database=Test");
             Environment.SetEnvironmentVariable("DRSDb", "database=Test");
+			Environment.SetEnvironmentVariable("SentrySettings__URL", "https://test123@sentry.io/123");
+			Environment.SetEnvironmentVariable("DISABLE_SENTRY", "true");
             _server = new TestServer(new WebHostBuilder()
 				.UseStartup<TestStartup>());
 			_client = _server.CreateClient();

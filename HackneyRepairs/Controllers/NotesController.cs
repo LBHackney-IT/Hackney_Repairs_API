@@ -74,7 +74,10 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
-                _sentryLogger.CaptureException(ex);
+                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                {
+                    _sentryLogger.CaptureException(ex);
+                }
                 if (ex is MissingNoteTargetException)
                 {
                     var userMessage = "noteTarget parameter does not exist in the data source";
@@ -125,6 +128,10 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
+                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                {
+                    _sentryLogger.CaptureException(ex);
+                }
                 if (ex is MissingWorkOrderException)
                 {
                     var userMessage = "Object reference has not been found. Note not created";

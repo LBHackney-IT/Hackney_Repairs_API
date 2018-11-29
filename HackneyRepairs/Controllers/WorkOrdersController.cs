@@ -63,7 +63,10 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
-                _sentryLogger.CaptureException(ex);
+                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                {
+                    _sentryLogger.CaptureException(ex);
+                }
                 if (ex is UHWWarehouseRepositoryException || ex is UhtRepositoryException || ex is MobileReportsConnectionException)
                 {
                     return ResponseBuilder.Error(500, "We had issues with connecting to the data source", ex.Message);
@@ -116,7 +119,10 @@ namespace HackneyRepairs.Controllers
 			}
             catch (Exception ex)
             {
-                _sentryLogger.CaptureException(ex);
+                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                {
+                    _sentryLogger.CaptureException(ex);
+                }
                 if (ex is UHWWarehouseRepositoryException || ex is UhtRepositoryException || ex is MobileReportsConnectionException)
                 {
                     return ResponseBuilder.Error(500, "We had issues with connecting to the data source", ex.Message);
@@ -184,7 +190,10 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
-                _sentryLogger.CaptureException(ex);
+                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                {
+                    _sentryLogger.CaptureException(ex);
+                }
                 if (ex is UHWWarehouseRepositoryException || ex is UhtRepositoryException)
                 {
                     return ResponseBuilder.Error(500, "We had issues with connecting to the data source", ex.Message);
@@ -221,17 +230,26 @@ namespace HackneyRepairs.Controllers
             }
 			catch (MissingWorkOrderException ex)
             {
-                _sentryLogger.CaptureException(ex);
+                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                {
+                    _sentryLogger.CaptureException(ex);
+                }
                 return ResponseBuilder.Error(404, "Work order not found", ex.Message);
             }
             catch (UhtRepositoryException ex)
             {
-                _sentryLogger.CaptureException(ex);
+                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                {
+                    _sentryLogger.CaptureException(ex);
+                }
                 return ResponseBuilder.Error(500, "We had issues with connecting to the data source", ex.Message);
             }
             catch (Exception ex)
             {
-                _sentryLogger.CaptureException(ex);
+                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                {
+                    _sentryLogger.CaptureException(ex);
+                }
                 return ResponseBuilder.Error(500, "We had issues processing your request", ex.Message);
             }
         }
@@ -265,7 +283,10 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
-                _sentryLogger.CaptureException(ex);
+                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                {
+                    _sentryLogger.CaptureException(ex);
+                }
                 if (ex is UhtRepositoryException || ex is UHWWarehouseRepositoryException)
                 {
                     return ResponseBuilder.Error(500, "we had issues with connecting to the data source.", ex.Message);

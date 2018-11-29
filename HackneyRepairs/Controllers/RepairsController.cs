@@ -71,7 +71,10 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
-                _sentryLogger.CaptureException(ex);
+                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                {
+                    _sentryLogger.CaptureException(ex);
+                }
                 return ResponseBuilder.Error(500, "We had some problems processing your request", ex.Message);
             }
         }
@@ -96,12 +99,18 @@ namespace HackneyRepairs.Controllers
             }
 			catch (MissingRepairRequestException ex)
             {
-                _sentryLogger.CaptureException(ex);
+                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                {
+                    _sentryLogger.CaptureException(ex);
+                }
                 return ResponseBuilder.Error(404, "Cannot find repair", ex.Message);
             }
             catch (UhtRepositoryException ex)
             {
-                _sentryLogger.CaptureException(ex);
+                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                {
+                    _sentryLogger.CaptureException(ex);
+                }
                 var errors = new List<ApiErrorMessage>
                 {
                     new ApiErrorMessage
@@ -116,7 +125,10 @@ namespace HackneyRepairs.Controllers
             }
             catch (UHWWarehouseRepositoryException ex)
             {
-                _sentryLogger.CaptureException(ex);
+                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                {
+                    _sentryLogger.CaptureException(ex);
+                }
                 var errors = new List<ApiErrorMessage>
                 {
                     new ApiErrorMessage
@@ -132,7 +144,10 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
-                _sentryLogger.CaptureException(ex);
+                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                {
+                    _sentryLogger.CaptureException(ex);
+                }
                 return ResponseBuilder.Error(500, "We had some problems processing your request", ex.Message);
             }
 
@@ -163,12 +178,18 @@ namespace HackneyRepairs.Controllers
             }
             catch (MissingPropertyException ex)
             {
-                _sentryLogger.CaptureException(ex);
+                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                {
+                    _sentryLogger.CaptureException(ex);
+                }
                 return ResponseBuilder.Error(404, "Cannot find property", ex.Message);
             }
             catch (Exception ex)
             {
-                _sentryLogger.CaptureException(ex);
+                if (Environment.GetEnvironmentVariable("DISABLE_SENTRY") != "true")
+                {
+                    _sentryLogger.CaptureException(ex);
+                }
                 return ResponseBuilder.Error(500, "We had some problems processing your request", ex.Message);
             }
         }
