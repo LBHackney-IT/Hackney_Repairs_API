@@ -24,8 +24,6 @@ namespace HackneyRepairs.Tests.Integration
             Environment.SetEnvironmentVariable("UhwDb", "connectionString=Test");
             Environment.SetEnvironmentVariable("UhWarehouseDb", "connectionString=Test");
             Environment.SetEnvironmentVariable("UhSorSupplierMapping", "08500820,H01|20040010,H01|20040020,H01|20040060,H01|20040310,H01|20060020,H01|20060030,H01|20110010,H01|48000000,H05|PRE00001,H02");
-            Environment.SetEnvironmentVariable("SentrySettings__URL", "https://test123@sentry.io/123");
-            Environment.SetEnvironmentVariable("DISABLE_SENTRY", "true");
             _server = new TestServer(new WebHostBuilder()
             .UseStartup<TestStartup>());
             _client = _server.CreateClient();

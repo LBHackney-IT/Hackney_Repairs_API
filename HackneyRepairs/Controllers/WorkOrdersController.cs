@@ -21,10 +21,11 @@ namespace HackneyRepairs.Controllers
 		private ILoggerAdapter<WorkOrdersActions> _workOrderLoggerAdapter;
 	    private readonly IExceptionLogger _sentryLogger;
 
-	    public WorkOrdersController(ILoggerAdapter<WorkOrdersActions> workOrderLoggerAdapter, IUhtRepository uhtRepository, IUhwRepository uhwRepository, IUHWWarehouseRepository uhWarehouseRepository, IExceptionLogger sentryLogger)
+	    public WorkOrdersController(ILoggerAdapter<WorkOrdersActions> workOrderLoggerAdapter, IUhtRepository uhtRepository, IUhwRepository uhwRepository, IUHWWarehouseRepository uhWarehouseRepository, IExceptionLogger sentryLogger = null)
 		{
 			_workOrderLoggerAdapter = workOrderLoggerAdapter;
 		    _sentryLogger = sentryLogger;
+		    
 		    var workOrderServiceFactory = new HackneyWorkOrdersServiceFactory();
 			_workOrdersService = workOrderServiceFactory.build(uhtRepository, uhwRepository, uhWarehouseRepository, _workOrderLoggerAdapter);
 		}
@@ -47,7 +48,6 @@ namespace HackneyRepairs.Controllers
         [ProducesResponseType(500)]
         public async Task<JsonResult> GetWorkOrdersByWorkOrderReferences(string[] reference, string include = "")
         {  
-            var disableSentry = Environment.GetEnvironmentVariable("DISABLE_SENTRY");
             if (reference.Length == 0)
             {
                 return ResponseBuilder.Error(400, "Bad request", "Bad Request - Missing reference parameter");
@@ -64,10 +64,8 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
-                if (disableSentry != "true")
-                {
-                    _sentryLogger.CaptureException(ex);
-                }
+                _sentryLogger?.CaptureException(ex);
+
                 if (ex is UHWWarehouseRepositoryException || ex is UhtRepositoryException || ex is MobileReportsConnectionException)
                 {
                     return ResponseBuilder.Error(500, "We had issues with connecting to the data source", ex.Message);
@@ -100,7 +98,6 @@ namespace HackneyRepairs.Controllers
 		[ProducesResponseType(500)]
         public async Task<JsonResult> GetWorkOrder(string workOrderReference, string include = null)
 		{
-		    var disableSentry = Environment.GetEnvironmentVariable("DISABLE_SENTRY");
             var workOrdersActions = new WorkOrdersActions(_workOrdersService, _workOrderLoggerAdapter);
 			try
 			{
@@ -121,10 +118,8 @@ namespace HackneyRepairs.Controllers
 			}
             catch (Exception ex)
             {
-                if (disableSentry != "true")
-                {
-                    _sentryLogger.CaptureException(ex);
-                }
+                _sentryLogger?.CaptureException(ex);
+                
                 if (ex is UHWWarehouseRepositoryException || ex is UhtRepositoryException || ex is MobileReportsConnectionException)
                 {
                     return ResponseBuilder.Error(500, "We had issues with connecting to the data source", ex.Message);
@@ -159,7 +154,6 @@ namespace HackneyRepairs.Controllers
         [ProducesResponseType(500)]
         public async Task<JsonResult> GetWorkOrderByPropertyReference(string[] propertyReference, string since, string until)
         {
-            var disableSentry = Environment.GetEnvironmentVariable("DISABLE_SENTRY");
             if (propertyReference == null || propertyReference.Length == 0)
             {
                 return ResponseBuilder.Error(400, "Bad request", "Bad request - Missing parameter");
@@ -193,10 +187,8 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
-                if (disableSentry != "true")
-                {
-                    _sentryLogger.CaptureException(ex);
-                }
+                _sentryLogger?.CaptureException(ex);
+                
                 if (ex is UHWWarehouseRepositoryException || ex is UhtRepositoryException)
                 {
                     return ResponseBuilder.Error(500, "We had issues with connecting to the data source", ex.Message);
@@ -224,7 +216,6 @@ namespace HackneyRepairs.Controllers
         [ProducesResponseType(500)]
         public async Task<JsonResult> GetNotesForWorkOrder(string workOrderReference)
         {
-            var disableSentry = Environment.GetEnvironmentVariable("DISABLE_SENTRY");
 			var workOrdersActions = new WorkOrdersActions(_workOrdersService, _workOrderLoggerAdapter);
             IEnumerable<Note> result = new List<Note>();
             try
@@ -234,26 +225,18 @@ namespace HackneyRepairs.Controllers
             }
 			catch (MissingWorkOrderException ex)
             {
-                if (disableSentry != "true")
-                {
-                    _sentryLogger.CaptureException(ex);
-                }
+                _sentryLogger?.CaptureException(ex);
+
                 return ResponseBuilder.Error(404, "Work order not found", ex.Message);
             }
             catch (UhtRepositoryException ex)
             {
-                if (disableSentry != "true")
-                {
-                    _sentryLogger.CaptureException(ex);
-                }
+                _sentryLogger?.CaptureException(ex);
                 return ResponseBuilder.Error(500, "We had issues with connecting to the data source", ex.Message);
             }
             catch (Exception ex)
             {
-                if (disableSentry != "true")
-                {
-                    _sentryLogger.CaptureException(ex);
-                }
+                _sentryLogger?.CaptureException(ex);
                 return ResponseBuilder.Error(500, "We had issues processing your request", ex.Message);
             }
         }
@@ -274,7 +257,6 @@ namespace HackneyRepairs.Controllers
         [ProducesResponseType(500)]
         public async Task<JsonResult> getWorkOrderFeed(string startId, int resultSize = 0)
         {
-            var disableSentry = Environment.GetEnvironmentVariable("DISABLE_SENTRY");
             if (string.IsNullOrWhiteSpace(startId))
             {
                 return ResponseBuilder.Error(400, "Bad request", "Missing parameter - startId");
@@ -288,10 +270,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
-                if (disableSentry != "true")
-                {
-                    _sentryLogger.CaptureException(ex);
-                }
+                _sentryLogger?.CaptureException(ex);
                 if (ex is UhtRepositoryException || ex is UHWWarehouseRepositoryException)
                 {
                     return ResponseBuilder.Error(500, "we had issues with connecting to the data source.", ex.Message);

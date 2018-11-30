@@ -26,7 +26,7 @@ namespace HackneyRepairs.Controllers
         private ILoggerAdapter<WorkOrdersActions> _workOrdersLoggerAdapter;
         private readonly IExceptionLogger _sentryLogger;
 
-        public NotesController(ILoggerAdapter<NoteActions> logger, ILoggerAdapter<WorkOrdersActions> workOrdersLogger, IUhtRepository uhtRepository, IUhwRepository uhwRepository, IUHWWarehouseRepository uhWarehouseRepository, IExceptionLogger sentryLogger)
+        public NotesController(ILoggerAdapter<NoteActions> logger, ILoggerAdapter<WorkOrdersActions> workOrdersLogger, IUhtRepository uhtRepository, IUhwRepository uhwRepository, IUHWWarehouseRepository uhWarehouseRepository, IExceptionLogger sentryLogger = null)
         {
             _workOrdersLoggerAdapter = workOrdersLogger;
             _notesLoggerAdapter = logger;
@@ -57,7 +57,6 @@ namespace HackneyRepairs.Controllers
         [ProducesResponseType(500)]
         public async Task<JsonResult> GetFeedNotes(int startId, string noteTarget, int resultSize = 0)
         {
-            var disableSentry = Environment.GetEnvironmentVariable("DISABLE_SENTRY");
             if (startId < 1)
             {
                 return ResponseBuilder.Error(400, "Invalid parameter - Please use a valid startId", "Invalid parameter - Please use a valid startId");
@@ -75,10 +74,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
-                if (disableSentry != "true")
-                {
-                    _sentryLogger.CaptureException(ex);
-                }
+                _sentryLogger?.CaptureException(ex);
                 if (ex is MissingNoteTargetException)
                 {
                     var userMessage = "noteTarget parameter does not exist in the data source";
@@ -108,7 +104,6 @@ namespace HackneyRepairs.Controllers
         [ProducesResponseType(500)]
         public async Task<IActionResult> AddNote([FromBody] NoteRequest request)
         {
-            var disableSentry = Environment.GetEnvironmentVariable("DISABLE_SENTRY");
             var validationObj = new NoteRequestValidator();
             var validationResult = validationObj.Validate(request);
 
@@ -130,10 +125,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
-                if (disableSentry != "true")
-                {
-                    _sentryLogger.CaptureException(ex);
-                }
+                _sentryLogger?.CaptureException(ex);
                 if (ex is MissingWorkOrderException)
                 {
                     var userMessage = "Object reference has not been found. Note not created";

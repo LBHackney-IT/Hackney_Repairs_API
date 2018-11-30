@@ -31,7 +31,7 @@ namespace HackneyRepairs.Controllers
 
 		public AppointmentsController(ILoggerAdapter<AppointmentActions> loggerAdapter, IUhtRepository uhtRepository, IUhwRepository uhwRepository,
 			ILoggerAdapter<HackneyAppointmentsServiceRequestBuilder> requestBuildLoggerAdapter, ILoggerAdapter<RepairsActions> repairsLoggerAdapter,
-                                      IDRSRepository drsRepository, IUHWWarehouseRepository uHWWarehouseRepository, IExceptionLogger sentryLogger)
+                                      IDRSRepository drsRepository, IUHWWarehouseRepository uHWWarehouseRepository, IExceptionLogger sentryLogger = null)
 		{
 			var serviceFactory = new HackneyAppointmentServiceFactory();
 			_configBuilder = new HackneyConfigurationBuilder((Hashtable)Environment.GetEnvironmentVariables(), ConfigurationManager.AppSettings);
@@ -62,7 +62,6 @@ namespace HackneyRepairs.Controllers
 		[Route("v1/work_orders/{workOrderReference}/available_appointments")]
 		public async Task<JsonResult> Get(string workOrderReference)
 		{
-			var disableSentry = Environment.GetEnvironmentVariable("DISABLE_SENTRY");
 			try
 			{
                 if (string.IsNullOrWhiteSpace(workOrderReference))
@@ -76,26 +75,17 @@ namespace HackneyRepairs.Controllers
             }
 			catch (NoAvailableAppointmentsException ex)
 			{
-				if (disableSentry != "true")
-				{
-					_sentryLogger.CaptureException(ex);
-				}
+				_sentryLogger?.CaptureException(ex);
                 return ResponseBuilder.Ok(new { results = new List<string>() });
 			}
             catch (InvalidWorkOrderInUHException ex)
             {
-	            if (disableSentry != "true")
-	            {
-		            _sentryLogger.CaptureException(ex);
-	            }
+	            _sentryLogger?.CaptureException(ex);
                 return ResponseBuilder.Error(404, "WorkOrderReference not found", ex.Message);
             }
 			catch (Exception ex)
 			{
-				if (disableSentry != "true")
-				{
-					_sentryLogger.CaptureException(ex);
-				}
+				_sentryLogger?.CaptureException(ex);
                 return ResponseBuilder.Error(500, "We had some problems processing your request", ex.Message);
 			}
 		}
@@ -111,7 +101,6 @@ namespace HackneyRepairs.Controllers
 		[Route("v1/work_orders/{workOrderReference}/appointments")]
 		public async Task<JsonResult> Post(string workOrderReference, [FromBody]ScheduleAppointmentRequest request)
 		{
-			var disableSentry = Environment.GetEnvironmentVariable("DISABLE_SENTRY");
 			try
 			{
 				var validationResult = _scheduleBookingRequestValidator.Validate(workOrderReference, request);
@@ -136,10 +125,7 @@ namespace HackneyRepairs.Controllers
 			}
 			catch (Exception ex)
 			{
-				if (disableSentry != "true")
-				{
-					_sentryLogger.CaptureException(ex);
-				}
+				_sentryLogger?.CaptureException(ex);
                 return ResponseBuilder.Error(500, "We had some problems processing your request", ex.Message);
 			}
 		}
@@ -159,7 +145,6 @@ namespace HackneyRepairs.Controllers
         [ProducesResponseType(500)]
         public async Task<JsonResult> GetAppointmentsByWorkOrderReference(string workOrderReference)
         {
-	        var disableSentry = Environment.GetEnvironmentVariable("DISABLE_SENTRY");
             var appointmentsActions = new AppointmentActions(_loggerAdapter, _appointmentsService, _serviceRequestBuilder, _repairsService, _repairsServiceRequestBuilder, _configBuilder.getConfiguration());
             IEnumerable<DetailedAppointment> result;
             try
@@ -169,34 +154,22 @@ namespace HackneyRepairs.Controllers
             }
             catch (MissingAppointmentsException ex)
             {
-	            if (disableSentry != "true")
-	            {
-		            _sentryLogger.CaptureException(ex);
-	            }
+	            _sentryLogger?.CaptureException(ex);
                 return ResponseBuilder.Ok(new string[0]);
             }
             catch (InvalidWorkOrderInUHException ex)
             {
-	            if (disableSentry != "true")
-	            {
-		            _sentryLogger.CaptureException(ex);
-	            }
+	            _sentryLogger?.CaptureException(ex);
                 return ResponseBuilder.Error(404, "workOrderReference not found", ex.Message);
             }
             catch (UhtRepositoryException ex)
             {
-	            if (disableSentry != "true")
-	            {
-		            _sentryLogger.CaptureException(ex);
-	            }
+	            _sentryLogger?.CaptureException(ex);
                 return ResponseBuilder.Error(500, "We had issues with connecting to the data source.", ex.Message);
             }
             catch (Exception ex)
             {
-	            if (disableSentry != "true")
-	            {
-		            _sentryLogger.CaptureException(ex);
-	            }
+	            _sentryLogger?.CaptureException(ex);
                 return ResponseBuilder.Error(500, "We had issues processing your request", ex.Message);
             }
         }
@@ -216,7 +189,6 @@ namespace HackneyRepairs.Controllers
         [ProducesResponseType(500)]
         public async Task<JsonResult> GetLatestAppointmentByWorkOrderReference(string workOrderReference)
         {
-	        var disableSentry = Environment.GetEnvironmentVariable("DISABLE_SENTRY");
             var appointmentsActions = new AppointmentActions(_loggerAdapter, _appointmentsService, _serviceRequestBuilder, _repairsService, _repairsServiceRequestBuilder, _configBuilder.getConfiguration());
             DetailedAppointment result;
             try
@@ -226,34 +198,22 @@ namespace HackneyRepairs.Controllers
             }
             catch (MissingAppointmentException ex)
             {
-	            if (disableSentry != "true")
-	            {
-		            _sentryLogger.CaptureException(ex);
-	            }
+	            _sentryLogger?.CaptureException(ex);
                 return ResponseBuilder.Ok(new string[0]);
             }
             catch (InvalidWorkOrderInUHException ex)
             {
-	            if (disableSentry != "true")
-	            {
-		            _sentryLogger.CaptureException(ex);
-	            }
+	            _sentryLogger?.CaptureException(ex);
                 return ResponseBuilder.Error(404, "workOrderReference not found", ex.Message);
             }
             catch (UhtRepositoryException ex)
             {
-	            if (disableSentry != "true")
-	            {
-		            _sentryLogger.CaptureException(ex);
-	            }
+	            _sentryLogger?.CaptureException(ex);
                 return ResponseBuilder.Error(500, "We had issues with connecting to the data source.", ex.Message);
             }
             catch (Exception ex)
             {
-	            if (disableSentry != "true")
-	            {
-		            _sentryLogger.CaptureException(ex);
-	            }
+	            _sentryLogger?.CaptureException(ex);
                 return ResponseBuilder.Error(500, "We had issues processing your request", ex.Message);
             }
         }

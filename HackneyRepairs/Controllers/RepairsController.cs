@@ -27,7 +27,7 @@ namespace HackneyRepairs.Controllers
         private HackneyConfigurationBuilder _configBuilder;
         private readonly IExceptionLogger _sentryLogger;
 
-        public RepairsController(ILoggerAdapter<RepairsActions> loggerAdapter, IUhtRepository uhtRepository, IUhwRepository uhwRepository, IUHWWarehouseRepository uHWWarehouseRepository, IExceptionLogger sentryLogger)
+        public RepairsController(ILoggerAdapter<RepairsActions> loggerAdapter, IUhtRepository uhtRepository, IUhwRepository uhwRepository, IUHWWarehouseRepository uHWWarehouseRepository, IExceptionLogger sentryLogger = null)
         {
             var factory = new HackneyRepairsServiceFactory();
             _configBuilder = new HackneyConfigurationBuilder((Hashtable)Environment.GetEnvironmentVariables(), ConfigurationManager.AppSettings);
@@ -50,7 +50,6 @@ namespace HackneyRepairs.Controllers
         [HttpPost]
         public async Task<JsonResult> Post([FromBody]RepairRequest request)
         {
-            var disableSentry = Environment.GetEnvironmentVariable("DISABLE_SENTRY");
             try
             {
                 // Validate the request
@@ -72,10 +71,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
-                if (disableSentry != "true")
-                {
-                    _sentryLogger.CaptureException(ex);
-                }
+                _sentryLogger?.CaptureException(ex);
                 return ResponseBuilder.Error(500, "We had some problems processing your request", ex.Message);
             }
         }
@@ -92,7 +88,6 @@ namespace HackneyRepairs.Controllers
         [HttpGet("{repairRequestReference}")]
         public async Task<JsonResult> GetByReference(string repairRequestReference)
         {
-            var disableSentry = Environment.GetEnvironmentVariable("DISABLE_SENTRY");
             try
             {
                 RepairsActions repairActions = new RepairsActions(_repairsService, _requestBuilder, _loggerAdapter);
@@ -101,18 +96,12 @@ namespace HackneyRepairs.Controllers
             }
 			catch (MissingRepairRequestException ex)
             {
-                if (disableSentry != "true")
-                {
-                    _sentryLogger.CaptureException(ex);
-                }
+                _sentryLogger?.CaptureException(ex);
                 return ResponseBuilder.Error(404, "Cannot find repair", ex.Message);
             }
             catch (UhtRepositoryException ex)
             {
-                if (disableSentry != "true")
-                {
-                    _sentryLogger.CaptureException(ex);
-                }
+                _sentryLogger?.CaptureException(ex);
                 var errors = new List<ApiErrorMessage>
                 {
                     new ApiErrorMessage
@@ -127,10 +116,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (UHWWarehouseRepositoryException ex)
             {
-                if (disableSentry != "true")
-                {
-                    _sentryLogger.CaptureException(ex);
-                }
+                _sentryLogger?.CaptureException(ex);
                 var errors = new List<ApiErrorMessage>
                 {
                     new ApiErrorMessage
@@ -146,10 +132,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
-                if (disableSentry != "true")
-                {
-                    _sentryLogger.CaptureException(ex);
-                }
+                _sentryLogger?.CaptureException(ex);
                 return ResponseBuilder.Error(500, "We had some problems processing your request", ex.Message);
             }
 
@@ -167,7 +150,6 @@ namespace HackneyRepairs.Controllers
         [HttpGet]
         public async Task<JsonResult> GetByPropertyReference(string propertyReference)
         {
-            var disableSentry = Environment.GetEnvironmentVariable("DISABLE_SENTRY");
             if (String.IsNullOrWhiteSpace(propertyReference))
             {
                 return ResponseBuilder.Error(400, "Missing parameter - propertyReference", "Missing parameter - propertyReference");
@@ -181,18 +163,12 @@ namespace HackneyRepairs.Controllers
             }
             catch (MissingPropertyException ex)
             {
-                if (disableSentry != "true")
-                {
-                    _sentryLogger.CaptureException(ex);
-                }
+                _sentryLogger?.CaptureException(ex);
                 return ResponseBuilder.Error(404, "Cannot find property", ex.Message);
             }
             catch (Exception ex)
             {
-                if (disableSentry != "true")
-                {
-                    _sentryLogger.CaptureException(ex);
-                }
+                _sentryLogger?.CaptureException(ex);
                 return ResponseBuilder.Error(500, "We had some problems processing your request", ex.Message);
             }
         }
