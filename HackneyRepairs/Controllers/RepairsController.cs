@@ -25,9 +25,9 @@ namespace HackneyRepairs.Controllers
         private IRepairRequestValidator _repairRequestValidator;
         private ILoggerAdapter<RepairsActions> _loggerAdapter;
         private HackneyConfigurationBuilder _configBuilder;
-        private readonly IExceptionLogger _sentryLogger;
+        private readonly IExceptionLogger _exceptionLogger;
 
-        public RepairsController(ILoggerAdapter<RepairsActions> loggerAdapter, IUhtRepository uhtRepository, IUhwRepository uhwRepository, IUHWWarehouseRepository uHWWarehouseRepository, IExceptionLogger sentryLogger = null)
+        public RepairsController(ILoggerAdapter<RepairsActions> loggerAdapter, IUhtRepository uhtRepository, IUhwRepository uhwRepository, IUHWWarehouseRepository uHWWarehouseRepository, IExceptionLogger exceptionLogger = null)
         {
             var factory = new HackneyRepairsServiceFactory();
             _configBuilder = new HackneyConfigurationBuilder((Hashtable)Environment.GetEnvironmentVariables(), ConfigurationManager.AppSettings);
@@ -35,7 +35,7 @@ namespace HackneyRepairs.Controllers
             _requestBuilder = new HackneyRepairsServiceRequestBuilder(_configBuilder.getConfiguration());
             _repairRequestValidator = new RepairRequestValidator();
             _loggerAdapter = loggerAdapter;
-            _sentryLogger = sentryLogger;
+            _exceptionLogger = exceptionLogger;
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
-                _sentryLogger?.CaptureException(ex);
+                _exceptionLogger?.CaptureException(ex);
                 return ResponseBuilder.Error(500, "We had some problems processing your request", ex.Message);
             }
         }
@@ -96,12 +96,12 @@ namespace HackneyRepairs.Controllers
             }
 			catch (MissingRepairRequestException ex)
             {
-                _sentryLogger?.CaptureException(ex);
+                _exceptionLogger?.CaptureException(ex);
                 return ResponseBuilder.Error(404, "Cannot find repair", ex.Message);
             }
             catch (UhtRepositoryException ex)
             {
-                _sentryLogger?.CaptureException(ex);
+                _exceptionLogger?.CaptureException(ex);
                 var errors = new List<ApiErrorMessage>
                 {
                     new ApiErrorMessage
@@ -116,7 +116,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (UHWWarehouseRepositoryException ex)
             {
-                _sentryLogger?.CaptureException(ex);
+                _exceptionLogger?.CaptureException(ex);
                 var errors = new List<ApiErrorMessage>
                 {
                     new ApiErrorMessage
@@ -132,7 +132,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
-                _sentryLogger?.CaptureException(ex);
+                _exceptionLogger?.CaptureException(ex);
                 return ResponseBuilder.Error(500, "We had some problems processing your request", ex.Message);
             }
 
@@ -163,12 +163,12 @@ namespace HackneyRepairs.Controllers
             }
             catch (MissingPropertyException ex)
             {
-                _sentryLogger?.CaptureException(ex);
+                _exceptionLogger?.CaptureException(ex);
                 return ResponseBuilder.Error(404, "Cannot find property", ex.Message);
             }
             catch (Exception ex)
             {
-                _sentryLogger?.CaptureException(ex);
+                _exceptionLogger?.CaptureException(ex);
                 return ResponseBuilder.Error(500, "We had some problems processing your request", ex.Message);
             }
         }
