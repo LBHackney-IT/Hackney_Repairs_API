@@ -27,10 +27,11 @@ namespace HackneyRepairs.Controllers
 		private IHackneyRepairsServiceRequestBuilder _repairsServiceRequestBuilder;
 		private IScheduleBookingRequestValidator _scheduleBookingRequestValidator;
 		private HackneyConfigurationBuilder _configBuilder;
+		private readonly IExceptionLogger _exceptionLogger;
 
 		public AppointmentsController(ILoggerAdapter<AppointmentActions> loggerAdapter, IUhtRepository uhtRepository, IUhwRepository uhwRepository,
 			ILoggerAdapter<HackneyAppointmentsServiceRequestBuilder> requestBuildLoggerAdapter, ILoggerAdapter<RepairsActions> repairsLoggerAdapter,
-                                      IDRSRepository drsRepository, IUHWWarehouseRepository uHWWarehouseRepository)
+                                      IDRSRepository drsRepository, IUHWWarehouseRepository uHWWarehouseRepository, IExceptionLogger exceptionLogger = null)
 		{
 			var serviceFactory = new HackneyAppointmentServiceFactory();
 			_configBuilder = new HackneyConfigurationBuilder((Hashtable)Environment.GetEnvironmentVariables(), ConfigurationManager.AppSettings);
@@ -41,6 +42,7 @@ namespace HackneyRepairs.Controllers
 			_serviceRequestBuilder = new HackneyAppointmentsServiceRequestBuilder(_configBuilder.getConfiguration(), requestBuildLoggerAdapter);
 			_scheduleBookingRequestValidator = new ScheduleBookingRequestValidator(_repairsService);
 			_repairsServiceRequestBuilder = new HackneyRepairsServiceRequestBuilder(_configBuilder.getConfiguration());
+			_exceptionLogger = exceptionLogger;
 		}
 
 		// GET available appointments for a Universal Housing work order
@@ -71,16 +73,19 @@ namespace HackneyRepairs.Controllers
                 var response = await appointmentsActions.GetAppointments(workOrderReference);
                 return ResponseBuilder.Ok(new { results = response.ToList().FormatAppointmentsDaySlots() });
             }
-			catch (NoAvailableAppointmentsException)
+			catch (NoAvailableAppointmentsException ex)
 			{
+				_exceptionLogger?.CaptureException(ex);
                 return ResponseBuilder.Ok(new { results = new List<string>() });
 			}
             catch (InvalidWorkOrderInUHException ex)
             {
+	            _exceptionLogger?.CaptureException(ex);
                 return ResponseBuilder.Error(404, "WorkOrderReference not found", ex.Message);
             }
 			catch (Exception ex)
 			{
+				_exceptionLogger?.CaptureException(ex);
                 return ResponseBuilder.Error(500, "We had some problems processing your request", ex.Message);
 			}
 		}
@@ -118,9 +123,10 @@ namespace HackneyRepairs.Controllers
                     return ResponseBuilder.ErrorFromList(400, errors);
 				}
 			}
-			catch (Exception e)
+			catch (Exception ex)
 			{
-                return ResponseBuilder.Error(500, "We had some problems processing your request", e.Message);
+				_exceptionLogger?.CaptureException(ex);
+                return ResponseBuilder.Error(500, "We had some problems processing your request", ex.Message);
 			}
 		}
 
@@ -146,20 +152,24 @@ namespace HackneyRepairs.Controllers
                 result = await appointmentsActions.GetAppointmentsByWorkOrderReference(workOrderReference);
                 return ResponseBuilder.Ok(result);
             }
-            catch (MissingAppointmentsException)
+            catch (MissingAppointmentsException ex)
             {
+	            _exceptionLogger?.CaptureException(ex);
                 return ResponseBuilder.Ok(new string[0]);
             }
             catch (InvalidWorkOrderInUHException ex)
             {
+	            _exceptionLogger?.CaptureException(ex);
                 return ResponseBuilder.Error(404, "workOrderReference not found", ex.Message);
             }
             catch (UhtRepositoryException ex)
             {
+	            _exceptionLogger?.CaptureException(ex);
                 return ResponseBuilder.Error(500, "We had issues with connecting to the data source.", ex.Message);
             }
             catch (Exception ex)
             {
+	            _exceptionLogger?.CaptureException(ex);
                 return ResponseBuilder.Error(500, "We had issues processing your request", ex.Message);
             }
         }
@@ -186,20 +196,24 @@ namespace HackneyRepairs.Controllers
                 result = await appointmentsActions.GetLatestAppointmentByWorkOrderReference(workOrderReference);
                 return ResponseBuilder.Ok(result);
             }
-            catch (MissingAppointmentException)
+            catch (MissingAppointmentException ex)
             {
+	            _exceptionLogger?.CaptureException(ex);
                 return ResponseBuilder.Ok(new string[0]);
             }
             catch (InvalidWorkOrderInUHException ex)
             {
+	            _exceptionLogger?.CaptureException(ex);
                 return ResponseBuilder.Error(404, "workOrderReference not found", ex.Message);
             }
             catch (UhtRepositoryException ex)
             {
+	            _exceptionLogger?.CaptureException(ex);
                 return ResponseBuilder.Error(500, "We had issues with connecting to the data source.", ex.Message);
             }
             catch (Exception ex)
             {
+	            _exceptionLogger?.CaptureException(ex);
                 return ResponseBuilder.Error(500, "We had issues processing your request", ex.Message);
             }
         }

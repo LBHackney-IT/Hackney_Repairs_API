@@ -1,5 +1,4 @@
-﻿using System.Configuration;
-using HackneyRepairs.Tests;
+﻿using HackneyRepairs.Tests;
 using HackneyRepairs.DbContext;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,6 +12,9 @@ using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.IO;
 using HackneyRepairs.Extension;
+using HackneyRepairs.Logging;
+using HackneyRepairs.Interfaces;
+using HackneyRepairs.Settings;
 using System.Reflection;
 
 namespace HackneyRepairs
@@ -35,6 +37,9 @@ namespace HackneyRepairs
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<ConfigurationSettings>(Configuration);
+            var settings = Configuration.Get<ConfigurationSettings>();
+
             // Add framework services.
             services.AddDbContext<UhtDbContext>(options =>
                                                 options.UseSqlServer(Configuration.GetSection("UhtDb").Value));
@@ -61,7 +66,16 @@ namespace HackneyRepairs
 
 			});
 			services.AddCustomServices();
-		}
+
+	        if (!string.IsNullOrEmpty(settings.SentrySettings?.Url))
+	        {
+		        var sentryLoggerProvider =
+			        new SentryLoggerProvider(settings.SentrySettings?.Url, settings.SentrySettings?.Environment);
+		        services.AddTransient<IExceptionLogger>(_ => sentryLoggerProvider.CreateExceptionLogger());
+
+		        services.AddLogging(configure => { configure.AddProvider(sentryLoggerProvider); });
+	        }
+        }
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)

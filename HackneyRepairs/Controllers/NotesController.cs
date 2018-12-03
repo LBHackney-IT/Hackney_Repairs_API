@@ -24,16 +24,18 @@ namespace HackneyRepairs.Controllers
         private IHackneyNotesService _notesService;
         private ILoggerAdapter<NoteActions> _notesLoggerAdapter;
         private ILoggerAdapter<WorkOrdersActions> _workOrdersLoggerAdapter;
+        private readonly IExceptionLogger _exceptionLogger;
 
-        public NotesController(ILoggerAdapter<NoteActions> logger, ILoggerAdapter<WorkOrdersActions> workOrdersLogger, IUhtRepository uhtRepository, IUhwRepository uhwRepository, IUHWWarehouseRepository uhWarehouseRepository)
+        public NotesController(ILoggerAdapter<NoteActions> logger, ILoggerAdapter<WorkOrdersActions> workOrdersLogger, IUhtRepository uhtRepository, IUhwRepository uhwRepository, IUHWWarehouseRepository uhWarehouseRepository, IExceptionLogger exceptionLogger = null)
         {
             _workOrdersLoggerAdapter = workOrdersLogger;
             _notesLoggerAdapter = logger;
             var WorkOrdersfactory = new HackneyWorkOrdersServiceFactory();
             var notesfactory = new HackneyNotesServiceFactory();
-
+            
             _workOrdersService = WorkOrdersfactory.build(uhtRepository, uhwRepository, uhWarehouseRepository, _workOrdersLoggerAdapter);
-            _notesService = notesfactory.build(uhwRepository, _notesLoggerAdapter); 
+            _notesService = notesfactory.build(uhwRepository, _notesLoggerAdapter);
+            _exceptionLogger = exceptionLogger;
         }
 
         // GET A feed of notes
@@ -72,6 +74,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
+                _exceptionLogger?.CaptureException(ex);
                 if (ex is MissingNoteTargetException)
                 {
                     var userMessage = "noteTarget parameter does not exist in the data source";
@@ -122,6 +125,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
+                _exceptionLogger?.CaptureException(ex);
                 if (ex is MissingWorkOrderException)
                 {
                     var userMessage = "Object reference has not been found. Note not created";
