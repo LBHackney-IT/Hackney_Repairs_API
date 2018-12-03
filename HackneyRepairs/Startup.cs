@@ -1,5 +1,9 @@
-﻿using HackneyRepairs.Tests;
-using HackneyRepairs.DbContext;
+﻿using HackneyRepairs.DbContext;
+using HackneyRepairs.Extension;
+using HackneyRepairs.Interfaces;
+using HackneyRepairs.Logging;
+using HackneyRepairs.Settings;
+using HackneyRepairs.Tests;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -10,11 +14,9 @@ using NLog.Extensions.Logging;
 using NLog.Web;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
+using System.Collections.Generic;
 using System.IO;
-using HackneyRepairs.Extension;
-using HackneyRepairs.Logging;
-using HackneyRepairs.Interfaces;
-using HackneyRepairs.Settings;
+using System.Linq;
 using System.Reflection;
 
 namespace HackneyRepairs
@@ -53,7 +55,21 @@ namespace HackneyRepairs
             services.AddMvc();
             services.AddSwaggerGen(c =>
             {
-				c.SwaggerDoc("v1", new Info { Version = "v1", Title = $"Hackney Repairs API - {Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}",
+                c.AddSecurityDefinition("Token",
+                  new ApiKeyScheme
+                  {
+                      In = "header",
+                      Description = "Your Hackney API Key",
+                      Name = "X-Api-Key",
+                      Type = "apiKey"
+                  });
+
+                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
+                {
+                    {"Token", Enumerable.Empty<string>()}
+                });
+
+                c.SwaggerDoc("v1", new Info { Version = "v1", Title = $"Hackney Repairs API - {Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}",
                     Description="This is the Hackney Repairs API which allows client applications " +
                         "to securely access publicly available information on repairs to Hackney properties, " +
                         "and to raise new repair requests." });
