@@ -91,6 +91,10 @@ namespace HackneyRepairs
 
 		        services.AddLogging(configure => { configure.AddProvider(sentryLoggerProvider); });
 	        }
+	        else
+	        {
+	            services.AddTransient<IExceptionLogger, NullExceptionLogger>();
+	        }
         }
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

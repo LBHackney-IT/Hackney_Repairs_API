@@ -31,7 +31,7 @@ namespace HackneyRepairs.Controllers
 
 		public AppointmentsController(ILoggerAdapter<AppointmentActions> loggerAdapter, IUhtRepository uhtRepository, IUhwRepository uhwRepository,
 			ILoggerAdapter<HackneyAppointmentsServiceRequestBuilder> requestBuildLoggerAdapter, ILoggerAdapter<RepairsActions> repairsLoggerAdapter,
-                                      IDRSRepository drsRepository, IUHWWarehouseRepository uHWWarehouseRepository, IExceptionLogger exceptionLogger = null)
+                                      IDRSRepository drsRepository, IUHWWarehouseRepository uHWWarehouseRepository, IExceptionLogger exceptionLogger)
 		{
 			var serviceFactory = new HackneyAppointmentServiceFactory();
 			_configBuilder = new HackneyConfigurationBuilder((Hashtable)Environment.GetEnvironmentVariables(), ConfigurationManager.AppSettings);
@@ -75,17 +75,17 @@ namespace HackneyRepairs.Controllers
             }
 			catch (NoAvailableAppointmentsException ex)
 			{
-				_exceptionLogger?.CaptureException(ex);
+				_exceptionLogger.CaptureException(ex);
                 return ResponseBuilder.Ok(new { results = new List<string>() });
 			}
             catch (InvalidWorkOrderInUHException ex)
             {
-	            _exceptionLogger?.CaptureException(ex);
+	            _exceptionLogger.CaptureException(ex);
                 return ResponseBuilder.Error(404, "WorkOrderReference not found", ex.Message);
             }
 			catch (Exception ex)
 			{
-				_exceptionLogger?.CaptureException(ex);
+				_exceptionLogger.CaptureException(ex);
                 return ResponseBuilder.Error(500, "We had some problems processing your request", ex.Message);
 			}
 		}
@@ -125,7 +125,7 @@ namespace HackneyRepairs.Controllers
 			}
 			catch (Exception ex)
 			{
-				_exceptionLogger?.CaptureException(ex);
+				_exceptionLogger.CaptureException(ex);
                 return ResponseBuilder.Error(500, "We had some problems processing your request", ex.Message);
 			}
 		}
@@ -154,22 +154,22 @@ namespace HackneyRepairs.Controllers
             }
             catch (MissingAppointmentsException ex)
             {
-	            _exceptionLogger?.CaptureException(ex);
+	            _exceptionLogger.CaptureException(ex);
                 return ResponseBuilder.Ok(new string[0]);
             }
             catch (InvalidWorkOrderInUHException ex)
             {
-	            _exceptionLogger?.CaptureException(ex);
+	            _exceptionLogger.CaptureException(ex);
                 return ResponseBuilder.Error(404, "workOrderReference not found", ex.Message);
             }
             catch (UhtRepositoryException ex)
             {
-	            _exceptionLogger?.CaptureException(ex);
+	            _exceptionLogger.CaptureException(ex);
                 return ResponseBuilder.Error(500, "We had issues with connecting to the data source.", ex.Message);
             }
             catch (Exception ex)
             {
-	            _exceptionLogger?.CaptureException(ex);
+	            _exceptionLogger.CaptureException(ex);
                 return ResponseBuilder.Error(500, "We had issues processing your request", ex.Message);
             }
         }
@@ -198,22 +198,22 @@ namespace HackneyRepairs.Controllers
             }
             catch (MissingAppointmentException ex)
             {
-	            _exceptionLogger?.CaptureException(ex);
+	            _exceptionLogger.CaptureException(ex);
                 return ResponseBuilder.Ok(new string[0]);
             }
             catch (InvalidWorkOrderInUHException ex)
             {
-	            _exceptionLogger?.CaptureException(ex);
+	            _exceptionLogger.CaptureException(ex);
                 return ResponseBuilder.Error(404, "workOrderReference not found", ex.Message);
             }
             catch (UhtRepositoryException ex)
             {
-	            _exceptionLogger?.CaptureException(ex);
+	            _exceptionLogger.CaptureException(ex);
                 return ResponseBuilder.Error(500, "We had issues with connecting to the data source.", ex.Message);
             }
             catch (Exception ex)
             {
-	            _exceptionLogger?.CaptureException(ex);
+	            _exceptionLogger.CaptureException(ex);
                 return ResponseBuilder.Error(500, "We had issues processing your request", ex.Message);
             }
         }

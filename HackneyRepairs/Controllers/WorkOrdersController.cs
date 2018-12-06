@@ -21,7 +21,7 @@ namespace HackneyRepairs.Controllers
 		private ILoggerAdapter<WorkOrdersActions> _workOrderLoggerAdapter;
 	    private readonly IExceptionLogger _exceptionLogger;
 
-	    public WorkOrdersController(ILoggerAdapter<WorkOrdersActions> workOrderLoggerAdapter, IUhtRepository uhtRepository, IUhwRepository uhwRepository, IUHWWarehouseRepository uhWarehouseRepository, IExceptionLogger exceptionLogger = null)
+	    public WorkOrdersController(ILoggerAdapter<WorkOrdersActions> workOrderLoggerAdapter, IUhtRepository uhtRepository, IUhwRepository uhwRepository, IUHWWarehouseRepository uhWarehouseRepository, IExceptionLogger exceptionLogger)
 		{
 			_workOrderLoggerAdapter = workOrderLoggerAdapter;
 		    _exceptionLogger = exceptionLogger;
@@ -64,7 +64,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
-                _exceptionLogger?.CaptureException(ex);
+                _exceptionLogger.CaptureException(ex);
 
                 if (ex is UHWWarehouseRepositoryException || ex is UhtRepositoryException || ex is MobileReportsConnectionException)
                 {
@@ -118,7 +118,7 @@ namespace HackneyRepairs.Controllers
 			}
             catch (Exception ex)
             {
-                _exceptionLogger?.CaptureException(ex);
+                _exceptionLogger.CaptureException(ex);
                 
                 if (ex is UHWWarehouseRepositoryException || ex is UhtRepositoryException || ex is MobileReportsConnectionException)
                 {
@@ -187,7 +187,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
-                _exceptionLogger?.CaptureException(ex);
+                _exceptionLogger.CaptureException(ex);
                 
                 if (ex is UHWWarehouseRepositoryException || ex is UhtRepositoryException)
                 {
@@ -225,18 +225,18 @@ namespace HackneyRepairs.Controllers
             }
 			catch (MissingWorkOrderException ex)
             {
-                _exceptionLogger?.CaptureException(ex);
+                _exceptionLogger.CaptureException(ex);
 
                 return ResponseBuilder.Error(404, "Work order not found", ex.Message);
             }
             catch (UhtRepositoryException ex)
             {
-                _exceptionLogger?.CaptureException(ex);
+                _exceptionLogger.CaptureException(ex);
                 return ResponseBuilder.Error(500, "We had issues with connecting to the data source", ex.Message);
             }
             catch (Exception ex)
             {
-                _exceptionLogger?.CaptureException(ex);
+                _exceptionLogger.CaptureException(ex);
                 return ResponseBuilder.Error(500, "We had issues processing your request", ex.Message);
             }
         }
@@ -270,7 +270,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
-                _exceptionLogger?.CaptureException(ex);
+                _exceptionLogger.CaptureException(ex);
                 if (ex is UhtRepositoryException || ex is UHWWarehouseRepositoryException)
                 {
                     return ResponseBuilder.Error(500, "we had issues with connecting to the data source.", ex.Message);

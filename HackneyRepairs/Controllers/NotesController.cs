@@ -26,7 +26,7 @@ namespace HackneyRepairs.Controllers
         private ILoggerAdapter<WorkOrdersActions> _workOrdersLoggerAdapter;
         private readonly IExceptionLogger _exceptionLogger;
 
-        public NotesController(ILoggerAdapter<NoteActions> logger, ILoggerAdapter<WorkOrdersActions> workOrdersLogger, IUhtRepository uhtRepository, IUhwRepository uhwRepository, IUHWWarehouseRepository uhWarehouseRepository, IExceptionLogger exceptionLogger = null)
+        public NotesController(ILoggerAdapter<NoteActions> logger, ILoggerAdapter<WorkOrdersActions> workOrdersLogger, IUhtRepository uhtRepository, IUhwRepository uhwRepository, IUHWWarehouseRepository uhWarehouseRepository, IExceptionLogger exceptionLogger)
         {
             _workOrdersLoggerAdapter = workOrdersLogger;
             _notesLoggerAdapter = logger;
@@ -74,7 +74,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
-                _exceptionLogger?.CaptureException(ex);
+                _exceptionLogger.CaptureException(ex);
                 if (ex is MissingNoteTargetException)
                 {
                     var userMessage = "noteTarget parameter does not exist in the data source";
@@ -125,7 +125,7 @@ namespace HackneyRepairs.Controllers
             }
             catch (Exception ex)
             {
-                _exceptionLogger?.CaptureException(ex);
+                _exceptionLogger.CaptureException(ex);
                 if (ex is MissingWorkOrderException)
                 {
                     var userMessage = "Object reference has not been found. Note not created";
