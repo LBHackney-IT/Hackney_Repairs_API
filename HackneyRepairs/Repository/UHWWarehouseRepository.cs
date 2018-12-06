@@ -623,7 +623,7 @@ namespace HackneyRepairs.Repository
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                throw new UHWWarehouseRepositoryException();
+                throw new UHWWarehouseRepositoryException(ex.Message);
             }
             return workOrders;
         }
@@ -878,5 +878,8 @@ namespace HackneyRepairs.Repository
         }
     }
 
-    public class UHWWarehouseRepositoryException : Exception { }
+    public class UHWWarehouseRepositoryException : Exception {
+      public UHWWarehouseRepositoryException () : base() { }
+      public UHWWarehouseRepositoryException (string message) : base(message) { }
+    }
 }
