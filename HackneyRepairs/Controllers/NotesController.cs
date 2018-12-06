@@ -104,22 +104,22 @@ namespace HackneyRepairs.Controllers
         [ProducesResponseType(500)]
         public async Task<IActionResult> AddNote([FromBody] NoteRequest request)
         {
-            var validationObj = new NoteRequestValidator();
-            var validationResult = validationObj.Validate(request);
-
-            if (!validationResult.Valid)
-            {
-                var errors = validationResult.ErrorMessages.Select(error => new ApiErrorMessage
-                {
-                    DeveloperMessage = error,
-                    UserMessage = error
-                }).ToList();
-                return ResponseBuilder.ErrorFromList(400, errors);
-            }
-
-            var notesActions = new NoteActions(_workOrdersService, _notesService, _notesLoggerAdapter);
             try
             {
+                var validationObj = new NoteRequestValidator();
+                var validationResult = validationObj.Validate(request);
+
+                if (!validationResult.Valid)
+                {
+                    var errors = validationResult.ErrorMessages.Select(error => new ApiErrorMessage
+                    {
+                        DeveloperMessage = error,
+                        UserMessage = error
+                    }).ToList();
+                    return ResponseBuilder.ErrorFromList(400, errors);
+                }
+                var notesActions = new NoteActions(_workOrdersService, _notesService, _notesLoggerAdapter);
+
                 await notesActions.AddNote(request);
                 return NoContent();
             }

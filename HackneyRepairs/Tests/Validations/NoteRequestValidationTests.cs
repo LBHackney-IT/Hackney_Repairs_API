@@ -33,6 +33,15 @@ namespace HackneyRepairs.Tests.Validations
         }
 
         [Fact]
+        public void return_false_if_noterequest_is_invalid_object()
+        {
+            NoteRequest badRequest = null;
+            var result = requestValidator.Validate(badRequest);
+            Assert.False(result.Valid);
+            Assert.Single(result.ErrorMessages);
+        }
+
+        [Fact]
         public void return_false_if_Objectkey_is_other_than_uhorder()
         {
             request.ObjectKey = fakeRandomValue.Lorem.Word();

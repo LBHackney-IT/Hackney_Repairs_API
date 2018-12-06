@@ -10,25 +10,34 @@ namespace HackneyRepairs.Validators
         {
             var validationResult = new NoteRequestValidationResult(request);
 
-            if (string.IsNullOrWhiteSpace(request.ObjectKey) || !string.Equals(request.ObjectKey.ToLower(), "uhorder"))
+            if (request == null)
             {
                 validationResult.Valid = false;
-                validationResult.ErrorMessages.Add("Please provide a valid object key");
+                validationResult.ErrorMessages.Add("Invalid request body");
             }
-            if (string.IsNullOrWhiteSpace(request.ObjectReference))
+            else
             {
-                validationResult.Valid = false;
-                validationResult.ErrorMessages.Add("Please provide an object reference");
-            }
-            if (string.IsNullOrWhiteSpace(request.Text))
-            {
-                validationResult.Valid = false;
-                validationResult.ErrorMessages.Add("Please provide a text for the note");
-            }
-            if (request.Text.Length > 50)
-            {
-                validationResult.Valid = false;
-                validationResult.ErrorMessages.Add("Note text cannot exeed 2000 characters");
+                if (string.IsNullOrWhiteSpace(request.ObjectKey) || !string.Equals(request.ObjectKey.ToLower(), "uhorder"))
+                {
+                    validationResult.Valid = false;
+                    validationResult.ErrorMessages.Add("Please provide a valid object key");
+                }
+                if (string.IsNullOrWhiteSpace(request.ObjectReference))
+                {
+                    validationResult.Valid = false;
+                    validationResult.ErrorMessages.Add("Please provide an object reference");
+                }
+
+                if (string.IsNullOrWhiteSpace(request.Text))
+                {
+                    validationResult.Valid = false;
+                    validationResult.ErrorMessages.Add("Please provide a text for the note");
+                }
+                else if (request.Text.Length > 2000)
+                { 
+                    validationResult.Valid = false;
+                    validationResult.ErrorMessages.Add("Note text cannot exeed 2000 characters");
+                }
             }
             return validationResult;
         }

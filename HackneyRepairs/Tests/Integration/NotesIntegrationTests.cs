@@ -95,6 +95,22 @@ namespace HackneyRepairs.Tests.Integration
 
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
+
+        [Fact]
+        public async Task return_a_400_result_if_bad_formed_request()
+        {
+            var requestBody = JsonConvert.SerializeObject(new
+            {
+                invalidAttribute1 = "yes",
+                invalidAttribute2 = "no"
+            });
+
+            _client.DefaultRequestHeaders.Accept.Clear();
+            _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var response = await _client.PostAsync("v1/notes", new StringContent(requestBody, Encoding.UTF8, "application/json"));
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
         #endregion
     }
 }
