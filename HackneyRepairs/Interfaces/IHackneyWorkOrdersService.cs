@@ -14,6 +14,7 @@ namespace HackneyRepairs.Interfaces
         Task<IEnumerable<UHWorkOrder>> GetWorkOrdersByPropertyReferences(string[] propertyReferences, DateTime since, DateTime until);
         Task<IEnumerable<UHWorkOrder>> GetWorkOrderByBlockReference(string[] blockReferences, string trade, DateTime since, DateTime until);
         Task<IEnumerable<Note>> GetNotesByWorkOrderReference(string workOrderReference);
+        Task<int?> GetWorkOrderSid(string workOrderReference);
         Task<IEnumerable<Note>> GetNoteFeed(int startId, string noteTarget, int size);
         Task<IEnumerable<UHWorkOrderFeed>> GetWorkOrderFeed(string startId, int resultSize);
     }

@@ -164,6 +164,18 @@ namespace HackneyRepairs.Services
             };
             return Task.Run(() => (IEnumerable<UHWorkOrderFeed>)fakeResponse);
         }
+
+        public Task<int?> GetWorkOrderSid(string workOrderReference)
+        {
+            int? response;
+            if (string.Equals(workOrderReference, "0"))
+            {
+                response = null;
+                return Task.Run(() => response);
+            }
+            response = 44444444;
+            return Task.Run(() => response);
+        }
     }
 
     class FakeWorkOrdersServiceException : Exception {}

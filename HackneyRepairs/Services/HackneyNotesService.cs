@@ -17,7 +17,7 @@ namespace HackneyRepairs.Services
             _logger = logger;
         }
 
-        public async Task AddNote(NoteRequest note)
+        public async Task AddNote(FullNoteRequest note)
         {
             _logger.LogInformation($"HackneyNoteService/AddNote(): Calling UHWRepository for adding note to {note.ObjectKey} object for : {note.ObjectReference})");
             await _uhwRepository.AddNote(note);
