@@ -5,6 +5,6 @@ namespace HackneyRepairs.Interfaces
 {
     public interface IHackneyNotesService
     {
-        Task AddNote(NoteRequest note);
+        Task AddNote(FullNoteRequest note);
     }
 }

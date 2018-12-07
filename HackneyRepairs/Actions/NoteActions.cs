@@ -35,17 +35,31 @@ namespace HackneyRepairs.Actions
         public async Task AddNote(NoteRequest note)
         {
             _logger.LogInformation($"Adding note for {note.ObjectKey} object for: {note.ObjectReference}");
-            if (!await WorkOrderExists(note.ObjectReference))
+            int? workOrderSid = await GetWorkOrderSid(note.ObjectReference);
+            if (!workOrderSid.HasValue)
             {
                 throw new MissingWorkOrderException();
             }
-            await _notesService.AddNote(note);
+
+            var fullNote = BuildFullNote(note, workOrderSid.Value);
+            await _notesService.AddNote(fullNote);
         }
 
-        private async Task<bool> WorkOrderExists(string workOrderReference)
+        private async Task<int?> GetWorkOrderSid(string workOrderReference)
         {
-            var workOrder = await _workOrdersService.GetWorkOrder(workOrderReference);
-            return workOrder != null;
+            var workOrderSid = await _workOrdersService.GetWorkOrderSid(workOrderReference);
+            return workOrderSid;
+        }
+
+        private FullNoteRequest BuildFullNote(NoteRequest note, int workOrderSid)
+        {
+            return new FullNoteRequest
+            {
+                ObjectKey = note.ObjectKey,
+                ObjectReference = note.ObjectReference,
+                WorkOrderSid = workOrderSid,
+                Text = note.Text
+            };
         }
     }
 

@@ -172,7 +172,14 @@ namespace HackneyRepairs.Services
             //return result;
         }
 
-		public async Task<IEnumerable<Note>> GetNoteFeed(int startId, string noteTarget, int batchSize)
+        public async Task<int?> GetWorkOrderSid(string workOrderReference)
+        {
+            _logger.LogInformation($"HackneyWorkOrdersService/GetWorkOrderSid(): Querying uhtRepository for: {workOrderReference}");
+            var result = await _uhtRepository.GetWorkOrderSid(workOrderReference);
+            return result;
+        }
+
+        public async Task<IEnumerable<Note>> GetNoteFeed(int startId, string noteTarget, int batchSize)
         {
             int feedMaxBatchSize = Int32.Parse(Environment.GetEnvironmentVariable("NoteFeedMaxBatchSize"));
             if (batchSize > feedMaxBatchSize || batchSize < 1)

@@ -687,9 +687,34 @@ namespace HackneyRepairs.Repository
             }
             return dtCutoff.ToString("yyyy-MM-dd HH:mm:ss");
         }
+
+        public Task<int?> GetWorkOrderSid(string workOrderReference)
+        {
+            try
+            {
+                using (var connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+                {
+                    string query = $@"
+                        SELECT    
+                            rmworder_sid
+                        FROM 
+                            rmworder
+                        WHERE 
+                            wo_ref = @WorkOrderReference";
+
+                    var workOrderSid = connection.Query<int?>(query, new { WorkOrderReference = workOrderReference }).FirstOrDefault();
+                    return Task.FromResult(workOrderSid);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                throw new UhtRepositoryException();
+            }
+        }
     }
 
-	public static class DateReaderExtensions
+    public static class DateReaderExtensions
 	{
 		public static List<T> MapToList<T>(this DbDataReader reader) where T : new()
 		{
