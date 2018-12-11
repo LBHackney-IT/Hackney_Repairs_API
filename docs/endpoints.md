@@ -466,5 +466,3 @@ A successful response should get the detail of Authenticated neighbourhood offic
 }
 
 ```
-
-[universal-housing-simulator]: https://github.com/LBHackney-IT/lbh-universal-housing-simulator
