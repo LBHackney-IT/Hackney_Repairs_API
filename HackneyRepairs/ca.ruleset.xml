@@ -32,12 +32,9 @@
     <Rule Id="SA1024" Action="Error" />
     <Rule Id="SA1025" Action="Error" />
     <Rule Id="SA1026" Action="Error" />
-    <Rule Id="SA1027" Action="Error" />
     <!-- Layout Rules -->
     <Rule Id="SA1500" Action="Error" />
     <Rule Id="SA1501" Action="Error" />
-    <Rule Id="SA1502" Action="Error" />
-    <Rule Id="SA1503" Action="Error" />
     <Rule Id="SA1504" Action="Error" />
     <Rule Id="SA1505" Action="Error" />
     <Rule Id="SA1506" Action="Error" />
@@ -48,9 +45,6 @@
     <Rule Id="SA1511" Action="Error" />
     <Rule Id="SA1512" Action="Error" />
     <Rule Id="SA1513" Action="Error" />
-    <Rule Id="SA1514" Action="Error" />
-    <Rule Id="SA1515" Action="Error" />
-    <Rule Id="SA1516" Action="Error" />
     <Rule Id="SA1517" Action="Error" />
     <Rule Id="SA1518" Action="Error" />
     <Rule Id="SA1519" Action="Error" />

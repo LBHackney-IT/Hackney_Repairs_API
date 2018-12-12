@@ -22,6 +22,7 @@ namespace HackneyRepairs.Repository
             {
                 return new List<MobileReport>();
             }
+
             var results = new List<MobileReport> { BuildMobileReportResponse(processedReport) };
            
             var unprocessedReports = Directory.GetFiles(MountedPath + "Unprocessed/", $"*{servitorReference}*").ToList();
@@ -36,6 +37,7 @@ namespace HackneyRepairs.Repository
                     }
                 }
             }
+
             return results;
         }
 

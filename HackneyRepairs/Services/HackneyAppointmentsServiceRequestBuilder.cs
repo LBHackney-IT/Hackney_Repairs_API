@@ -18,6 +18,7 @@ namespace HackneyRepairs.Services
             _appSettings = appSettings;
             _logger = logger;
         }
+
         public xmbCheckAvailability BuildXmbCheckAvailabilityRequest(string workOrderReference, string sessionId, DrsOrder drsOrder, DateTime startPeriod, DateTime endPeriod)
         {
             _logger.LogInformation($"Building the xmbCheckAvailability request for {workOrderReference}");
@@ -41,6 +42,7 @@ namespace HackneyRepairs.Services
             {
                 _logger.LogError(ex.Message);
             }
+
             return null;
         }
 
@@ -71,7 +73,7 @@ namespace HackneyRepairs.Services
                 primaryOrderNumber = workOrderReference.Trim(),
                 contract = drsOrder.contract.Trim(),
                 locationID = drsOrder.prop_ref.Trim(),
-                //TODO:: need to discuss what the user id will be
+                // TODO:: need to discuss what the user id will be
                 userId = "createARepair",
                 theBookingCodes = bookingCodes,
                 priority = drsOrder.priority,
@@ -101,7 +103,7 @@ namespace HackneyRepairs.Services
             };
         }
 
-        public xmbCreateOrder BuildXmbCreateOrderRequest(string workOrderReference, string sessionId, DrsOrder drsOrder )
+        public xmbCreateOrder BuildXmbCreateOrderRequest(string workOrderReference, string sessionId, DrsOrder drsOrder)
         {
             var xmbCreateOrder = new xmbCreateOrder
             {
@@ -163,7 +165,7 @@ namespace HackneyRepairs.Services
 
         public xmbSelectOrder BuildXmbSelectOrderRequest(string workOrderReference, string sessionId)
         {
-            string[] workOrders = {workOrderReference};
+            string[] workOrders = { workOrderReference };
             var xmsSelectOrder = new xmbSelectOrder
             {
                 primaryOrderNumber = workOrders,

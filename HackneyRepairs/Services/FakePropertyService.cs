@@ -92,6 +92,7 @@ namespace HackneyRepairs.Services
                     fakeProperty
                 });
             }
+
             if (references.Contains("5454545454"))
             {
                 return Task.Run(() => new PropertyDetails[]
@@ -99,6 +100,7 @@ namespace HackneyRepairs.Services
                     fakeProperty
                 });
             }
+
             if (references.Contains("5252"))
             {
                 throw new PropertyServiceException();
@@ -114,7 +116,7 @@ namespace HackneyRepairs.Services
 
         public Task<PropertyLevelModel[]> GetPropertyListByPostCode(string post_code, int? maxLevel, int? minLevel)
         {
-            var  PropertyList= new PropertyLevelModel[2];
+            var PropertyList = new PropertyLevelModel[2];
             PropertyLevelModel[] emptyPropertyList;
             var property1 = new PropertyLevelModel()
             {
@@ -182,12 +184,11 @@ namespace HackneyRepairs.Services
         }
 
 		public Task<List<PropertyLevelModel>> GetPropertyLevelInfosForParent(string parentReference)
-		{
-            
+		{ 
 			if (string.Equals(parentReference, "99999999"))
             {
 				List<PropertyLevelModel> emptyList = new List<PropertyLevelModel>();
-				return Task.Run(() => (List<PropertyLevelModel>) emptyList);
+				return Task.Run(() => (List<PropertyLevelModel>)emptyList);
             }
 
 			List<PropertyLevelModel> levelInfos = new List<PropertyLevelModel>()
@@ -222,7 +223,6 @@ namespace HackneyRepairs.Services
 						PropertyReference = "00079999",
 						Address = "St Thomass Square 1 Pitcarin House",
 						LevelCode = "7"
-
 					}));
 
 				case "00074866":
@@ -232,7 +232,6 @@ namespace HackneyRepairs.Services
                         PropertyReference = "00074866",
                         Address = "St Thomass Square 1-93 Pitcarin House",
                         LevelCode = "3"
-
                     }));
 
 				case "00078556":
@@ -242,7 +241,6 @@ namespace HackneyRepairs.Services
                         PropertyReference = "00078556",
                         Address = "Frampton Park Road Frampton Park Estate",
                         LevelCode = "2"
-
                     }));
 
 				case "00087086":
@@ -255,7 +253,7 @@ namespace HackneyRepairs.Services
                     }));
 
 				case "99999999":
-					return Task.Run(() => ((PropertyLevelModel) null));
+					return Task.Run(() => ((PropertyLevelModel)null));
 
 				case "66666666":
 					throw new PropertyServiceException();

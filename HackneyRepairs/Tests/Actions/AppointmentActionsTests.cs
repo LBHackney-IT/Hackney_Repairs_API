@@ -543,7 +543,7 @@ namespace HackneyRepairs.Tests.Actions
 									bookingId = 123456
 								}
 							}.ToArray(),
-							theLocation= new location
+							theLocation = new location
 							{
 								locationId = "012345",
 								contract = "H01",
@@ -551,7 +551,6 @@ namespace HackneyRepairs.Tests.Actions
 								address1 = "An address",
 								postCode = "Apostcode"
 							}
-
 						}
 					}.ToArray()
 				}));

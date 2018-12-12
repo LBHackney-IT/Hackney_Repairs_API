@@ -9,7 +9,7 @@ namespace HackneyRepairs.Formatters
     {
         public static string FormatDateTimeToUtc(DateTime date)
         {
-            return date.ToString("s")+"Z";
+            return date.ToString("s") + "Z";
         }
     }
 }

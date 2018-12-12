@@ -97,7 +97,7 @@ namespace HackneyRepairs.Services
                 @return = new xmbCreateOrderResponse
                 {
                     status = responseStatus.success,
-                    theOrder = new order { primaryOrderNumber = createOrder.theOrder.primaryOrderNumber}
+                    theOrder = new order { primaryOrderNumber = createOrder.theOrder.primaryOrderNumber }
                 }
             };
 
@@ -156,13 +156,16 @@ namespace HackneyRepairs.Services
                     new DetailedAppointment()
                 });
             }
+
 			if (string.Equals(workOrderReference, "888888888"))
 			{
                 return Task.Run(() => ((IEnumerable<DetailedAppointment>)new List<DetailedAppointment>()));
 			}
+
 			var appointmentEntitites = new List<DetailedAppointment>
 			{
-				new DetailedAppointment{
+				new DetailedAppointment 
+                {
 					BeginDate = DateTime.Today
                 }
             };
@@ -178,10 +181,12 @@ namespace HackneyRepairs.Services
 					BeginDate = null
 				});
             }
+
             if (string.Equals(workOrderReference, "888888888"))
             {
-				return Task.Run(() => (DetailedAppointment) null);
+				return Task.Run(() => (DetailedAppointment)null);
             }
+
             var appointment = new DetailedAppointment()
             {
 				BeginDate = DateTime.Today,

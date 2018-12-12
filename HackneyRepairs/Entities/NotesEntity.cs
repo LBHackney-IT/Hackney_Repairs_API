@@ -6,7 +6,7 @@ namespace HackneyRepairs.Entities
 	    public string KeyObject { get; set; }
 		public int KeyNumb { get; set; }
 		public string KeyText { get; set; }
-		public DateTime  NDate { get; set; }
+		public DateTime NDate { get; set; }
 		public string UserID { get; set; }
 		public string SecureCategory { get; set; }
 		public string NoteType { get; set; }

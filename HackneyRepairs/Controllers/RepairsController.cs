@@ -61,6 +61,7 @@ namespace HackneyRepairs.Controllers
                     var result = await actions.CreateRepair(request);
                     return ResponseBuilder.Ok(result);
                 }
+
                 var errors = validationResult.ErrorMessages.Select(error => new ApiErrorMessage
                 {
                     DeveloperMessage = error,
@@ -69,6 +70,7 @@ namespace HackneyRepairs.Controllers
                 return ResponseBuilder.ErrorFromList(400, errors);
 
             }
+
             catch (Exception ex)
             {
                 _exceptionLogger.CaptureException(ex);

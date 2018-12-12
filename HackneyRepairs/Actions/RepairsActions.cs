@@ -31,11 +31,13 @@ namespace HackneyRepairs.Actions
                 _logger.LogError($"Property not found for Id: {propertyReference}");
                 throw new MissingPropertyException();
             }
+
             if (((List<RepairRequestBase>)repairRequests).Count == 0)
             {
                 _logger.LogError($"Repairs not found for Id: {propertyReference}");
                 return repairRequests;
             }
+
             _logger.LogInformation($"Repair request details returned for: {propertyReference}");
             return repairRequests;
         }
@@ -61,6 +63,7 @@ namespace HackneyRepairs.Actions
                 _logger.LogInformation($"Repair not found for Id: {repairReference}");
                 throw new MissingRepairRequestException();
             }
+
             var repair = BuildRepair(repairResponse);
             return repair;
         }
@@ -76,11 +79,13 @@ namespace HackneyRepairs.Actions
             {
                 throw new RepairsServiceException();
             }
+
             var workOrderList = response.WorksOrderList;
             if (workOrderList == null)
             {
                 throw new MissingRepairRequestException();
             }
+
             var workOrderItem = workOrderList.FirstOrDefault();
             // update the request status to 000
             _repairsService.UpdateRequestStatus(workOrderItem.RepairRequestReference.Trim());
@@ -114,11 +119,13 @@ namespace HackneyRepairs.Actions
             {
                 throw new RepairsServiceException();
             }
+
             var repairResponse = response.RepairRequest;
             if (repairResponse == null)
             {
                 throw new MissingRepairRequestException();
             }
+
             // update the request status to 000
             _repairsService.UpdateRequestStatus(repairResponse.Reference.Trim());
 
@@ -141,6 +148,7 @@ namespace HackneyRepairs.Actions
             {
                 throw new RepairsServiceException();
             }
+
             return response;
         }
 
@@ -164,7 +172,7 @@ namespace HackneyRepairs.Actions
             var workOrders = new List<WorkOrder>();
             foreach (var result in repositoryResult)
             {
-                
+
                 if (!string.IsNullOrWhiteSpace(result.wo_ref))
                 {
                     var workOrder = new WorkOrder()
@@ -177,6 +185,7 @@ namespace HackneyRepairs.Actions
                     workOrders.Add(workOrder);
                 }
             }
+
             repair.WorkOrders = workOrders;
             GenericFormatter.TrimStringAttributes(repair);
             GenericFormatter.TrimStringAttributes(repair.Contact);

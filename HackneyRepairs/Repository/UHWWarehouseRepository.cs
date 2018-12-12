@@ -16,7 +16,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HackneyRepairs.Repository
 {
-    public class UHWWarehouseRepository :IUHWWarehouseRepository
+    public class UHWWarehouseRepository : IUHWWarehouseRepository
     {
         private UHWWarehouseDbContext _context;
         private ILoggerAdapter<UHWWarehouseRepository> _logger;
@@ -32,7 +32,7 @@ namespace HackneyRepairs.Repository
             _logger.LogInformation($"Getting the maintainable flag from UHWarehouse for {propertyReference}");
             try
             {
-                using (var connection  = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+                using (var connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
                 {
                     var query = "SELECT [no_maint] FROM [property] where [prop_ref]= @PropertyReference";
                     var result = connection.Query<bool>(query, new { PropertyReference = propertyReference }).FirstOrDefault();
@@ -198,7 +198,6 @@ namespace HackneyRepairs.Repository
             _logger.LogInformation($"Getting properties for postcode {postcode}");
             try
             {
-                
                 using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
                 {
                     string query = $@"
@@ -321,8 +320,7 @@ namespace HackneyRepairs.Repository
         }
 
         public async Task<PropertyDetails> GetPropertyEstateByReference(string reference)
-        {
-            
+        { 
             _logger.LogInformation($"Getting details for property {reference}");
             try
             {
@@ -357,6 +355,7 @@ namespace HackneyRepairs.Repository
             {
                 return null;
             }
+
             try
             {
                 using (var connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
@@ -407,6 +406,7 @@ namespace HackneyRepairs.Repository
             {
                 return new List<UHWorkOrder>();
             }
+
             try
             {
                 using (var connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
@@ -568,6 +568,7 @@ namespace HackneyRepairs.Repository
                 _logger.LogError(ex.Message);
                 throw new UHWWarehouseRepositoryException();
             }
+
 			return workOrders;
         }
 
@@ -625,6 +626,7 @@ namespace HackneyRepairs.Repository
                 _logger.LogError(ex.Message);
                 throw new UHWWarehouseRepositoryException(ex.Message);
             }
+
             return workOrders;
         }
 
@@ -685,6 +687,7 @@ namespace HackneyRepairs.Repository
                 _logger.LogError(ex.Message);
                 throw new UHWWarehouseRepositoryException();
             }
+
             return workOrders;
         }
 
@@ -864,6 +867,7 @@ namespace HackneyRepairs.Repository
             {
                 levelConditionString = $"AND level_code <= {minLevel} AND level_code >= {maxLevel}";
             }
+
             return levelConditionString;
         }
 
@@ -874,12 +878,13 @@ namespace HackneyRepairs.Repository
             {
                 return false;
             }
+
             return true;
         }
     }
 
     public class UHWWarehouseRepositoryException : Exception {
-      public UHWWarehouseRepositoryException () : base() { }
-      public UHWWarehouseRepositoryException (string message) : base(message) { }
+      public UHWWarehouseRepositoryException() : base() { }
+      public UHWWarehouseRepositoryException(string message) : base(message) { }
     }
 }

@@ -12,6 +12,7 @@ namespace HackneyRepairs.Models
             ErrorMessages = new List<string>();
             Valid = true;
         }
+
         public bool Valid { get; set; }
         public List<string> ErrorMessages { get; set; }
     }

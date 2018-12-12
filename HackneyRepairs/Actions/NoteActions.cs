@@ -29,6 +29,7 @@ namespace HackneyRepairs.Actions
             {
                 throw new MissingNoteTargetException();
             }
+
             return results;
         }
 
@@ -63,5 +64,5 @@ namespace HackneyRepairs.Actions
         }
     }
 
-    public class MissingNoteTargetException : Exception {}
+    public class MissingNoteTargetException : Exception { }
 }

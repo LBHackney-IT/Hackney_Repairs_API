@@ -138,7 +138,7 @@ namespace HackneyRepairs.Tests.Services
             
             var bookingCodes = new List<bookingCode>{ new bookingCode
                 {
-                    bookingCodeDescription ="Some comments",
+                    bookingCodeDescription = "Some comments",
                     bookingCodeSORCode = "00210356",
                     itemValue = "1.00",
                     primaryOrderNumber = "01550854",

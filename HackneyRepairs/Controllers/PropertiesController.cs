@@ -100,6 +100,7 @@ namespace HackneyRepairs.Controllers
                     return ResponseBuilder.Error(400, "Please provide a valid post code", "Invalid parameter - postcode");
 
                 }
+
                 PropertyActions actions = new PropertyActions(_propertyService, _propertyServiceRequestBuilder, _workordersService, _propertyLoggerAdapter);
                 var result = await actions.FindProperty(_propertyServiceRequestBuilder.BuildListByPostCodeRequest(postcode), max_level, min_level);
                 return ResponseBuilder.Ok(result);
@@ -189,12 +190,12 @@ namespace HackneyRepairs.Controllers
                 var result = await actions.FindPropertyBlockDetailsByRef(reference);
                 return ResponseBuilder.Ok(result);
             }
-            catch(MissingPropertyException ex)
+            catch (MissingPropertyException ex)
             {
                 _exceptionLogger.CaptureException(ex);
                 return ResponseBuilder.Error(404, "Resource identification error", ex.Message);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _exceptionLogger.CaptureException(ex);
                 return ResponseBuilder.Error(500, "API Internal Error", ex.Message);
@@ -235,6 +236,7 @@ namespace HackneyRepairs.Controllers
                     {
                         return ResponseBuilder.Error(400, "Invalid parameter value - until", "Parameter is not a valid DateTime");
                     }
+
                     validUntil = validUntil.AddDays(1).AddSeconds(-1);
                 }
 
@@ -279,6 +281,7 @@ namespace HackneyRepairs.Controllers
                 {
                     return ResponseBuilder.Error(404, "No estate identified for the property requested", "No estate identified for the property requested");
                 }
+
                 return ResponseBuilder.Ok(result);
             }
             catch (MissingPropertyException ex)

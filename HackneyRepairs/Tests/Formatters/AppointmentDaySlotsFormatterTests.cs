@@ -18,19 +18,19 @@ namespace HackneyRepairs.Tests.Formatters
             {
                 new Slot
                 {
-                    BeginDate = new DateTime(2017,10,18,10,00,00),
-                    EndDate = new DateTime(2017,10,18,12,00,00),
+                    BeginDate = new DateTime(2017, 10, 18, 10, 00, 00),
+                    EndDate = new DateTime(2017, 10, 18, 12, 00, 00),
                     BestSlot = true
                 },
                 new Slot
                 {
-                    BeginDate = new DateTime(2017,10,18,12,00,00),
-                    EndDate = new DateTime(2017,10,18,14,00,00),
+                    BeginDate = new DateTime(2017, 10, 18, 12, 00, 00),
+                    EndDate = new DateTime(2017, 10, 18, 14, 00, 00),
                     BestSlot = false
                 },new Slot
                 {
-                    BeginDate = new DateTime(2017,10,18,14,00,00),
-                    EndDate = new DateTime(2017,10,18,16,00,00),
+                    BeginDate = new DateTime(2017, 10, 18, 14, 00, 00),
+                    EndDate = new DateTime(2017, 10, 18, 16, 00, 00),
                     BestSlot = false
                 }
             };

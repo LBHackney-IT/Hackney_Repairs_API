@@ -20,14 +20,17 @@ namespace HackneyRepairs.Logging
             _environment = environment;
             _ravenClient = new RavenClient(_url);
         }
+
         public IDisposable BeginScope<TState>(TState state)
         {
             return null;
         }
+
         public bool IsEnabled(LogLevel logLevel)
         {
             return true;
         }
+
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
         {
             if (exception != null)
@@ -37,6 +40,7 @@ namespace HackneyRepairs.Logging
                 _ravenClient.Capture(ev);
             }
         }
+
         public void CaptureException(Exception exception)
         {
             var ev = new SentryEvent(exception);

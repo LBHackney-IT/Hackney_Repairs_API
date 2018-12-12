@@ -66,20 +66,20 @@ namespace HackneyRepairs
 
                 c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
                 {
-                    {"Token", Enumerable.Empty<string>()}
+                    { "Token", Enumerable.Empty<string>() }
                 });
 
                 c.SwaggerDoc("v1", new Info { Version = "v1", Title = $"Hackney Repairs API - {Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}",
-                    Description="This is the Hackney Repairs API which allows client applications " +
+                    Description = "This is the Hackney Repairs API which allows client applications " +
                         "to securely access publicly available information on repairs to Hackney properties, " +
                         "and to raise new repair requests." });
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
-            services.AddCors(option => {
+            services.AddCors(option => 
+            {
                 option.AddPolicy("AllowAny", policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-
 			});
 			services.AddCustomServices();
 
@@ -180,7 +180,6 @@ namespace HackneyRepairs
                         });
                         break;
                 }
-
             }
 		}
 	}

@@ -332,7 +332,6 @@ namespace HackneyRepairs.Tests.Actions
                 PropertyReference = "00079999",
                 Address = "St Thomass Square 1 Pitcarin House",
                 LevelCode = "7"
-
             };
 			PropertyLevelModel block = new PropertyLevelModel()
 			{
@@ -340,7 +339,6 @@ namespace HackneyRepairs.Tests.Actions
 				PropertyReference = "00074866",
 				Address = "St Thomass Square 1-93 Pitcarin House",
 				LevelCode = "3"
-
 			};
 			PropertyLevelModel estate = new PropertyLevelModel()
 			{
@@ -411,7 +409,6 @@ namespace HackneyRepairs.Tests.Actions
                 PropertyReference = "00079999",
                 Address = "St Thomass Square 1 Pitcarin House",
                 LevelCode = "7"
-
             };
             PropertyLevelModel block = new PropertyLevelModel()
             {
@@ -419,7 +416,6 @@ namespace HackneyRepairs.Tests.Actions
                 PropertyReference = "00074866",
                 Address = "St Thomass Square 1-93 Pitcarin House",
                 LevelCode = "3"
-
             };
             PropertyLevelModel estate = new PropertyLevelModel()
             {
@@ -463,8 +459,7 @@ namespace HackneyRepairs.Tests.Actions
         {
 			var mockLogger = new Mock<ILoggerAdapter<PropertyActions>>();
             var mockPropertyService = new Mock<IHackneyPropertyService>();
-            var mockWorkordersService = new Mock<IHackneyWorkOrdersService>();
-            
+            var mockWorkordersService = new Mock<IHackneyWorkOrdersService>();    
             
 			mockPropertyService.Setup(service => service.GetPropertyLevelInfo(It.IsAny<string>()))
                                .Returns(Task.FromResult<PropertyLevelModel>(null));
@@ -489,7 +484,6 @@ namespace HackneyRepairs.Tests.Actions
                 PropertyReference = "00079999",
                 Address = "St Thomass Square 1 Pitcarin House",
                 LevelCode = "7"
-
             };
             PropertyLevelModel block = new PropertyLevelModel()
             {
@@ -497,7 +491,6 @@ namespace HackneyRepairs.Tests.Actions
                 PropertyReference = "00074866",
                 Address = "St Thomass Square 1-93 Pitcarin House",
                 LevelCode = "3"
-
             };
             PropertyLevelModel estate = new PropertyLevelModel()
             {
@@ -543,7 +536,6 @@ namespace HackneyRepairs.Tests.Actions
                 PropertyReference = "00079999",
                 Address = "St Thomass Square 1 Pitcarin House",
                 LevelCode = "7"
-
             };
             PropertyLevelModel block = new PropertyLevelModel()
             {
@@ -551,7 +543,6 @@ namespace HackneyRepairs.Tests.Actions
                 PropertyReference = "00074866",
                 Address = "St Thomass Square 1-93 Pitcarin House",
                 LevelCode = "3"
-
             };
             PropertyLevelModel estate = new PropertyLevelModel()
             {
@@ -585,6 +576,5 @@ namespace HackneyRepairs.Tests.Actions
 			await Assert.ThrowsAsync<InvalidParameterException>(async () => await propertyActions.GetWorkOrdersForBlock("00079999", "", date, date));
         }
         #endregion
-	}
-    
+	}    
 }

@@ -29,6 +29,7 @@ namespace HackneyRepairs.Actions
 				_logger.LogError($"Work order not found for reference: {workOrderReference}");
 				throw new MissingWorkOrderException();
 			}
+
             if (mobileReports)
             {
                 var resultWithMobileReports = MapToWorkOrderWithMobileReports(result);
@@ -38,6 +39,7 @@ namespace HackneyRepairs.Actions
                     resultWithMobileReports.MobileReports = new List<MobileReport>();
                     return resultWithMobileReports;
                 }
+
                 _logger.LogError($"Getting mobile reports matching servitor reference {result.ServitorReference} for work order {workOrderReference}");
                 resultWithMobileReports.MobileReports = await _workOrdersService.GetMobileReports(result.ServitorReference);
                 return resultWithMobileReports;
@@ -78,8 +80,7 @@ namespace HackneyRepairs.Actions
                     }
 
                     return resultWithMobileReports;
-                })
-            );
+                }));
 
             _logger.LogInformation($"Work order details returned for: {workOrderReferences}");
 
@@ -95,11 +96,13 @@ namespace HackneyRepairs.Actions
 				_logger.LogError($"Property not found for property reference: {propertyReference}");
 				throw new MissingPropertyException();
 			}
+
 			if ((result.ToList()).Count == 0)
 			{
 				_logger.LogError($"Work order not found for property reference: {propertyReference}");
 				return result;
 			}
+
 			_logger.LogInformation($"Work order details returned for property reference: {propertyReference}");
 			return result;
 		}
@@ -126,11 +129,13 @@ namespace HackneyRepairs.Actions
 				_logger.LogError($"Work order reference not found Ref: {workOrderReference}");
 				throw new MissingWorkOrderException();
 			}
+
 			if ((result.ToList()).Count == 0)
             {
 				_logger.LogError($"Notes not found for: {workOrderReference}");
 				return result;
             }
+
 			_logger.LogInformation($"Notes returned for: {workOrderReference}");
             return result;
 		}
@@ -147,6 +152,7 @@ namespace HackneyRepairs.Actions
             {
                 return default(UHWorkOrderWithMobileReports);
             }
+
             var jsonObject = JsonConvert.SerializeObject(workOrder);
             return JsonConvert.DeserializeObject<UHWorkOrderWithMobileReports>(jsonObject);
         }
