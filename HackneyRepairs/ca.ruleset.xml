@@ -4,8 +4,55 @@
     <Rule Id="CA1001" Action="Warning" />
   </Rules>
   <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
-    <Rule Id="SA0001" Action="None" />
-    <Rule Id="SA1600" Action="Warning" />
-    <Rule Id="SA1000" Action="Warning" />
+    <!-- Spacing Rules -->
+    <Rule Id="SA1000" Action="Error" />
+    <Rule Id="SA1001" Action="Error" />
+    <Rule Id="SA1002" Action="Error" />
+    <Rule Id="SA1003" Action="Error" />
+    <Rule Id="SA1004" Action="Error" />
+    <Rule Id="SA1005" Action="Error" />
+    <Rule Id="SA1006" Action="Error" />
+    <Rule Id="SA1007" Action="Error" />
+    <Rule Id="SA1008" Action="Error" />
+    <Rule Id="SA1009" Action="Error" />
+    <Rule Id="SA1010" Action="Error" />
+    <Rule Id="SA1011" Action="Error" />
+    <Rule Id="SA1012" Action="Error" />
+    <Rule Id="SA1013" Action="Error" />
+    <Rule Id="SA1014" Action="Error" />
+    <Rule Id="SA1015" Action="Error" />
+    <Rule Id="SA1016" Action="Error" />
+    <Rule Id="SA1017" Action="Error" />
+    <Rule Id="SA1018" Action="Error" />
+    <Rule Id="SA1019" Action="Error" />
+    <Rule Id="SA1020" Action="Error" />
+    <Rule Id="SA1021" Action="Error" />
+    <Rule Id="SA1022" Action="Error" />
+    <Rule Id="SA1023" Action="Error" />
+    <Rule Id="SA1024" Action="Error" />
+    <Rule Id="SA1025" Action="Error" />
+    <Rule Id="SA1026" Action="Error" />
+    <Rule Id="SA1027" Action="Error" />
+    <!-- Layout Rules -->
+    <Rule Id="SA1500" Action="Error" />
+    <Rule Id="SA1501" Action="Error" />
+    <Rule Id="SA1502" Action="Error" />
+    <Rule Id="SA1503" Action="Error" />
+    <Rule Id="SA1504" Action="Error" />
+    <Rule Id="SA1505" Action="Error" />
+    <Rule Id="SA1506" Action="Error" />
+    <Rule Id="SA1507" Action="Error" />
+    <Rule Id="SA1508" Action="Error" />
+    <Rule Id="SA1509" Action="Error" />
+    <Rule Id="SA1510" Action="Error" />
+    <Rule Id="SA1511" Action="Error" />
+    <Rule Id="SA1512" Action="Error" />
+    <Rule Id="SA1513" Action="Error" />
+    <Rule Id="SA1514" Action="Error" />
+    <Rule Id="SA1515" Action="Error" />
+    <Rule Id="SA1516" Action="Error" />
+    <Rule Id="SA1517" Action="Error" />
+    <Rule Id="SA1518" Action="Error" />
+    <Rule Id="SA1519" Action="Error" />
   </Rules>
 </RuleSet>
