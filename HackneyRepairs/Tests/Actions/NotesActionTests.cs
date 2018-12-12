@@ -9,7 +9,6 @@ using Xunit;
 
 namespace HackneyRepairs.Tests.Actions
 {
-
     public class NotesActionTests
     {
         Mock<ILoggerAdapter<NoteActions>> _mockLogger;

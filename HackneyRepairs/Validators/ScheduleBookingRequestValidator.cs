@@ -15,6 +15,7 @@ namespace HackneyRepairs.Validators
         {
             _hackneyRepairsService = hackneyRepairsService;
         }
+
         public ValidationResult Validate(string workOrderReference, ScheduleAppointmentRequest request)
         {
             var validationResult = new ValidationResult();
@@ -32,6 +33,7 @@ namespace HackneyRepairs.Validators
                     validationResult.ErrorMessages.Add("Please provide a valid work order reference");
                 }
             }
+
             if (string.IsNullOrEmpty(request.BeginDate))
             {
                 validationResult.Valid = false;
@@ -44,12 +46,14 @@ namespace HackneyRepairs.Validators
                 {
                     request.BeginDate = request.BeginDate.Remove(request.BeginDate.Length - 1, 1);
                 }
+
                 if (!DateTime.TryParse(request.BeginDate, out beginDateTime))
                 {
                     validationResult.Valid = false;
                     validationResult.ErrorMessages.Add("Please provide a valid begin date in the following format. Eg:2017-11-10T10:00:00Z");
                 }
             }
+
             if (string.IsNullOrEmpty(request.EndDate))
             {
                 validationResult.Valid = false;
@@ -62,12 +66,14 @@ namespace HackneyRepairs.Validators
                 {
                     request.EndDate = request.EndDate.Remove(request.EndDate.Length - 1, 1);
                 }
+
                 if (!DateTime.TryParse(request.EndDate, out endDateTime))
                 {
                     validationResult.Valid = false;
                     validationResult.ErrorMessages.Add("Please provide a valid end date in the following format. Eg:2017-11-10T10:00:00Z");
                 }
             }
+
             return validationResult;
         }
     }

@@ -25,15 +25,14 @@ namespace HackneyRepairs.Tests.Services
             Assert.IsType<xmbOpenSession>(request);
         }
 
-
         [Fact]
         public void build_open_session_request_builts_valid_request_object()
         {
             var mockLogger = new Mock<ILoggerAdapter<HackneyAppointmentsServiceRequestBuilder>>();
             var configuration = new NameValueCollection
             {
-                {"DRSLogin", "Login" },
-                {"DRSPassword", "Password" }
+                { "DRSLogin", "Login" },
+                { "DRSPassword", "Password" }
             };
             IHackneyAppointmentsServiceRequestBuilder builder =
                 new HackneyAppointmentsServiceRequestBuilder(configuration, mockLogger.Object);
@@ -58,7 +57,8 @@ namespace HackneyRepairs.Tests.Services
                 postcode = "addresspostcode",
                 createdDate = DateTime.Today,
                 dueDate = DateTime.Today.AddDays(30),
-                Tasks = new List<DrsTask> {
+                Tasks = new List<DrsTask> 
+                {
                     new DrsTask
                     {
                         job_code = "00210356",
@@ -90,7 +90,8 @@ namespace HackneyRepairs.Tests.Services
                 postcode = "addresspostcode",
                 createdDate = DateTime.Today,
                 dueDate = DateTime.Today.AddDays(30),
-                Tasks = new List<DrsTask> {
+                Tasks = new List<DrsTask> 
+                {
                     new DrsTask
                     {
                         job_code = "00210356",
@@ -129,6 +130,7 @@ namespace HackneyRepairs.Tests.Services
             var request = builder.BuildXmbCloseSessionRequest("123456");
             Assert.Equal(request.sessionId, "123456");
         }
+
         [Fact]
         public void build_xmb_create_order_request_return_a_valid_request_object()
         {
@@ -136,7 +138,9 @@ namespace HackneyRepairs.Tests.Services
             IHackneyAppointmentsServiceRequestBuilder builder =
                 new HackneyAppointmentsServiceRequestBuilder(new NameValueCollection(), mockLogger.Object);
             
-            var bookingCodes = new List<bookingCode>{ new bookingCode
+            var bookingCodes = new List<bookingCode>
+            { 
+                new bookingCode
                 {
                     bookingCodeDescription = "Some comments",
                     bookingCodeSORCode = "00210356",
@@ -146,7 +150,8 @@ namespace HackneyRepairs.Tests.Services
                     standardMinuteValue = "1",
                     quantity = "1.00",
                     itemNumberWithinBooking = "1"
-                }}
+                }
+            }
                 .ToArray();
             var order = new DrsOrder
             {
@@ -157,7 +162,8 @@ namespace HackneyRepairs.Tests.Services
                 postcode = "addresspostcode",
                 createdDate = DateTime.Today,
                 dueDate = DateTime.Today.AddDays(30),
-                Tasks = new List<DrsTask> {
+                Tasks = new List<DrsTask> 
+                {
                     new DrsTask
                     {
                         job_code = "00210356",
@@ -190,7 +196,8 @@ namespace HackneyRepairs.Tests.Services
                 prop_ref = "12345",
                 createdDate = DateTime.Today,
                 dueDate = DateTime.Today.AddDays(30),
-                Tasks = new List<DrsTask> {
+                Tasks = new List<DrsTask> 
+                {
                     new DrsTask
                     {
                         job_code = "00210356",

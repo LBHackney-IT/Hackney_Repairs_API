@@ -172,7 +172,6 @@ namespace HackneyRepairs.Actions
             var workOrders = new List<WorkOrder>();
             foreach (var result in repositoryResult)
             {
-
                 if (!string.IsNullOrWhiteSpace(result.wo_ref))
                 {
                     var workOrder = new WorkOrder()

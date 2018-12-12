@@ -22,6 +22,7 @@ namespace HackneyRepairs.Validators
                     validationResult.Valid = false;
                     validationResult.ErrorMessages.Add("Please provide a valid object key");
                 }
+
                 if (string.IsNullOrWhiteSpace(request.ObjectReference))
                 {
                     validationResult.Valid = false;
@@ -39,6 +40,7 @@ namespace HackneyRepairs.Validators
                     validationResult.ErrorMessages.Add("Note text cannot exeed 2000 characters");
                 }
             }
+
             return validationResult;
         }
     }

@@ -883,7 +883,8 @@ namespace HackneyRepairs.Repository
         }
     }
 
-    public class UHWWarehouseRepositoryException : Exception {
+    public class UHWWarehouseRepositoryException : Exception
+    {
       public UHWWarehouseRepositoryException() : base() { }
       public UHWWarehouseRepositoryException(string message) : base(message) { }
     }

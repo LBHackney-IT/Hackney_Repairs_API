@@ -37,9 +37,9 @@ namespace HackneyRepairs.Tests.Services
         {
             var configuration = new NameValueCollection
             {
-                {"UHUsername", "uhuser"},
-                {"UHPassword", "uhpassword"},
-                {"UHSourceSystem", "sourcesystem"}
+                { "UHUsername", "uhuser" },
+                { "UHPassword", "uhpassword" },
+                { "UHSourceSystem", "sourcesystem" }
             };
             IHackneyPropertyServiceRequestBuilder builder = new HackneyPropertyServiceRequestBuilder(configuration, new PostcodeFormatter());
             var request = builder.BuildByPropertyRefRequest("43453543");
@@ -48,6 +48,5 @@ namespace HackneyRepairs.Tests.Services
             Assert.Equal("uhpassword", request.DirectUser.UserPassword);
             Assert.Equal("sourcesystem", request.SourceSystem);
         }
-
     }
 }

@@ -41,6 +41,5 @@ namespace HackneyRepairs.Models
         public decimal itemqty { get; set; }
         public int smv { get; set; }
         public string trade { get; set; }
-
     }
 }

@@ -70,8 +70,6 @@ namespace HackneyRepairs.Tests.Integration
 			Assert.Equal(json.ToString(), resultString);
 		}
 
-
-
 		[Fact]
 		public async Task return_a_json_object_for_valid_requests()
 		{

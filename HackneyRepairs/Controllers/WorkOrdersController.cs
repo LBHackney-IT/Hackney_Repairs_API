@@ -196,7 +196,6 @@ namespace HackneyRepairs.Controllers
                 else
                 {
                     return ResponseBuilder.Error(500, "We had issues processing your request", ex.Message);
-
                 }
             }
         }

@@ -192,7 +192,6 @@ namespace HackneyRepairs.Tests.Integration
             Assert.Equal(responsejson.ToString(), responseString);
         }
 
-
         [Fact]
         public async Task return_a_json_object_for_invalid_repair_request()
         {

@@ -16,10 +16,10 @@ namespace HackneyRepairs.Tests.Actions
 	{
 		private NameValueCollection configuration = new NameValueCollection
 			{
-				{"UHUsername", "uhuser"},
-				{"UHPassword", "uhpassword"},
-				{"UHSourceSystem", "sourcesystem"},
-				{"UhSorSupplierMapping","08500820,H01|20040010,H01|20040020,H01|20040060,H01|20040310,H01|20060020,H01|20060030,H01|20110010,H01|48000000,H05|PRE00001,H02"}
+				{ "UHUsername", "uhuser" },
+				{ "UHPassword", "uhpassword" },
+				{ "UHSourceSystem", "sourcesystem" },
+				{ "UhSorSupplierMapping", "08500820,H01|20040010,H01|20040020,H01|20040060,H01|20040310,H01|20060020,H01|20060030,H01|20110010,H01|48000000,H05|PRE00001,H02" }
 			};
 
 		[Fact]
@@ -73,14 +73,12 @@ namespace HackneyRepairs.Tests.Actions
 				{
 					status = responseStatus.success,
 					sessionId = "123456"
-				}
-			);
+				});
 			var closeSessionResponse = new closeSessionResponse(
 				new xmbCloseSessionResponse
 				{
 					status = responseStatus.success
-				}
-			);
+				});
 			var drsOrder = new DrsOrder { wo_ref = "01550854", priority = "N" };
 			var xmbCheckAvailabilty = new xmbCheckAvailability { theOrder = new order { primaryOrderNumber = "01550854", priority = "N" } };
 			var xmbCreateOrder =
@@ -130,8 +128,7 @@ namespace HackneyRepairs.Tests.Actions
 				{
 					status = responseStatus.error,
 					sessionId = ""
-				}
-			);
+				});
 			var drsOrder = new DrsOrder();
 			mockAppointmentsService.Setup(service => service.OpenSessionAsync(It.IsAny<xmbOpenSession>()))
 				.ReturnsAsync(sessionResponse);
@@ -163,14 +160,12 @@ namespace HackneyRepairs.Tests.Actions
 				{
 					status = responseStatus.error,
 					sessionId = ""
-				}
-			);
+				});
 			var closeSessionResponse = new closeSessionResponse(
 				new xmbCloseSessionResponse
 				{
 					status = responseStatus.error
-				}
-			);
+				});
 			var drsOrder = new DrsOrder();
 			mockAppointmentsService.Setup(service => service.OpenSessionAsync(It.IsAny<xmbOpenSession>()))
 				.ReturnsAsync(openSessionResponse);
@@ -204,14 +199,12 @@ namespace HackneyRepairs.Tests.Actions
 				{
 					status = responseStatus.success,
 					sessionId = "123456"
-				}
-			);
+				});
 			var closeSessionResponse = new closeSessionResponse(
 				new xmbCloseSessionResponse
 				{
 					status = responseStatus.success
-				}
-			);
+				});
 			var drsOrder = new DrsOrder { wo_ref = "01550854", priority = "N" };
 			var xmbCheckAvailabilty = new xmbCheckAvailability { theOrder = new order { primaryOrderNumber = "01550854" } };
 			var xmbCreateOrder =
@@ -259,14 +252,12 @@ namespace HackneyRepairs.Tests.Actions
 				{
 					status = responseStatus.success,
 					sessionId = "123456"
-				}
-			);
+				});
 			var closeSessionResponse = new closeSessionResponse(
 				new xmbCloseSessionResponse
 				{
 					status = responseStatus.error
-				}
-			);
+				});
 			var drsOrder = new DrsOrder { wo_ref = "01550854", priority = "N" };
 			var xmbCheckAvailabilty = new xmbCheckAvailability { theOrder = new order { primaryOrderNumber = "01550854" } };
 			var xmbCreateOrder =
@@ -316,14 +307,12 @@ namespace HackneyRepairs.Tests.Actions
 				{
 					status = responseStatus.success,
 					sessionId = "123456"
-				}
-			);
+				});
 			var closeSessionResponse = new closeSessionResponse(
 				new xmbCloseSessionResponse
 				{
 					status = responseStatus.success
-				}
-			);
+				});
             var drsOrder = (DrsOrder)null;
 			mockAppointmentsService.Setup(service => service.OpenSessionAsync(It.IsAny<xmbOpenSession>()))
 				.ReturnsAsync(openSessionResponse);
@@ -364,14 +353,12 @@ namespace HackneyRepairs.Tests.Actions
 				{
 					status = responseStatus.success,
 					sessionId = "123456"
-				}
-			);
+				});
 			var closeSessionResponse = new closeSessionResponse(
 				new xmbCloseSessionResponse
 				{
 					status = responseStatus.success
-				}
-			);
+				});
 			var createOrderResponse = new createOrderResponse
 			{
 				@return = new xmbCreateOrderResponse
@@ -379,7 +366,7 @@ namespace HackneyRepairs.Tests.Actions
 					status = responseStatus.error,
 					errorMsg = "error creating the order"
 				}
-			};
+            };
 			var drsOrder = new DrsOrder { wo_ref = "01550854", priority = "N" };
 			var xmbCheckAvailabilty = new xmbCheckAvailability { theOrder = new order { primaryOrderNumber = "01550854" } };
 			var xmbCreateOrder =
@@ -457,14 +444,12 @@ namespace HackneyRepairs.Tests.Actions
 				{
 					status = responseStatus.success,
 					sessionId = "123456"
-				}
-			);
+				});
 			var closeSessionResponse = new closeSessionResponse(
 				new xmbCloseSessionResponse
 				{
 					status = responseStatus.success
-				}
-			);
+				});
 			var drsOrder = new DrsOrder { wo_ref = "01550854", priority = "N" };
 			var xmbCheckAvailabilty = new xmbCheckAvailability { theOrder = new order { primaryOrderNumber = "01550854" } };
 			var xmbCreateOrder =
@@ -508,14 +493,12 @@ namespace HackneyRepairs.Tests.Actions
 				{
 					status = responseStatus.success,
 					sessionId = "123456"
-				}
-			);
+				});
 			var closeSessionResponse = new closeSessionResponse(
 				new xmbCloseSessionResponse
 				{
 					status = responseStatus.success
-				}
-			);
+				});
 			var drsOrder = new DrsOrder { wo_ref = "01550854" };
 			var xmbScheduleBooking = new xmbScheduleBooking
 			{
@@ -586,14 +569,12 @@ namespace HackneyRepairs.Tests.Actions
 				{
 					status = responseStatus.success,
 					sessionId = "123456"
-				}
-			);
+				});
 			var closeSessionResponse = new closeSessionResponse(
 				new xmbCloseSessionResponse
 				{
 					status = responseStatus.success
-				}
-			);
+				});
 			var drsOrder = new DrsOrder { wo_ref = "01550854" };
 			mockAppointmentsService.Setup(service => service.OpenSessionAsync(It.IsAny<xmbOpenSession>()))
 				.ReturnsAsync(openSessionResponse);
@@ -645,14 +626,12 @@ namespace HackneyRepairs.Tests.Actions
 				{
 					status = responseStatus.error,
 					sessionId = ""
-				}
-			);
+				});
 			var closeSessionResponse = new closeSessionResponse(
 				new xmbCloseSessionResponse
 				{
 					status = responseStatus.success
-				}
-			);
+				});
 			var drsOrder = new DrsOrder { wo_ref = "01550854" };
 			mockAppointmentsService.Setup(service => service.OpenSessionAsync(It.IsAny<xmbOpenSession>()))
 				.ReturnsAsync(openSessionResponse);
@@ -685,14 +664,12 @@ namespace HackneyRepairs.Tests.Actions
 				{
 					status = responseStatus.success,
 					sessionId = "123456"
-				}
-			);
+				});
 			var closeSessionResponse = new closeSessionResponse(
 				new xmbCloseSessionResponse
 				{
 					status = responseStatus.error
-				}
-			);
+				});
 			var drsOrder = new DrsOrder { wo_ref = "01550854" };
 			mockAppointmentsService.Setup(service => service.OpenSessionAsync(It.IsAny<xmbOpenSession>()))
 				.ReturnsAsync(openSessionResponse);
@@ -848,7 +825,7 @@ namespace HackneyRepairs.Tests.Actions
         [Fact]
         public async Task get_appointments_by_workorder_reference_throws_a_missingappointment_exception_when_response_object_properties_are_null()
         {
-            DetailedAppointment fakeResponse =  new DetailedAppointment();
+            DetailedAppointment fakeResponse = new DetailedAppointment();
             
             Random rnd = new Random();
             string randomReference = rnd.Next(10000000, 99999999).ToString();
@@ -866,4 +843,3 @@ namespace HackneyRepairs.Tests.Actions
 		#endregion
 	}
 }
-

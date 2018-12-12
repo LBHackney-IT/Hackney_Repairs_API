@@ -8,7 +8,8 @@ namespace HackneyRepairs.Sanitizers
     public class URLQuerySanitizer
     {
         private string _URL;
-        public string URL {
+        public string URL 
+        {
             get
             {
                 return _URL;

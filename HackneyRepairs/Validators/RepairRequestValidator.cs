@@ -20,11 +20,13 @@ namespace HackneyRepairs.Validators
                 validationResult.ErrorMessages.Add("Please provide  a valid repair request");
                 return validationResult;
             }
+
             if (string.IsNullOrWhiteSpace(request.ProblemDescription))
             {
                 validationResult.Valid = false;
                 validationResult.ErrorMessages.Add("Please provide a valid Problem");
             }
+
             if (!string.IsNullOrWhiteSpace(request.PropertyReference))
             {
                 var propRefPattern = "^[0-9]{8}$";
@@ -39,6 +41,7 @@ namespace HackneyRepairs.Validators
                 validationResult.Valid = false;
                 validationResult.ErrorMessages.Add("You must provide a Property reference");
             }
+
             var priorityPattern = "^[UGINEZVMuginezvm]{1}$";
             if (!Regex.IsMatch(request.Priority, priorityPattern))
             {
@@ -90,6 +93,7 @@ namespace HackneyRepairs.Validators
                     validationResult.Valid = false;
                     validationResult.ErrorMessages.Add("Telephone number must contain minimum of 10 and maximum of 11 digits.");
                 }
+
                 if (request.Contact.EmailAddress != null && request.Contact.EmailAddress != string.Empty)
                 {
                     var emailPattern = @"[A-Za-z][A-Za-z0-9._%-]+[A-Za-z_\-0-9]@[A-Za-z0-9._%-]+(\.[A-Za-z]{2,4}|\.[A-Za-z]{2,3}\.[A-Za-z]{2,3})([,;]?\s*[A-Za-z_-][A-Za-z0-9._%-]+[A-Za-z_\-0-9]@[A-Za-z0-9._%-]+(\.[A-Za-z]{2,4}|\.[A-Za-z]{2,3}\.[A-Za-z]{2,3}))*";
@@ -118,8 +122,8 @@ namespace HackneyRepairs.Validators
             ErrorMessages = new List<string>();
             Valid = true;
             RepairRequest = request;
-
         }
+
         public RepairRequest RepairRequest { get; set; }
     }
 }

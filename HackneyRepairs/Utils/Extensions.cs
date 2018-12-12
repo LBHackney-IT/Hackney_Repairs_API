@@ -17,6 +17,7 @@ namespace HackneyRepairs.ExtensionMethods
 
                 nameValueCollection.Add(entry.Key.ToString(), value);
             }
+
             return nameValueCollection;
         }
     }

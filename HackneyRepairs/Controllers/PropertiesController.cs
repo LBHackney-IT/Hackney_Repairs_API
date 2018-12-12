@@ -98,7 +98,6 @@ namespace HackneyRepairs.Controllers
                 if (!_postcodeValidator.Validate(postcode))
                 {
                     return ResponseBuilder.Error(400, "Please provide a valid post code", "Invalid parameter - postcode");
-
                 }
 
                 PropertyActions actions = new PropertyActions(_propertyService, _propertyServiceRequestBuilder, _workordersService, _propertyLoggerAdapter);

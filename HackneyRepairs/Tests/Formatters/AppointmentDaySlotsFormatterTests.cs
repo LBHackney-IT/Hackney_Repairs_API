@@ -27,7 +27,7 @@ namespace HackneyRepairs.Tests.Formatters
                     BeginDate = new DateTime(2017, 10, 18, 12, 00, 00),
                     EndDate = new DateTime(2017, 10, 18, 14, 00, 00),
                     BestSlot = false
-                },new Slot
+                }, new Slot
                 {
                     BeginDate = new DateTime(2017, 10, 18, 14, 00, 00),
                     EndDate = new DateTime(2017, 10, 18, 16, 00, 00),

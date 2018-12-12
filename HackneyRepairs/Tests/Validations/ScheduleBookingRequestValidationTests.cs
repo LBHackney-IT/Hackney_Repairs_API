@@ -18,7 +18,7 @@ namespace HackneyRepairs.Tests.Validations
         {
             var fakeRequestBuilder = new Mock<IHackneyRepairsService>();
             fakeRequestBuilder.Setup(service => service.GetWorkOrderDetails("015580954"))
-                .ReturnsAsync(new DrsOrder {wo_ref = "015580954"});
+                .ReturnsAsync(new DrsOrder { wo_ref = "015580954" });
             var validator = new ScheduleBookingRequestValidator(fakeRequestBuilder.Object);
             var request = new ScheduleAppointmentRequest
             {
@@ -29,6 +29,7 @@ namespace HackneyRepairs.Tests.Validations
             Assert.True(result.Valid);
             Assert.Equal(result.ErrorMessages.Count, 0);
         }
+
         [Fact]
         public void returns_false_and_errormessage_if_schedule_booking_request_is_missing_work_order_reference()
         {

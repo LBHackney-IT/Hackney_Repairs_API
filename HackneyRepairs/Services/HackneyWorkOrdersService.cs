@@ -56,7 +56,8 @@ namespace HackneyRepairs.Services
                 validWarehouseWorkOrders = retrievedWarehouseWorkOrders.Where(wo => IsTerminatedWorkOrder(wo)).ToArray();
                 foundWorkOrderRefs = validWarehouseWorkOrders.Select(wo => wo.WorkOrderReference).ToArray();
                 remainingWorkOrderRefs = workOrderReferences.Where(wo => !foundWorkOrderRefs.Contains(wo)).Select(wo => wo).ToArray();
-            } else 
+            } 
+            else 
             {
                 remainingWorkOrderRefs = workOrderReferences;
             }
@@ -128,7 +129,8 @@ namespace HackneyRepairs.Services
                     var updatedWorkOrders = await _uhtRepository.GetWorkOrders(referencesToRetrieveFromLive);
                     var combinedWorkOders = validWarehouseWorkOrders.Concat(updatedWorkOrders);
                     result.InsertRange(0, combinedWorkOders);
-                } else 
+                } 
+                else 
                 {
                     result.InsertRange(0, warehouseData);
                 }
@@ -199,8 +201,8 @@ namespace HackneyRepairs.Services
 				_logger.LogInformation($"HackneyWorkOrdersService/GetNoteFeed(): Returning UH warehouse only results to for: {startId}");
 				return result;
 			}
-			
-			_logger.LogInformation($"HackneyWorkOrdersService/GetNoteFeed(): Querying UH and expecting up to {batchSize - result.Count() } results for: {startId}");
+
+			_logger.LogInformation($"HackneyWorkOrdersService/GetNoteFeed(): Querying UH and expecting up to {batchSize - result.Count()} results for: {startId}");
 			var uhwResult = await _uhwRepository.GetNoteFeed(startId, noteTarget, batchSize - result.Count());
             _logger.LogInformation($"HackneyWorkOrdersService/GetNoteFeed(): {uhwResult.Count()} results received for: {startId}");
             _logger.LogInformation($"HackneyWorkOrdersService/GetNoteFeed(): Joining warehouse and uh results into a single list for: {startId}");

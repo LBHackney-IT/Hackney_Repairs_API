@@ -12,6 +12,5 @@ namespace HackneyRepairs
         public UhwDbContext(DbContextOptions<UhwDbContext> options) : base(options)
         {
         }
-
     }
 }
