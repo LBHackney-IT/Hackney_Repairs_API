@@ -7,6 +7,6 @@ namespace HackneyRepairs.Services
 {
     public class FakeNotesService : IHackneyNotesService
     {
-        public async Task AddNote(FullNoteRequest note) {}
+        public async Task AddNote(FullNoteRequest note) { }
     }
 }

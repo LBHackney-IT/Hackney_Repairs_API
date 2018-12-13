@@ -127,7 +127,7 @@ namespace HackneyRepairs.Repository
 				using (var command = _context.Database.GetDbConnection().CreateCommand())
 				{
 					_context.Database.OpenConnection();
-					//Step 1
+					// Step 1
 					command.CommandText = @"select rmworder_sid from rmworder where wo_ref='" + workOrderReference.Trim() + "'";
 					command.CommandType = CommandType.Text;
 					using (var reader = await command.ExecuteReaderAsync())
@@ -140,7 +140,8 @@ namespace HackneyRepairs.Repository
 							}
 						}
 					}
-					//Step 2
+
+					// Step 2
 					if (order_sid != null)
 					{
 						command.CommandText = "usp_update_uh_with_optiappt";
@@ -179,7 +180,7 @@ namespace HackneyRepairs.Repository
 						visit_sid = command.Parameters.Add(returnParam);
 						await command.ExecuteNonQueryAsync();
 						// Step 3
-						//update table u_sentToAppointmentSys directly
+						// update table u_sentToAppointmentSys directly
 						if (visit_sid != 0)
 						{
 							_logger.LogInformation($"Blocking UH triggers for order {workOrderReference}");
@@ -189,6 +190,7 @@ namespace HackneyRepairs.Repository
 						}
 					}
 				}
+
 				return order_sid;
 			}
 			catch (Exception ex)
@@ -201,7 +203,6 @@ namespace HackneyRepairs.Repository
 				_context.Database.CloseConnection();
 			}
 		}
-
 
         public async Task<UHWorkOrder> GetWorkOrder(string workOrderReference)
 		{
@@ -243,6 +244,7 @@ namespace HackneyRepairs.Repository
 				_logger.LogError(ex.Message);
 				throw new UhtRepositoryException();
 			}
+
 			return workOrder;
 		}
 
@@ -328,6 +330,7 @@ namespace HackneyRepairs.Repository
                 _logger.LogError(ex.Message);
                 throw new UhtRepositoryException();
             }
+
 			return workOrders;
         }
 
@@ -437,6 +440,7 @@ namespace HackneyRepairs.Repository
                 _logger.LogError(ex.Message);
                 throw new UhtRepositoryException();
             }
+
             return workOrders;
         }
 
@@ -469,7 +473,6 @@ namespace HackneyRepairs.Repository
                 throw new UhtRepositoryException();
             }
         }
-
 
         public async Task<IEnumerable<RepairWithWorkOrderDto>> GetRepairRequest(string repairReference)
         {
@@ -541,6 +544,7 @@ namespace HackneyRepairs.Repository
                 _logger.LogError(ex.Message);
                 throw new UhtRepositoryException();
             }
+
             return appointments;
         }
 
@@ -629,6 +633,7 @@ namespace HackneyRepairs.Repository
                 _logger.LogError(ex.Message);
                 throw new UhtRepositoryException();
             }
+
             return appointment;
         }
 
@@ -685,6 +690,7 @@ namespace HackneyRepairs.Repository
             {
                 dtCutoff = dtCutoff.AddYears(-10);
             }
+
             return dtCutoff.ToString("yyyy-MM-dd HH:mm:ss");
         }
 
@@ -740,15 +746,16 @@ namespace HackneyRepairs.Repository
 							}
 						}
 					}
+
 					entities.Add(newObject);
 				}
+
 				return entities;
 			}
+
 			return null;
 		}
     }
 
-	public class UhtRepositoryException : Exception {}
+	public class UhtRepositoryException : Exception { }
 }
-
-

@@ -66,20 +66,23 @@ namespace HackneyRepairs
 
                 c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
                 {
-                    {"Token", Enumerable.Empty<string>()}
+                    { "Token", Enumerable.Empty<string>() }
                 });
 
-                c.SwaggerDoc("v1", new Info { Version = "v1", Title = $"Hackney Repairs API - {Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}",
-                    Description="This is the Hackney Repairs API which allows client applications " +
+                c.SwaggerDoc("v1", new Info 
+                { 
+                    Version = "v1", Title = $"Hackney Repairs API - {Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}",
+                    Description = "This is the Hackney Repairs API which allows client applications " +
                         "to securely access publicly available information on repairs to Hackney properties, " +
-                        "and to raise new repair requests." });
+                        "and to raise new repair requests." 
+                });
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
-            services.AddCors(option => {
+            services.AddCors(option => 
+            {
                 option.AddPolicy("AllowAny", policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-
 			});
 			services.AddCustomServices();
 
@@ -125,8 +128,7 @@ namespace HackneyRepairs
                 {
                     case "Production":
                         app.UseSwagger(
-                            c => c.PreSerializeFilters.Add((swaggerDoc, httpReq) => swaggerDoc.Host = "api.hackney.gov.uk/unboxedhackneyrepairs/")
-                        );
+                            c => c.PreSerializeFilters.Add((swaggerDoc, httpReq) => swaggerDoc.Host = "api.hackney.gov.uk/unboxedhackneyrepairs/"));
                         app.UseSwaggerUI(c =>
                         {
                             string basePath = Environment.GetEnvironmentVariable("ASPNETCORE_APPL_PATH");
@@ -137,8 +139,7 @@ namespace HackneyRepairs
                         break;
                     case "Test":
                         app.UseSwagger(
-                            c => c.PreSerializeFilters.Add((swaggerDoc, httpReq) => swaggerDoc.Host = "sandboxapi.hackney.gov.uk/unboxedhackneyrepairs/")
-                        );
+                            c => c.PreSerializeFilters.Add((swaggerDoc, httpReq) => swaggerDoc.Host = "sandboxapi.hackney.gov.uk/unboxedhackneyrepairs/"));
                         app.UseSwaggerUI(c =>
                         {
                             string basePath = Environment.GetEnvironmentVariable("ASPNETCORE_APPL_PATH");
@@ -149,8 +150,7 @@ namespace HackneyRepairs
                         break;
                     case "Development":
                         app.UseSwagger(
-                            c => c.PreSerializeFilters.Add((swaggerDoc, httpReq) => swaggerDoc.Host = "sandboxapi.hackney.gov.uk/unboxedhackneyrepairs_dev/")
-                        );
+                            c => c.PreSerializeFilters.Add((swaggerDoc, httpReq) => swaggerDoc.Host = "sandboxapi.hackney.gov.uk/unboxedhackneyrepairs_dev/"));
                         app.UseSwaggerUI(c =>
                         {
                             string basePath = Environment.GetEnvironmentVariable("ASPNETCORE_APPL_PATH");
@@ -180,7 +180,6 @@ namespace HackneyRepairs
                         });
                         break;
                 }
-
             }
 		}
 	}

@@ -11,6 +11,7 @@ namespace HackneyRepairs.Models
         {
             Tasks = new List<DrsTask>();
         }
+
         public int Id { get; set; }
         public DateTime createdDate { get; set; }
         public DateTime dueDate { get; set; }
@@ -40,6 +41,5 @@ namespace HackneyRepairs.Models
         public decimal itemqty { get; set; }
         public int smv { get; set; }
         public string trade { get; set; }
-
     }
 }

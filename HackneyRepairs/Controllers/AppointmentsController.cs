@@ -52,7 +52,7 @@ namespace HackneyRepairs.Controllers
 		/// <param name="workorderreference">The work order reference for which to provide available appointments</param>
 		/// <returns>A list of available appointments</returns>
 		/// <response code="200">Returns the list of available appointments</response>
-		/// <response code="400">If no valid work order reference is provided</response>   
+		/// <response code="400">If no valid work order reference is provided</response>
 		/// <response code="500">If any errors are encountered</response>   
 		[HttpGet]
 		[ProducesResponseType(200)]

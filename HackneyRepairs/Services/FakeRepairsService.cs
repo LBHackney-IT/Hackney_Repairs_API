@@ -50,15 +50,14 @@ namespace HackneyRepairs.Services
         public Task<WorksOrderListResponse> CreateRepairWithOrderAsync(NewRepairTasksRequest repairRequest)
         {
             var response = new WorksOrderListResponse
-            {
-                
+            { 
                 Success = true,
                 WorksOrderList = new List<WorksOrderDto>
                 {
                     new WorksOrderDto
                     {
                         RepairRequestReference = "123456",
-                        OrderReference= "987654  ",
+                        OrderReference = "987654  ",
                         PropertyReference = "00000320   ",
                         SupplierReference = "000000127 "
                     }
@@ -85,10 +84,11 @@ namespace HackneyRepairs.Services
 
         public Task<DrsOrder> GetWorkOrderDetails(string workOrderReference)
         {
-            if(workOrderReference == "01550853")
+            if (workOrderReference == "01550853")
             {
                 throw new Exception();
             }
+
             var drsOrder = new DrsOrder
             {
                 contract = "H01",
@@ -99,7 +99,8 @@ namespace HackneyRepairs.Services
                 postcode = "addresspostcode",
                 createdDate = DateTime.Today,
                 dueDate = DateTime.Today.AddDays(30),
-                Tasks = new List<DrsTask> {
+                Tasks = new List<DrsTask> 
+                {
                     new DrsTask
                     {
                         job_code = "00210356",
@@ -184,7 +185,7 @@ namespace HackneyRepairs.Services
                 case "999999999":
 					return Task.Run(() => new List<RepairRequestBase>().AsEnumerable());
 				case "0":
-					return Task.Run(() => (IEnumerable<RepairRequestBase>) null);
+					return Task.Run(() => (IEnumerable<RepairRequestBase>)null);
                 default:
 					return Task.Run(() => requests);
             }
@@ -196,11 +197,13 @@ namespace HackneyRepairs.Services
             {
                 throw new RepairsServiceException();
             }
+
             var fakeResponse = new List<RepairWithWorkOrderDto>();
             if (string.Equals(repairReference, "123456899"))
             {
                 return Task.Run(() => (IEnumerable<RepairWithWorkOrderDto>)fakeResponse);
             }
+
             var fakeElement = new RepairWithWorkOrderDto();
             return Task.Run(() => fakeResponse.Append(fakeElement));
         }

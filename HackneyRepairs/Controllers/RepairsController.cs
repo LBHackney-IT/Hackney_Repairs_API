@@ -61,13 +61,13 @@ namespace HackneyRepairs.Controllers
                     var result = await actions.CreateRepair(request);
                     return ResponseBuilder.Ok(result);
                 }
+
                 var errors = validationResult.ErrorMessages.Select(error => new ApiErrorMessage
                 {
                     DeveloperMessage = error,
                     UserMessage = error
                 }).ToList();
                 return ResponseBuilder.ErrorFromList(400, errors);
-
             }
             catch (Exception ex)
             {
@@ -121,7 +121,6 @@ namespace HackneyRepairs.Controllers
                 {
                     new ApiErrorMessage
                     {
-
                         DeveloperMessage = ex.Message,
                         UserMessage = "We had some issues connecting to the data source"
                     }
@@ -135,7 +134,6 @@ namespace HackneyRepairs.Controllers
                 _exceptionLogger.CaptureException(ex);
                 return ResponseBuilder.Error(500, "We had some problems processing your request", ex.Message);
             }
-
         }
 
 		    // GET Repair Requests by property reference

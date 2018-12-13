@@ -10,7 +10,7 @@ namespace HackneyRepairs.Services
         private NameValueCollection _configuration;
         public HackneyConfigurationBuilder(Hashtable env_variables, NameValueCollection config_items)
         {
-            if(env_variables!=null)
+            if (env_variables != null)
             {
                 _configuration = env_variables.ToNameValueCollection();
             }
@@ -24,7 +24,5 @@ namespace HackneyRepairs.Services
         {
             return _configuration;
         }
-
-
     }
 }

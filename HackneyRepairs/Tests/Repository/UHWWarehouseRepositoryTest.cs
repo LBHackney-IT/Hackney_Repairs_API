@@ -52,8 +52,7 @@ namespace HackneyRepairs.Tests.Repository
                 u_servitor_ref: "servitor-ref",
                 u_dlo_status: "ABC",
                 wo_status: "300",
-                date_due: "2001-01-02 17:30:00"
-            );
+                date_due: "2001-01-02 17:30:00");
 
             var repo = new UHWWarehouseRepository((UHWWarehouseDbContext)_simulator.context, _logger);
             var workOrders = await repo.GetWorkOrderByPropertyReference("00076258");
@@ -82,14 +81,12 @@ namespace HackneyRepairs.Tests.Repository
 
             Assert.Equal(
                 JsonConvert.SerializeObject(expectedWorkOrder),
-                JsonConvert.SerializeObject(retrievedWorkOrder)
-            );
+                JsonConvert.SerializeObject(retrievedWorkOrder));
         }
 
         [Fact.WhenUniversalHousingIsRunning]
         public async void GetWorkOrderByPropertyReference_should_return_all_valid_work_orders_that_exist_for_the_property()
         {
-
             _simulator.InsertTrade(trade: "AS");
             _simulator.InsertTask(rq_ref: "00000002", trade: "AS", task_no: 1);
             _simulator.InsertRequest(rq_ref: "00000002");

@@ -32,7 +32,7 @@ namespace HackneyRepairs.Actions
         public async Task<IList<Slot>> GetAppointments(string workOrderReference)
         {
             _logger.LogInformation($"Getting appointments from DRS for work order reference {workOrderReference}");
-            //Get DRS sessionId
+            // Get DRS sessionId
             var sessionId = await OpenDrsServiceSession();
 
             // get the work order details and pass it to the request builder
@@ -43,7 +43,7 @@ namespace HackneyRepairs.Actions
                 throw new InvalidWorkOrderInUHException();
             }
 
-            //Trim work order properties - to be moved to a separate method
+            // Trim work order properties - to be moved to a separate method
             workOrder.priority = workOrder.priority.Trim();
             // Create the work order in DRS
             var drsCreateResponse = await CreateWorkOrderInDrs(workOrderReference, sessionId, workOrder);
@@ -53,18 +53,20 @@ namespace HackneyRepairs.Actions
               _logger.LogError(drsCreateResponse.@return.errorMsg);
               throw new AppointmentServiceException();
             }
+
             _logger.LogInformation($"Successfully created order in DRS with order reference {workOrderReference}");
             var slotList = new List<Slot>();
             int count = 0;
-            while(!slotList.Any() && count < 4)
+            while (!slotList.Any() && count < 4)
             {
-                DateTime startDay = DateTime.Now.AddDays(1 + (count*7));
+                DateTime startDay = DateTime.Now.AddDays(1 + (count * 7));
                 DateTime endDay = startDay.AddDays(7);
                 var start = new DateTime(startDay.Year, startDay.Month, startDay.Day, 01, 0, 0, 0);
                 var end = new DateTime(endDay.Year, endDay.Month, endDay.Day, 01, 0, 0, 0);
                 slotList = await getAppointmentSlots(workOrderReference, sessionId, workOrder, start, end);
-                count+=1;
+                count += 1;
             }
+
             // close session
             await CloseDrsServiceSession(sessionId);
             if (slotList.Any())
@@ -80,7 +82,7 @@ namespace HackneyRepairs.Actions
         public async Task<object> BookAppointment(string workOrderReference, DateTime beginDate, DateTime endDate)
         {
             _logger.LogInformation($"Booking appointment for work order reference {workOrderReference} with {beginDate} and {endDate}");
-            //Get DRS sessionId
+            // Get DRS sessionId
             var sessionId = await OpenDrsServiceSession();
             // get the work order details and pass it to the request builder
             var workOrder = await _repairsService.GetWorkOrderDetails(workOrderReference);
@@ -89,6 +91,7 @@ namespace HackneyRepairs.Actions
                 _logger.LogError($"could not find the work order in UH with reference {workOrderReference}");
                 throw new InvalidWorkOrderInUHException();
             }
+
             var request = _appointmentsServiceRequestBuilder.BuildXmbScheduleBookingRequest(workOrderReference, sessionId, beginDate, endDate, workOrder);
 
             // Get booking id & order id for the primary order reference
@@ -104,18 +107,19 @@ namespace HackneyRepairs.Actions
                 _logger.LogError(returnResponse.errorMsg);
                 throw new AppointmentServiceException();
             }
-            //update UHT with the order and populate the u_sentToAppointmentSys table 
-            var order_id = await _repairsService.UpdateUHTVisitAndBlockTrigger(workOrderReference, beginDate, endDate, 
-                request.theBooking.orderId,request.theBooking.bookingId, BuildSlotDetail(beginDate, endDate));
-            //attach the process (running Andrey's stored procedure)
+
+            // update UHT with the order and populate the u_sentToAppointmentSys table
+            var order_id = await _repairsService.UpdateUHTVisitAndBlockTrigger(workOrderReference, beginDate, endDate,
+                request.theBooking.orderId, request.theBooking.bookingId, BuildSlotDetail(beginDate, endDate));
+            // attach the process (running Andrey's stored procedure)
             _logger.LogInformation($"Updating UH documents for workorder {workOrderReference}");
             if (order_id != null)
             {
                 await _repairsService.AddOrderDocumentAsync(_configuration.Get("RepairRequestDocTypeCode"),
                                                             workOrderReference, order_id.Value, _configuration.Get("UHDocUploadResponseMessage"));
             }
-            //Issue Order
 
+            // Issue Order
             _logger.LogInformation($"Issuing order for workorder {workOrderReference}");
             var worksOrderRequest = _repairsServiceRequestBuilder.BuildWorksOrderRequest(workOrderReference);
             var issueOrderResponse = await _repairsService.IssueOrderAsync(worksOrderRequest);
@@ -124,8 +128,9 @@ namespace HackneyRepairs.Actions
                 _logger.LogError(issueOrderResponse.ErrorMessage);
                 throw new AppointmentServiceException();
             }
+
             _logger.LogInformation($"Successfully issued workorder {workOrderReference}");
-            //End Issue Order
+            // End Issue Order
             var json = new
             {
                 beginDate = DateTimeFormatter.FormatDateTimeToUtc(beginDate),
@@ -134,7 +139,7 @@ namespace HackneyRepairs.Actions
             return json;
         }
 
-		public async Task<IEnumerable<DetailedAppointment>> GetAppointmentsByWorkOrderReference(string workOrderReference)
+        public async Task<IEnumerable<DetailedAppointment>> GetAppointmentsByWorkOrderReference(string workOrderReference)
         {
             _logger.LogInformation($"Getting all apointments for workOrderReference: {workOrderReference}");
             var result = await _appointmentsService.GetAppointmentsByWorkOrderReference(workOrderReference);
@@ -143,6 +148,7 @@ namespace HackneyRepairs.Actions
                 _logger.LogError($"No appointments returned due workOrderReference not being found: {workOrderReference}");
                 throw new InvalidWorkOrderInUHException();
             }
+
             if (result.FirstOrDefault().BeginDate == null)
             {
                 _logger.LogError($"No appointments found for : {workOrderReference}");
@@ -154,15 +160,16 @@ namespace HackneyRepairs.Actions
             return result;
         }
 
-		public async Task<DetailedAppointment> GetLatestAppointmentByWorkOrderReference(string workOrderReference)
+        public async Task<DetailedAppointment> GetLatestAppointmentByWorkOrderReference(string workOrderReference)
         {
-			_logger.LogInformation($"Getting current apointment for workOrderReference: {workOrderReference}");
+            _logger.LogInformation($"Getting current apointment for workOrderReference: {workOrderReference}");
             var result = await _appointmentsService.GetLatestAppointmentByWorkOrderReference(workOrderReference);
             if (result == null)
             {
                 _logger.LogError($"No appointment returned due workOrderReference not being found: {workOrderReference}");
                 throw new InvalidWorkOrderInUHException();
             }
+
             if (result.BeginDate == null)
             {
                 _logger.LogError($"No appointment found for : {workOrderReference}");
@@ -178,7 +185,7 @@ namespace HackneyRepairs.Actions
         internal async Task<object> GetAppointmentForWorksOrder(string workOrderReference)
         {
             _logger.LogInformation($"Getting booked appointment for work order reference {workOrderReference}");
-            //Get DRS sessionId
+            // Get DRS sessionId
             var sessionId = await OpenDrsServiceSession();
             // get the work order details and pass it to the request builder
             var workOrder = await _repairsService.GetWorkOrderDetails(workOrderReference);
@@ -187,6 +194,7 @@ namespace HackneyRepairs.Actions
                 _logger.LogError($"could not find the work order in UH with reference {workOrderReference}");
                 throw new InvalidWorkOrderInUHException();
             }
+
             // Get booking id & order id for the primary order reference
             var orderResponse = await GetOrderFromDrs(workOrderReference, sessionId);
             // close session
@@ -197,13 +205,13 @@ namespace HackneyRepairs.Actions
                 _logger.LogError(returnResponse.errorMsg);
                 throw new AppointmentServiceException();
             }
+
             return new
             {
                 beginDate = DateTimeFormatter.FormatDateTimeToUtc(orderResponse.@return.theOrders[0].theBookings[0].assignedStart),
                 endDate = DateTimeFormatter.FormatDateTimeToUtc(orderResponse.@return.theOrders[0].theBookings[0].assignedEnd)
             };
         }
-
 
         private async Task<string> OpenDrsServiceSession()
         {
@@ -216,6 +224,7 @@ namespace HackneyRepairs.Actions
                 _logger.LogError(sessionResponseReturn.errorMsg);
                 throw new AppointmentServiceException();
             }
+
             _logger.LogInformation($"Succesfully opened the session {sessionResponseReturn.sessionId}");
             return sessionResponseReturn.sessionId;
         }
@@ -231,6 +240,7 @@ namespace HackneyRepairs.Actions
                 _logger.LogError(sessionResponseReturn.errorMsg);
                 throw new AppointmentServiceException();
             }
+
             _logger.LogInformation($"Succesfully closed the session {sessionId}");
         }
 
@@ -256,6 +266,7 @@ namespace HackneyRepairs.Actions
             {
                 _logger.LogError(ex.Message);
             }
+
           return slots;
         }
 
@@ -263,7 +274,7 @@ namespace HackneyRepairs.Actions
         {
             // build the request
             var request = _appointmentsServiceRequestBuilder.BuildXmbCreateOrderRequest(workOrderReference, sessionId, drsOrder);
-            //create the work order
+            // create the work order
             var response = await _appointmentsService.CreateWorkOrderAsync(request);
             var returnResponse = response.@return;
             if (returnResponse.status == responseStatus.error && returnResponse.errorMsg.Contains("order already exists"))
@@ -271,7 +282,8 @@ namespace HackneyRepairs.Actions
                 _logger.LogInformation($"Unable to create order in DRS, an order already exists with order reference {workOrderReference}");
                 response.@return.status = responseStatus.success;
             }
-            return response;  
+
+            return response;
         }
 
         private async Task<selectOrderResponse> GetOrderFromDrs(string workOrderReference, string sessionId)
@@ -286,6 +298,7 @@ namespace HackneyRepairs.Actions
                 _logger.LogError(returnResponse.errorMsg);
                 throw new AppointmentServiceException();
             }
+
             _logger.LogInformation($"Succesful getting the order details from Drs for {workOrderReference}");
             return response;
         }
@@ -302,23 +315,25 @@ namespace HackneyRepairs.Actions
                 _logger.LogError(responseString.errorMsg);
                 throw new AppointmentServiceException();
             }
+
             var slots = responseString.theSlots;
             if (slots == null)
             {
                 _logger.LogError($"Missing the slots from the response string {responseString}");
                 throw new MissingSlotsException();
             }
+
             var slotList = new List<Slot>();
             foreach (var slot in slots)
             {
                 slotList.AddRange(buildSlot(slot));
             }
+
             return slotList.Where(slot => slot.Available).ToList();
         }
 
         private string BuildSlotDetail(DateTime beginDate, DateTime endDate)
         {
-
             int hrs = endDate.Subtract(beginDate).Hours;
 
             string slotName = string.Empty;
@@ -338,14 +353,14 @@ namespace HackneyRepairs.Actions
 
             return slotName;
         }
-
     }
+
     public class MissingSlotsException : System.Exception { }
     public class MissingSlotsForDayException : System.Exception { }
     public class AppointmentServiceException : System.Exception { }
 
     public class InvalidWorkOrderInUHException : System.Exception { }
     public class NoAvailableAppointmentsException : System.Exception { }
-	public class MissingAppointmentsException : Exception { }
-	public class MissingAppointmentException : Exception { }
+    public class MissingAppointmentsException : Exception { }
+    public class MissingAppointmentException : Exception { }
 }

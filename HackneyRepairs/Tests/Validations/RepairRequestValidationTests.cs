@@ -76,7 +76,7 @@ namespace HackneyRepairs.Tests.Validations
             var repairRequestValidator = new RepairRequestValidator();
             var result = repairRequestValidator.Validate(request);
             Assert.False(result.Valid);
-            Assert.Equal(result.ErrorMessages.Count,2);
+            Assert.Equal(result.ErrorMessages.Count, 2);
             Assert.Contains("Please provide a valid Priority", result.ErrorMessages);
         }
 
@@ -96,7 +96,6 @@ namespace HackneyRepairs.Tests.Validations
             Assert.Contains("You must provide a Property reference", result.ErrorMessages);
         }
 
-
         [Fact]
         public void returns_false_and_errormessage_if_repair_request_does_not_have_a_contact()
         {
@@ -112,7 +111,6 @@ namespace HackneyRepairs.Tests.Validations
             Assert.Equal(result.ErrorMessages.Count, 1);
             Assert.Contains("Please provide a contact", result.ErrorMessages);
         }
-
 
         [Fact]
         public void returns_false_and_errormsg_if_repair_request_contact_contains_empty_name()
@@ -136,8 +134,6 @@ namespace HackneyRepairs.Tests.Validations
             Assert.Equal(result.ErrorMessages.Count, 1);
             Assert.Contains("Contact Name cannot be empty", result.ErrorMessages);
         }
-
-
 
         [Fact]
         public void returns_false_and_errormsg_if_repair_request_contact_contains_invalid_telephone()

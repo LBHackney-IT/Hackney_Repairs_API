@@ -122,8 +122,7 @@ namespace HackneyRepairs.Repository
             try
             {
                 using (var connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
-                {
-                   
+                { 
                     _logger.LogInformation($"Getting up to {size} notes with an id > {noteId}");
 
                     var query = $@"set dateformat ymd;
@@ -193,11 +192,10 @@ namespace HackneyRepairs.Repository
             {
                 dtCutoff = dtCutoff.AddYears(-10);
             }
+
             return dtCutoff.ToString("yyyy-MM-dd HH:mm:ss");
         }
     }
 
-    public class UhwRepositoryException : Exception {}
+    public class UhwRepositoryException : Exception { }
 }
-
-

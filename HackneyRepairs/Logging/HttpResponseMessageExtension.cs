@@ -17,9 +17,6 @@ namespace HackneyRepairs.Logging
 
             return exceptionResponse;
         }
-
-        
-
     }
 
     public class ExceptionResponse

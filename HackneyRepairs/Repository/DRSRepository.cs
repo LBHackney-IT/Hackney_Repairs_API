@@ -75,8 +75,9 @@ namespace HackneyRepairs.Repository
                                         p_job.NAME = @WorkOrderReference)) AS jobs
                                         
                                 INNER JOIN s_worker ON jobs.AssignedWorker = s_worker.name";
-                    appointments = connection.Query<DetailedAppointment>(query, new {WorkOrderReference = workOrderReference}).ToList();
+                    appointments = connection.Query<DetailedAppointment>(query, new { WorkOrderReference = workOrderReference }).ToList();
 				}
+
 				return appointments;
 			}
 			catch (Exception ex)
@@ -103,6 +104,6 @@ namespace HackneyRepairs.Repository
 			}
 		}
 	}
-    public class DrsRepositoryException : Exception {}
-    
+
+    public class DrsRepositoryException : Exception { }  
 }

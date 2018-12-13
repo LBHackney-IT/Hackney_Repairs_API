@@ -15,6 +15,7 @@ namespace HackneyRepairs.Services
 			{
                 return Task.Run(() => (UHWorkOrder)null);
 			}
+
             var workOrder = new UHWorkOrder
 			{
                 WorkOrderReference = workOrderReference,
@@ -27,7 +28,8 @@ namespace HackneyRepairs.Services
         {
             IEnumerable<UHWorkOrder> workOrders = workOrderReferences
                 .Where(reference => reference != "MISSING")
-                .Select(reference => {
+                .Select(reference => 
+                {
                     return new UHWorkOrder
                     {
                         WorkOrderReference = reference,
@@ -56,10 +58,12 @@ namespace HackneyRepairs.Services
             {
 				return Task.Run(() => (IEnumerable<UHWorkOrder>)new List<UHWorkOrder>());
             }
+
 			if (string.Equals(propertyReference, "0"))
             {
                 return Task.Run(() => (IEnumerable<UHWorkOrder>)null);
             }
+
 			var workOrder = new List<UHWorkOrder>
             {
 				new UHWorkOrder
@@ -74,11 +78,12 @@ namespace HackneyRepairs.Services
         {
             if (Array.Exists(propertyReferences, v => v == "9999999999"))
             {
-                return Task.Run(() => (IEnumerable<UHWorkOrder>) new List<UHWorkOrder>() { new UHWorkOrder() });
+                return Task.Run(() => (IEnumerable<UHWorkOrder>)new List<UHWorkOrder>() { new UHWorkOrder() });
             }
+
             if (Array.Exists(propertyReferences, v => v == "0"))
             {
-                return Task.Run(() => (IEnumerable<UHWorkOrder>) new List<UHWorkOrder>());
+                return Task.Run(() => (IEnumerable<UHWorkOrder>)new List<UHWorkOrder>());
             }
 
             IEnumerable<UHWorkOrder> workOrders = new List<UHWorkOrder>();
@@ -92,6 +97,7 @@ namespace HackneyRepairs.Services
             {
                 return Task.Run(() => (IEnumerable<UHWorkOrder>)new List<UHWorkOrder>());
             }
+
             var workOrder = new List<UHWorkOrder>
             {
                 new UHWorkOrder
@@ -109,18 +115,19 @@ namespace HackneyRepairs.Services
             {
 				return Task.Run(() => (IEnumerable<Note>)new List<Note>());
             }
+
 			if (string.Equals(workOrderReference, "00"))
             {
 				return Task.Run(() => (IEnumerable<Note>)null);
             }
+
             var noteEntities = new List<Note>
             {
                 new Note
                 {
                     Text = "Some note",
                     LoggedBy = "UHOrder"
-				}
-          
+				}    
             };
 			return Task.Run(() => (IEnumerable<Note>)noteEntities);
         }
@@ -131,10 +138,12 @@ namespace HackneyRepairs.Services
             {
                 return Task.Run(() => (IEnumerable<Note>)new List<Note>());
             }
+
             if (startId == 11550853)
             {
                 throw new FakeWorkOrdersServiceException();
             }
+
             var fakeNoteResponse = new List<Note>
             {
                 new Note
@@ -151,10 +160,12 @@ namespace HackneyRepairs.Services
             {
                 return Task.Run(() => (IEnumerable<UHWorkOrderFeed>)new List<UHWorkOrderFeed>());
             }
+
             if (string.Equals(startId, "11550853"))
             {
                 throw new FakeWorkOrdersServiceException();
             }
+
             var fakeResponse = new List<UHWorkOrderFeed>
             {
                 new UHWorkOrderFeed
@@ -173,10 +184,11 @@ namespace HackneyRepairs.Services
                 response = null;
                 return Task.Run(() => response);
             }
+
             response = 44444444;
             return Task.Run(() => response);
         }
     }
 
-    class FakeWorkOrdersServiceException : Exception {}
+    class FakeWorkOrdersServiceException : Exception { }
 }

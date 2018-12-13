@@ -25,7 +25,7 @@ namespace HackneyRepairs.Tests.Actions
                 ProblemDescription = "tap leaking",
                 Priority = "N",
                 PropertyReference = "123456",
-                Contact = new RepairRequestContact { Name = "Test", TelephoneNumber = "0123456789"}
+                Contact = new RepairRequestContact { Name = "Test", TelephoneNumber = "0123456789" }
             };
 
             var repairRequest = new NewRepairRequest
@@ -65,7 +65,7 @@ namespace HackneyRepairs.Tests.Actions
                 problemDescription = "tap leaking",
                 priority = "N",
                 propertyReference = "123456",
-                contact = new {name = "Test", telephoneNumber = "0123456789"}  
+                contact = new { name = "Test", telephoneNumber = "0123456789" }  
             };
             Assert.Equal(response1, result);
         }
@@ -203,14 +203,14 @@ namespace HackneyRepairs.Tests.Actions
             var repairsActions = new RepairsActions(fakeRepairService.Object, fakeRequestBuilder.Object, mockLogger.Object);
             var result = await repairsActions.CreateRepair(request);
             var workOrders = new object[1];
-            workOrders[0] = new {workOrderReference = "987654", sorCode = "12345678", supplierReference = "00000127" };
+            workOrders[0] = new { workOrderReference = "987654", sorCode = "12345678", supplierReference = "00000127" };
             var response1 = new
             {
                 repairRequestReference = "123456",
                 propertyReference = "00000320",
                 problemDescription = "tap leaking",
                 priority = "N",
-                contact = new {name ="Test", telephoneNumber= "0123456789"},
+                contact = new { name ="Test", telephoneNumber= "0123456789" },
                 workOrders = workOrders
             };
 

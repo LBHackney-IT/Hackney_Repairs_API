@@ -14,14 +14,17 @@ namespace HackneyRepairs.Logging
             _url = url;
             _environment = environment;
         }
+
         public ILogger CreateLogger(string categoryName)
         {
             return _loggers.GetOrAdd(categoryName, name => new SentryLogger(name, _url, _environment));
         }
+
         public void Dispose()
         {
             _loggers.Clear();
         }
+
         public IExceptionLogger CreateExceptionLogger()
         {
             return _loggers.GetOrAdd("custom", name => new SentryLogger(name, _url, _environment));

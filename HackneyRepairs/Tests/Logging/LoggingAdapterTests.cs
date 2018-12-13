@@ -44,7 +44,7 @@ namespace HackneyRepairs.Tests.Logging
             var fakeRequestBuilder = new Mock<IHackneyPropertyServiceRequestBuilder>();
             fakeRequestBuilder.Setup(service => service.BuildListByPostCodeRequest("E8 1DT")).Returns(string.Empty);
 			var workOrdersService = new Mock<IHackneyWorkOrdersService>();
-			PropertyActions propertyActions = new PropertyActions(fakeService.Object, fakeRequestBuilder.Object,workOrdersService.Object,  mockLogger.Object);
+			PropertyActions propertyActions = new PropertyActions(fakeService.Object, fakeRequestBuilder.Object, workOrdersService.Object,  mockLogger.Object);
             
             var result = await propertyActions.FindProperty("E8 1DT", null, null);
 

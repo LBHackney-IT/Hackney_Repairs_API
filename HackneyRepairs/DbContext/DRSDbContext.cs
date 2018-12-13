@@ -5,10 +5,8 @@ namespace HackneyRepairs.DbContext
 {
     public partial class DRSDbContext : Microsoft.EntityFrameworkCore.DbContext
     {
-		public DRSDbContext(DbContextOptions<DRSDbContext> options) : base(options)
+        public DRSDbContext(DbContextOptions<DRSDbContext> options) : base(options)
         {
         }
-
-    }
-    
+    }   
 }

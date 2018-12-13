@@ -135,7 +135,6 @@ namespace HackneyRepairs.Controllers
             }
 		}
 
-
         // GET Work Order by property reference 
         /// <summary>
         /// Returns all work orders for a property
@@ -179,6 +178,7 @@ namespace HackneyRepairs.Controllers
                     {
                         return ResponseBuilder.Error(400, "Invalid parameter format - since", "Parameter is not a valid DateTime");
                     }
+
                     validUntil = validUntil.AddDays(1).AddSeconds(-1);
                 }
 
@@ -196,7 +196,6 @@ namespace HackneyRepairs.Controllers
                 else
                 {
                     return ResponseBuilder.Error(500, "We had issues processing your request", ex.Message);
-
                 }
             }
         }

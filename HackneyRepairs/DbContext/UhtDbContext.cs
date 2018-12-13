@@ -12,6 +12,5 @@ namespace HackneyRepairs.DbContext
         public UhtDbContext(DbContextOptions<UhtDbContext> options) : base(options)
         {
         }
-
     }
 }

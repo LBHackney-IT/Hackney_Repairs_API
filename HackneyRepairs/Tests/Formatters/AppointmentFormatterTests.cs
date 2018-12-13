@@ -16,8 +16,8 @@ namespace HackneyRepairs.Tests.Formatters
         {
             var anAppointment = new Appointment
             {
-                BeginDate = new DateTime(2017,10,18,10,00,00),
-                EndDate = new DateTime(2017,10,18,12,00,00),
+                BeginDate = new DateTime(2017, 10, 18, 10, 00, 00),
+                EndDate = new DateTime(2017, 10, 18, 12, 00, 00),
             };
             var formattedAppointment = anAppointment.FormatAppointment();
             var appointment = new
@@ -28,5 +28,4 @@ namespace HackneyRepairs.Tests.Formatters
             Assert.Equal(JsonConvert.SerializeObject(appointment), JsonConvert.SerializeObject(formattedAppointment));
         }
     }
-
 }

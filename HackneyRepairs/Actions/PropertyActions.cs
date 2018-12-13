@@ -13,25 +13,26 @@ namespace HackneyRepairs.Actions
 {
     public class PropertyActions
     {
-		private IHackneyPropertyService _propertyService;
-		private IHackneyWorkOrdersService _workordersService;
+        private IHackneyPropertyService _propertyService;
+        private IHackneyWorkOrdersService _workordersService;
         private IHackneyPropertyServiceRequestBuilder _requestBuilder;
         private readonly ILoggerAdapter<PropertyActions> _logger;
 
-		public PropertyActions(IHackneyPropertyService propertyService, IHackneyPropertyServiceRequestBuilder requestBuilder, IHackneyWorkOrdersService workOrdersService, ILoggerAdapter<PropertyActions> logger)
+        public PropertyActions(IHackneyPropertyService propertyService, IHackneyPropertyServiceRequestBuilder requestBuilder, IHackneyWorkOrdersService workOrdersService, ILoggerAdapter<PropertyActions> logger)
         {
-			_propertyService = propertyService;
+            _propertyService = propertyService;
             _requestBuilder = requestBuilder;
-			_workordersService = workOrdersService;
+            _workordersService = workOrdersService;
             _logger = logger;
         }
-        
+
         public async Task<IEnumerable<UHWorkOrder>> GetWorkOrdersForBlock(string propertyReference, string trade, DateTime since, DateTime until)
-		{
-			if (string.IsNullOrEmpty(trade) || string.IsNullOrEmpty(propertyReference))
-			{
-				throw new InvalidParameterException();
-			}
+        {
+            if (string.IsNullOrEmpty(trade) || string.IsNullOrEmpty(propertyReference))
+            {
+                throw new InvalidParameterException();
+            }
+
             var propertyInfo = await _propertyService.GetPropertyLevelInfo(propertyReference);
             if (propertyInfo == null)
             {
@@ -52,7 +53,7 @@ namespace HackneyRepairs.Actions
                 _logger.LogError($"No block or sub-block identified for {propertyReference}, returning an empty list");
                 return new List<UHWorkOrder>();
             }
-   
+
             _logger.LogInformation($"Finding work order details for block reference (including children): {GenericFormatter.CommaSeparate(blockReferences.ToArray())}, trade: {trade}");
             var blockResult = await _workordersService.GetWorkOrderByBlockReference(blockReferences.ToArray(), trade, since, until);
             _logger.LogInformation($"{blockResult.Count()} work order details returned for block or sub-block references (including children): {GenericFormatter.CommaSeparate(blockReferences.ToArray())}, trade: {trade}");
@@ -75,14 +76,17 @@ namespace HackneyRepairs.Actions
                         _logger.LogError($"Property not found for {reference}");
                         throw new MissingPropertyException();
                     }
+
                     if (response == null)
                     {
                         _logger.LogError($"Property hierarchy appears to be broken, parent property {reference} does not exist. Returning results until this point");
                         break;
                     }
+
                     results.Add(response);
                     parent = response.MajorReference;
                 }
+
                 GenericFormatter.TrimStringAttributesInEnumerable(results);
                 return results;
             }
@@ -114,7 +118,7 @@ namespace HackneyRepairs.Actions
                     results = response
                 };
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _logger.LogError($"Finding property by postcode: {postcode} returned an error: {e.Message}");
                 throw new PropertyServiceException();
@@ -126,7 +130,7 @@ namespace HackneyRepairs.Actions
             _logger.LogInformation($"Finding property by reference: {reference}");
             try
             {
-				var response = await _propertyService.GetPropertyByRefAsync(reference);
+                var response = await _propertyService.GetPropertyByRefAsync(reference);
                 if (response == null)
                 {
                     throw new MissingPropertyException();
@@ -136,12 +140,12 @@ namespace HackneyRepairs.Actions
                     return BuildPropertyDetails(response);
                 }
             }
-            catch(MissingPropertyException e)
+            catch (MissingPropertyException e)
             {
                 _logger.LogError($"Finding a property with the property reference: {reference} returned an error: {e.Message}");
                 throw e;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _logger.LogError($"Finding a property with the property reference: {reference} returned an error: {e.Message}");
                 throw new PropertyServiceException();
@@ -179,7 +183,7 @@ namespace HackneyRepairs.Actions
             _logger.LogInformation($"Finding the block of a property by the property reference: {reference}");
             try
             {
-				var response = await _propertyService.GetPropertyBlockByRef(reference);
+                var response = await _propertyService.GetPropertyBlockByRef(reference);
                 if (response == null)
                 {
                     throw new MissingPropertyException();
@@ -194,7 +198,7 @@ namespace HackneyRepairs.Actions
                 _logger.LogError($"Finding the block of a property by the property reference: {reference} returned an error: {e.Message}");
                 throw e;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _logger.LogError($"Finding the block of a property by the property reference: {reference} returned an error: {e.Message}");
                 throw new PropertyServiceException();
@@ -206,7 +210,7 @@ namespace HackneyRepairs.Actions
             _logger.LogInformation($"Finding the estate of a property by the property reference: {reference}");
             try
             {
-				var response = await _propertyService.GetPropertyEstateByRef(reference);
+                var response = await _propertyService.GetPropertyEstateByRef(reference);
                 if (response == null)
                 {
                     throw new MissingPropertyException();
@@ -240,6 +244,7 @@ namespace HackneyRepairs.Actions
                     blockReferences.Add(property.PropertyReference);
                 }
             }
+
             return blockReferences;
         }
 
@@ -265,6 +270,7 @@ namespace HackneyRepairs.Actions
                     maintainable = property.Maintainable,
                 };
             }
+
             return new
             {
                 address = property.ShortAddress.Trim(),
@@ -291,11 +297,12 @@ namespace HackneyRepairs.Actions
                     description = property[i].Description.Trim()
                 };
             }
+
             return properties;
         }
     }
 
-    public class MissingPropertyListException : Exception{ }
+    public class MissingPropertyListException : Exception { }
     public class PropertyServiceException : Exception { }
     public class MissingPropertyException : Exception { }
 	public class InvalidParameterException : Exception { }

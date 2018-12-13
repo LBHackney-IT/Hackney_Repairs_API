@@ -136,12 +136,14 @@ namespace HackneyRepairs.Tests.Services
         public async void GetWorkOrdersByPropertyReferences_retrieves_recent_work_orders_for_the_given_property_references_from_both_uht_and_uhw()
         {
             var propertyRefs = new string[] { "00000018", "00000019" };
-            var uhwWorkOrders = new[] {
+            var uhwWorkOrders = new[] 
+            {
                 new UHWorkOrder { WorkOrderReference = "0001", PropertyReference = "00000018", WorkOrderStatus = "300" },
                 new UHWorkOrder { WorkOrderReference = "0002", PropertyReference = "00000019", WorkOrderStatus = "001" }
             };
 
-            var uhtWorkOrders = new[] {
+            var uhtWorkOrders = new[] 
+            {
                 new UHWorkOrder { WorkOrderReference = "0002", PropertyReference = "00000019", WorkOrderStatus = "001" }
             };
 

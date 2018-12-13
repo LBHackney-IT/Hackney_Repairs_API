@@ -61,6 +61,7 @@ namespace HackneyRepairs.Controllers
             {
                 return ResponseBuilder.Error(400, "Invalid parameter - Please use a valid startId", "Invalid parameter - Please use a valid startId");
             }
+
             if (string.IsNullOrWhiteSpace(noteTarget))
             {
                 return ResponseBuilder.Error(400, "Missing parameter - notetarget", "Missing parameter - notetarget");
@@ -80,11 +81,13 @@ namespace HackneyRepairs.Controllers
                     var userMessage = "noteTarget parameter does not exist in the data source";
                     return ResponseBuilder.Error(404, userMessage, ex.Message);
                 }
+
                 if (ex is UHWWarehouseRepositoryException || ex is UhwRepositoryException)
                 {
                     var userMessage = "We had issues with connecting to the data source.";
                     return ResponseBuilder.Error(500, userMessage, ex.Message);
                 }
+
                 return ResponseBuilder.Error(500, "We had issues processing your request.", ex.Message);
             }
         }
@@ -118,6 +121,7 @@ namespace HackneyRepairs.Controllers
                     }).ToList();
                     return ResponseBuilder.ErrorFromList(400, errors);
                 }
+
                 var notesActions = new NoteActions(_workOrdersService, _notesService, _notesLoggerAdapter);
 
                 await notesActions.AddNote(request);
@@ -131,11 +135,13 @@ namespace HackneyRepairs.Controllers
                     var userMessage = "Object reference has not been found. Note not created";
                     return ResponseBuilder.Error(404, userMessage, ex.Message);
                 }
+
                 if (ex is UhwRepositoryException)
                 {
                     var userMessage = "We had issues with connecting to the data source.";
                     return ResponseBuilder.Error(500, userMessage, ex.Message);
                 }
+
                 return ResponseBuilder.Error(500, "We had issues processing your request.", ex.StackTrace);
             }
         }

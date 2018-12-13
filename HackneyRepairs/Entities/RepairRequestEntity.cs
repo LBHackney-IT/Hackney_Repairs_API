@@ -70,7 +70,5 @@ namespace HackneyRepairs.Entities
         public DateTime? repnotify_dt { get; set; }
         public string vm_propref { get; set; }
         public string u_saffron_job_number { get; set; }
-
-
     }
 }

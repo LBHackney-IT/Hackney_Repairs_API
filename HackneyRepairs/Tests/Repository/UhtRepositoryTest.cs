@@ -38,7 +38,6 @@ namespace HackneyRepairs.Tests.Repository
         [Fact.WhenUniversalHousingIsRunning]
         public async void GetWorkOrderByPropertyReference_should_return_a_work_order_when_one_exists_for_the_property()
         {
-
             _simulator.InsertTrade(trade: "DR", trade_desc: "Door Repair");
             _simulator.InsertTask(rq_ref: "00000021", trade: "DR", task_no: 1, job_code: "JOB4321");
             _simulator.InsertRequest(rq_ref: "00000021", rq_problem: "can't get in");
@@ -53,8 +52,7 @@ namespace HackneyRepairs.Tests.Repository
                 u_servitor_ref: "SR1",
                 u_dlo_status: "XYZ",
                 wo_status: "999",
-                date_due: "2020-01-02 17:30:00"
-            );
+                date_due: "2020-01-02 17:30:00");
 
             var repo = new UhtRepository((UhtDbContext)_simulator.context, _logger);
             var workOrders = await repo.GetWorkOrderByPropertyReference("00070000");
@@ -83,8 +81,7 @@ namespace HackneyRepairs.Tests.Repository
 
             Assert.Equal(
                 JsonConvert.SerializeObject(expectedWorkOrder),
-                JsonConvert.SerializeObject(retrievedWorkOrder)
-            );
+                JsonConvert.SerializeObject(retrievedWorkOrder));
         }
 
         [Fact.WhenUniversalHousingIsRunning]

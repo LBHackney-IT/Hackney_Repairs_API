@@ -74,6 +74,7 @@ namespace HackneyRepairs.Services
                     SupplierReference = getContractorForSOR(workorder.SorCode)
                 });
             }
+
             return new NewRepairTasksRequest
             {
                 RepairRequest = new RepairRequestInfo
@@ -86,9 +87,10 @@ namespace HackneyRepairs.Services
                 },
                 DirectUser = GetUserCredentials(),
                 SourceSystem = GetUhSourceSystem(),
-                TaskList =taskList.ToArray()
+                TaskList = taskList.ToArray()
             };
         }
+
         public WorksOrderRequest BuildWorksOrderRequest(string request)
         {
             return new WorksOrderRequest
@@ -103,10 +105,11 @@ namespace HackneyRepairs.Services
         {
             string[] sorLookupOptions = _configuration.Get("UhSorSupplierMapping").Split('|');
             Dictionary<string, string> sorDictionary = new Dictionary<string, string>();
-            for(int a=0; a<sorLookupOptions.Length; a++)
+            for (int a = 0; a < sorLookupOptions.Length; a++)
             {
                 sorDictionary.Add(sorLookupOptions[a].Split(',')[0], sorLookupOptions[a].Split(',')[1]);
             }
+
             if (sorDictionary.ContainsKey(sorCode))
             {
                 return sorDictionary[sorCode];
@@ -117,6 +120,7 @@ namespace HackneyRepairs.Services
             }
         }
     }
+
     public class InvalidSORCodeException : Exception
     {
     }

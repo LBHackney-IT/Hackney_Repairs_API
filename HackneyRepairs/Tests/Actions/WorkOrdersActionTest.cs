@@ -87,7 +87,8 @@ namespace HackneyRepairs.Tests.Actions
         public async Task when_retrieving_multiple_work_orders_returns_all_work_orders()
         {
             var references = new string[] { "12345", "67890" };
-            var expectedWorkOrders = new UHWorkOrderWithMobileReports[] {
+            var expectedWorkOrders = new UHWorkOrderWithMobileReports[] 
+            {
                 new UHWorkOrderWithMobileReports { WorkOrderReference = "12345" },
                 new UHWorkOrderWithMobileReports { WorkOrderReference = "67890" }
             };
@@ -111,7 +112,8 @@ namespace HackneyRepairs.Tests.Actions
             var references = new string[] { "12345", "67890" };
             var expectedMobileReports = new MobileReport[] { new MobileReport() };
 
-            var expectedWorkOrders = new UHWorkOrderWithMobileReports[] {
+            var expectedWorkOrders = new UHWorkOrderWithMobileReports[] 
+            {
                 new UHWorkOrderWithMobileReports { WorkOrderReference = "12345", ServitorReference = "VALID_SERVITOR_REF" },
                 new UHWorkOrderWithMobileReports { WorkOrderReference = "67890", ServitorReference = null }
             };
@@ -139,7 +141,8 @@ namespace HackneyRepairs.Tests.Actions
         public async Task when_retrieving_multiple_work_orders_and_one_is_missing_throws_an_error()
         {
             var references = new string[] { "12345", "67890" };
-            var stubbedWorkOrders = new UHWorkOrder[] {
+            var stubbedWorkOrders = new UHWorkOrder[] 
+            {
                 new UHWorkOrder { WorkOrderReference = "12345" }
             };
 
@@ -192,13 +195,12 @@ namespace HackneyRepairs.Tests.Actions
 			Assert.True(distinctPropIds.First() == randomReference);
         }
         
-		//[Fact]
-		//public async Task get_property_reference_with_children_returns_list_work_orders()
+		// [Fact]
+		// public async Task get_property_reference_with_children_returns_list_work_orders()
   //      {
 		//	// Setting up fake property service
-		//	Mock<IHackneyPropertyService> _propertyService = new Mock<IHackneyPropertyService>();
-   
-		//	Random rnd = new Random();
+		// Mock<IHackneyPropertyService> _propertyService = new Mock<IHackneyPropertyService>();
+		// Random rnd = new Random();
   //          string parentPropReference = rnd.Next(100000000, 999999990).ToString();
 
   //          PropertyLevelModel parent = new PropertyLevelModel()
@@ -271,9 +273,9 @@ namespace HackneyRepairs.Tests.Actions
 		//	Assert.True(!resultList.Except(response).Any());
 		//}
         
-		//[Fact]
-		//public async Task get_by_higher_than_block_property_reference_returns_ChildrenForEstateNotAllowedException()
-		//{
+		// [Fact]
+		// public async Task get_by_higher_than_block_property_reference_returns_ChildrenForEstateNotAllowedException()
+		// {
 		//	Random rnd = new Random();
   //          string randomReference = rnd.Next(100000000, 999999990).ToString();
           

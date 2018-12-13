@@ -10,7 +10,8 @@ namespace Fact
         public WhenUniversalHousingIsRunningAttribute()
         {
             var running = UniversalHousingSimulator<UhtDbContext>.IsRunning();
-            if (!running) {
+            if (!running) 
+            {
                 Skip = "Universal Housing Simulator must be running to run repository tests";
             }
         }
