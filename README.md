@@ -28,15 +28,15 @@ To serve the application, run it using your IDE of choice. We've Visual Studio C
 ```sh
 $ docker run -it --rm repairs-api dotnet HackneyRepairs.dll
 ```
-To run on particular port,the command is as below.
+To run on particular port, the command is as below.
 ```sh
 $ docker run -p 3000:80 -it --rm repairs-api dotnet HackneyRepairs.dll
 ```
 ### Release process
 
-![Circle CI Workflow Example](docs/circle_ci_workflow.png)
-
 We use a pull request workflow, where changes are made on a branch and approved by one or more other maintainers before the developer can merge into `central`.
+
+![Circle CI Workflow Example](docs/circle_ci_workflow.png)
 
 Then we have an automated four step deployment process, which runs in CircleCI.
 
@@ -45,7 +45,7 @@ Then we have an automated four step deployment process, which runs in CircleCI.
 3. We manually confirm a production deployment in the CircleCI workflow once we're happy with our changes in staging.
 4. The app is deployed to production.
 
-Our staging and production enviornments are hosted by AWS. We would deploy to production per each feature/config merged into  `central`  branch.
+Our staging and production environments are hosted by AWS. We would deploy to production per each feature/config merged into  `central`  branch.
 
 ## Testing
 
@@ -67,7 +67,7 @@ You can then run the tests using the test explorer in your IDE.
 
 ## Endpoints
  [Endpoints](docs/endpoints.md)
- 
+
 ## Contacts
 
 ### Active Maintainers
@@ -81,4 +81,5 @@ You can then run the tests using the test explorer in your IDE.
 
 [docker-download]: https://www.docker.com/products/docker-desktop
 [Endpoints]: docs/endpoints.md
-
+[universal-housing-simulator]: https://github.com/LBHackney-IT/lbh-universal-housing-simulator
+[made-tech]: https://madetech.com/
