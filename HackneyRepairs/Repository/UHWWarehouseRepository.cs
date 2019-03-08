@@ -308,9 +308,9 @@ namespace HackneyRepairs.Repository
                         INNER 
                             JOIN lulevel ON property.level_code = lulevel.lu_ref 
                         WHERE 
-                            lower(post_preamble) like lower('%80 Latimer House%')
+                            lower(post_preamble) like lower('%" + firstLineOfAddress + @"%')
                         ORDER BY property.prop_ref";
-                    var properties = connection.QueryAsync<PropertyDetails>(query, new { ShortAddress = firstLineOfAddress }).ToArray();
+                    var properties = connection.Query<PropertyDetails>(query).ToArray();
                     return properties;
                 }
             }
