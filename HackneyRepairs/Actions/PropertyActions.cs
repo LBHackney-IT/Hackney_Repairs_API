@@ -125,6 +125,33 @@ namespace HackneyRepairs.Actions
             }
         }
 
+
+        //Return a list of addresses using the first line of address
+        public async Task<object> FindPropertyWithAddress(string firstlineofaddress)
+        {
+            _logger.LogInformation($"Finding property by postcode: {firstlineofaddress}");
+            try
+            {
+                var response = await _propertyService.GetPropertyListByAddress(firstlineofaddress);
+                if (response.Any())
+                {
+                    GenericFormatter.TrimStringAttributesInEnumerable(response);
+                }
+
+                return new
+                {
+                    results = response
+                };
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Finding property by address: {firstlineofaddress} returned an error: {e.Message}");
+                throw new PropertyServiceException();
+            }
+        }
+
+
+
         public async Task<object> FindPropertyDetailsByRef(string reference)
         {
             _logger.LogInformation($"Finding property by reference: {reference}");

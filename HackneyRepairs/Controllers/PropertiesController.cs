@@ -111,6 +111,36 @@ namespace HackneyRepairs.Controllers
             }
         }
 
+        // GET properties
+        /// <summary>
+        /// Gets a property or properties for a particular postcode
+        /// </summary>
+        /// <param name="address">First line of the propterty address being requested</param>
+        /// <returns>A list of properties matching the specified post code</returns>
+        /// <response code="200">Returns the list of properties</response>
+        /// <response code="404">If the property is not found</response>   
+        /// <response code="500">If any errors are encountered</response>   
+        [HttpGet]
+        public async Task<JsonResult> GetByFirstLineOfAddress([FromQuery]string address)
+        {
+            try
+            {
+                PropertyActions actions = new PropertyActions(_propertyService, _propertyServiceRequestBuilder, _workordersService, _propertyLoggerAdapter);
+                var result = await actions.FindPropertyWithAddress(address);
+                return ResponseBuilder.Ok(result);
+            }
+            catch (MissingPropertyException ex)
+            {
+                _exceptionLogger.CaptureException(ex);
+                return ResponseBuilder.Error(404, "Resource identification error", ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _exceptionLogger.CaptureException(ex);
+                return ResponseBuilder.Error(500, "We had some problems processing your request", ex.Message);
+            }
+        }
+
         // GET property details by reference
         /// <summary>
         /// Gets the details of a property by a given reference number
