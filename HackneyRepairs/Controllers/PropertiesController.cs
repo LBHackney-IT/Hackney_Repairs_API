@@ -58,7 +58,7 @@ namespace HackneyRepairs.Controllers
         {
             try
             {
-	        PropertyActions actions = new PropertyActions(_propertyService, _propertyServiceRequestBuilder, _workordersService, _propertyLoggerAdapter);
+                PropertyActions actions = new PropertyActions(_propertyService, _propertyServiceRequestBuilder, _workordersService, _propertyLoggerAdapter);
                 var result = await actions.GetPropertyHierarchy(propertyReference);
                 return ResponseBuilder.Ok(result);
             }
@@ -120,13 +120,13 @@ namespace HackneyRepairs.Controllers
         /// <response code="200">Returns the list of properties</response>
         /// <response code="404">If the property is not found</response>   
         /// <response code="500">If any errors are encountered</response>   
-        [HttpGet]
+        [HttpGet("{by_first_line_of_address}")]
         public async Task<JsonResult> GetByFirstLineOfAddress([FromQuery]string address)
         {
             try
             {
                 PropertyActions actions = new PropertyActions(_propertyService, _propertyServiceRequestBuilder, _workordersService, _propertyLoggerAdapter);
-                var result = await actions.FindPropertyWithAddress(address);
+                var result = await actions.FindPropertyByFirstLineOfAddress(address);
                 return ResponseBuilder.Ok(result);
             }
             catch (MissingPropertyException ex)

@@ -288,7 +288,7 @@ namespace HackneyRepairs.Repository
             }
         }
 
-        public async Task<PropertyDetails[]> GetPropertyDetailsByFirstLineOfAddress(string firstLineOfAddress)
+        public async Task<PropertyLevelModel[]> GetPropertyDetailsByFirstLineOfAddress(string firstLineOfAddress)
         {
             _logger.LogInformation($"Getting details for properties using first line of address {firstLineOfAddress}");
             try
@@ -310,7 +310,7 @@ namespace HackneyRepairs.Repository
                         WHERE 
                             lower(post_preamble) like lower('%" + firstLineOfAddress + @"%')
                         ORDER BY property.prop_ref";
-                    var properties = connection.Query<PropertyDetails>(query).ToArray();
+                    var properties = connection.Query<PropertyLevelModel>(query).ToArray();
                     return properties;
                 }
             }

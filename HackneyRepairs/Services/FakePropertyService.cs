@@ -266,5 +266,10 @@ namespace HackneyRepairs.Services
 					}));
             }
         }
+
+        public Task<PropertyLevelModel[]> GetPropertyListByFirstLineOfAddress(string firstlineofaddress)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

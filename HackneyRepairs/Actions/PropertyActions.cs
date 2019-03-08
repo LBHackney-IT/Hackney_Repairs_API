@@ -125,14 +125,13 @@ namespace HackneyRepairs.Actions
             }
         }
 
-
         //Return a list of addresses using the first line of address
-        public async Task<object> FindPropertyWithAddress(string firstlineofaddress)
+        public async Task<object> FindPropertyByFirstLineOfAddress(string firstLineOfAddress)
         {
-            _logger.LogInformation($"Finding property by postcode: {firstlineofaddress}");
+            _logger.LogInformation($"Finding property by first line of address: {firstLineOfAddress}");
             try
             {
-                var response = await _propertyService.GetPropertyListByAddress(firstlineofaddress);
+                var response = await _propertyService.GetPropertyListByFirstLineOfAddress(firstLineOfAddress);
                 if (response.Any())
                 {
                     GenericFormatter.TrimStringAttributesInEnumerable(response);
@@ -145,12 +144,10 @@ namespace HackneyRepairs.Actions
             }
             catch (Exception e)
             {
-                _logger.LogError($"Finding property by address: {firstlineofaddress} returned an error: {e.Message}");
+                _logger.LogError($"Finding property by address: {firstLineOfAddress} returned an error: {e.Message}");
                 throw new PropertyServiceException();
             }
         }
-
-
 
         public async Task<object> FindPropertyDetailsByRef(string reference)
         {

@@ -28,5 +28,6 @@ namespace HackneyRepairs.Interfaces
         Task<IEnumerable<Note>> GetNoteFeed(int startId, string noteTarget, int size);
         Task<IEnumerable<string>> GetDistinctNoteKeyObjects();
 		Task<List<PropertyLevelModel>> GetPropertyLevelInfosForParent(string reference);
+        Task<PropertyLevelModel[]> GetPropertyDetailsByFirstLineOfAddress(string firstLineOfAddress);
     }
 }
