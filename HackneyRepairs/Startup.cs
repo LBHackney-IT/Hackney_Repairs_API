@@ -149,12 +149,11 @@ namespace HackneyRepairs
                         });
                         break;
                     case "Development":
-                        app.UseSwagger(
-                            c => c.PreSerializeFilters.Add((swaggerDoc, httpReq) => swaggerDoc.Host = "sandboxapi.hackney.gov.uk/unboxedhackneyrepairs_dev/"));
+                        app.UseSwagger();
                         app.UseSwaggerUI(c =>
                         {
                             string basePath = Environment.GetEnvironmentVariable("ASPNETCORE_APPL_PATH");
-                            if (basePath == null) basePath = "/unboxedhackneyrepairs_dev/";
+                            if (basePath == null) basePath = "/";
                             c.SwaggerEndpoint($"{basePath}swagger/v1/swagger.json", "Hackney Repairs API");
                             c.RoutePrefix = string.Empty;
                         });
