@@ -288,6 +288,39 @@ namespace HackneyRepairs.Repository
             }
         }
 
+        public async Task<PropertyLevelModel[]> GetPropertyDetailsByFirstLineOfAddress(string firstLineOfAddress)
+        {
+            _logger.LogInformation($"Getting details for properties using first line of address {firstLineOfAddress}");
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+                {
+                    string query = @"
+                        SELECT 
+                            property.prop_ref AS 'PropertyReference',
+                            property.level_code AS 'LevelCode',
+                            property.major_ref AS 'MajorReference',
+                            lulevel.lu_desc AS 'Description', 
+                            property.address1 AS 'Address',
+                            property.post_code AS 'PostCode'
+                        FROM 
+                            property
+                        INNER 
+                            JOIN lulevel ON property.level_code = lulevel.lu_ref 
+                        WHERE 
+                            lower(post_preamble) like lower('%" + firstLineOfAddress + @"%')
+                        ORDER BY property.prop_ref";
+                    var properties = connection.Query<PropertyLevelModel>(query).ToArray();
+                    return properties;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                throw new UHWWarehouseRepositoryException();
+            }
+        }
+
         public async Task<PropertyDetails> GetPropertyBlockByReference(string reference)
         {
             _logger.LogInformation($"Getting details for property {reference}");
