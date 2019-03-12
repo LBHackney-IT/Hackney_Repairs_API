@@ -308,7 +308,7 @@ namespace HackneyRepairs.Repository
                         INNER 
                             JOIN lulevel ON property.level_code = lulevel.lu_ref 
                         WHERE 
-                            lower(post_preamble) like %{firstLineOfAddress}%
+                            lower(post_preamble) like lower(%{firstLineOfAddress}%)
                         ORDER BY property.prop_ref";
                     var properties = connection.Query<PropertyLevelModel>(query).ToArray();
                     return properties;
