@@ -2,6 +2,10 @@
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
+    "iis": {
+      "applicationUrl": "http://localhost/HackneyRepairs",
+      "sslPort": 0
+    },
     "iisExpress": {
       "applicationUrl": "http://localhost:17175/",
       "sslPort": 0
@@ -9,11 +13,15 @@
   },
   "profiles": {
     "IIS Express": {
-      "commandName": "IISExpress",
+      "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
         "Key": "Value",
+        "UhwDb": "Data Source=lbhuhwsqld01;Initial Catalog=uhtdev;Pooling=false;user id=HackneyAPIRepairs;password=UqS7kwhA",
+        "UhtDb": "Data Source=lbhuhwsqlp01;Initial Catalog=uhtlive;Pooling=false;user id=HackneyAPIRepairs;password=UqS7kwhA",
+        "DRSDb": "DRSDb=“Server=lbhoptappd01;UID=APIReadDRSMirrorDB;PWD=M1rr0r@$;Database=hackney_sync",
+        "UhWarehouseDb": "Data Source=lbhuhwsqlp02;Initial Catalog=StagedDB;Pooling=false;user id=HackneyAPIRepairs;password=UqS7kwhA",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },

@@ -97,6 +97,87 @@ namespace HackneyRepairs.Tests.Actions
 		}
         #endregion
 
+        #region property by first line of address
+        [Fact]
+        public async Task find_properties_by_address_returns_a_list_of_properties()
+        {
+            var mockLogger = new Mock<ILoggerAdapter<PropertyActions>>();
+            var property1 = new PropertyLevelModel()
+            {
+                Address = "2 Acacia House  Lordship Road",
+                Postcode = "N16 0PX",
+                PropertyReference = "1/43453543"
+            };
+            var property2 = new PropertyLevelModel()
+            {
+                Address = "4 Acacia House  Lordship Road",
+                Postcode = "N16 0PX",
+                PropertyReference = "2/32453245"
+            };
+
+            var PropertyList = new PropertyLevelModel[2];
+            PropertyList[0] = property1;
+            PropertyList[1] = property2;
+            var fakeService = new Mock<IHackneyPropertyService>();
+            fakeService.Setup(service => service.GetPropertyListByFirstLineOfAddress("Acacia"))
+               .ReturnsAsync(PropertyList);
+
+            var fakeRequestBuilder = new Mock<IHackneyPropertyServiceRequestBuilder>();
+            var workOrdersService = new Mock<IHackneyWorkOrdersService>();
+            PropertyActions propertyActions = new PropertyActions(fakeService.Object, fakeRequestBuilder.Object, workOrdersService.Object, mockLogger.Object);
+
+            var results = await propertyActions.FindPropertyByFirstLineOfAddress("Acacia");
+            var outputproperty1 = new PropertyLevelModel
+            {
+                Address = "2 Acacia House  Lordship Road",
+                Postcode = "N16 0PX",
+                PropertyReference = "1/43453543"
+            };
+            var outputproperty2 = new PropertyLevelModel
+            {
+                Address = "4 Acacia House  Lordship Road",
+                Postcode = "N16 0PX",
+                PropertyReference = "2/32453245"
+            };
+            var properties = new PropertyLevelModel[2];
+            properties[0] = outputproperty1;
+            properties[1] = outputproperty2;
+            var json = new { results = properties };
+            Assert.Equal(JsonConvert.SerializeObject(json), JsonConvert.SerializeObject(results));
+        }
+
+        [Fact]
+        public async Task find_properties_by_address_returns_an_empty_response_when_no_matches()
+        {
+            var mockLogger = new Mock<ILoggerAdapter<PropertyActions>>();
+            var PropertyList = new PropertyLevelModel[0];
+            var fakeService = new Mock<IHackneyPropertyService>();
+            fakeService.Setup(service => service.GetPropertyListByFirstLineOfAddress(It.IsAny<string>()))
+                .ReturnsAsync(PropertyList);
+            var fakeRequestBuilder = new Mock<IHackneyPropertyServiceRequestBuilder>();
+            var workOrdersService = new Mock<IHackneyWorkOrdersService>();
+            PropertyActions propertyActions = new PropertyActions(fakeService.Object, fakeRequestBuilder.Object, workOrdersService.Object, mockLogger.Object);
+            var results = await propertyActions.FindPropertyByFirstLineOfAddress("elmbridge");
+            var properties = new object[0];
+            var json = new { results = properties };
+            Assert.Equal(JsonConvert.SerializeObject(json), JsonConvert.SerializeObject(results));
+        }
+
+        [Fact]
+        public async Task find_properties_by_address_raises_an_exception_if_the_property_list_is_missing()
+        {
+            var mockLogger = new Mock<ILoggerAdapter<PropertyActions>>();
+            var fakeService = new Mock<IHackneyPropertyService>();
+            PropertyLevelModel[] response = null;
+            fakeService.Setup(service => service.GetPropertyListByFirstLineOfAddress(It.IsAny<string>()))
+                .ReturnsAsync(response);
+            var fakeRequestBuilder = new Mock<IHackneyPropertyServiceRequestBuilder>();
+            var workOrdersService = new Mock<IHackneyWorkOrdersService>();
+            PropertyActions propertyActions = new PropertyActions(fakeService.Object, fakeRequestBuilder.Object, workOrdersService.Object, mockLogger.Object);
+            await Assert.ThrowsAsync<PropertyServiceException>(async () => await propertyActions.FindPropertyByFirstLineOfAddress("elmbridge"));
+        }
+        #endregion
+
         #region property details by reference
         [Fact]
 		public async Task get_property_details_by_reference_returns_a_property_object_for_a_valid_request()

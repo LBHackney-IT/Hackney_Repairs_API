@@ -120,8 +120,8 @@ namespace HackneyRepairs.Controllers
         /// <response code="200">Returns the list of properties</response>
         /// <response code="404">If the property is not found</response>   
         /// <response code="500">If any errors are encountered</response>   
-        [HttpGet("{by_first_line_of_address}")]
-        public async Task<JsonResult> GetByFirstLineOfAddress([FromQuery]string address)
+        [HttpGet("fladdress")]
+        public async Task<JsonResult> GetByFirstLineOfAddress(string address)
         {
             try
             {

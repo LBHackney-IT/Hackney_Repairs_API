@@ -153,7 +153,7 @@ namespace HackneyRepairs
                         app.UseSwaggerUI(c =>
                         {
                             string basePath = Environment.GetEnvironmentVariable("ASPNETCORE_APPL_PATH");
-                            if (basePath == null) basePath = "/";
+                            if (basePath == null) basePath = "/unboxedhackneyrepairs_dev/";
                             c.SwaggerEndpoint($"{basePath}swagger/v1/swagger.json", "Hackney Repairs API");
                             c.RoutePrefix = string.Empty;
                         });
