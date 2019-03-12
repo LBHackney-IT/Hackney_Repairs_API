@@ -295,7 +295,7 @@ namespace HackneyRepairs.Repository
             {
                 using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
                 {
-                    string query = $@"
+                    string query = @"
                         SELECT 
                             property.prop_ref AS 'PropertyReference',
                             property.level_code AS 'LevelCode',
@@ -308,7 +308,7 @@ namespace HackneyRepairs.Repository
                         INNER 
                             JOIN lulevel ON property.level_code = lulevel.lu_ref 
                         WHERE 
-                            lower(post_preamble) like lower(%'{firstLineOfAddress}'%)
+                            lower(post_preamble) like lower('%" + firstLineOfAddress + @"%')
                         ORDER BY property.prop_ref";
                     var properties = connection.Query<PropertyLevelModel>(query).ToArray();
                     return properties;
