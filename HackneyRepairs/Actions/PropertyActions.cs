@@ -131,7 +131,7 @@ namespace HackneyRepairs.Actions
             _logger.LogInformation($"Finding property by first line of address: {firstLineOfAddress}");
             try
             {
-                var response = await _propertyService.GetPropertyListByFirstLineOfAddress(firstLineOfAddress.ToLower());
+                var response = await _propertyService.GetPropertyListByFirstLineOfAddress(firstLineOfAddress);
                 if (response.Any())
                 {
                     GenericFormatter.TrimStringAttributesInEnumerable(response);
