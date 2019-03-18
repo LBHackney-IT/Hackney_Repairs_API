@@ -123,6 +123,7 @@ namespace HackneyRepairs.Controllers
         [HttpGet("fladdress")]
         public async Task<JsonResult> GetByFirstLineOfAddress(string address)
         {
+            address = address.ToLower();
             try
             {
                 PropertyActions actions = new PropertyActions(_propertyService, _propertyServiceRequestBuilder, _workordersService, _propertyLoggerAdapter);
