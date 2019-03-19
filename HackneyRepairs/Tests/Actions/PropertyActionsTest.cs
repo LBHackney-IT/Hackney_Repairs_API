@@ -119,14 +119,14 @@ namespace HackneyRepairs.Tests.Actions
             PropertyList[0] = property1;
             PropertyList[1] = property2;
             var fakeService = new Mock<IHackneyPropertyService>();
-            fakeService.Setup(service => service.GetPropertyListByFirstLineOfAddress("Acacia"))
+            fakeService.Setup(service => service.GetPropertyListByFirstLineOfAddress("Acacia", 2))
                .ReturnsAsync(PropertyList);
 
             var fakeRequestBuilder = new Mock<IHackneyPropertyServiceRequestBuilder>();
             var workOrdersService = new Mock<IHackneyWorkOrdersService>();
             PropertyActions propertyActions = new PropertyActions(fakeService.Object, fakeRequestBuilder.Object, workOrdersService.Object, mockLogger.Object);
 
-            var results = await propertyActions.FindPropertyByFirstLineOfAddress("Acacia");
+            var results = await propertyActions.FindPropertyByFirstLineOfAddress("Acacia", 2);
             var outputproperty1 = new PropertyLevelModel
             {
                 Address = "2 Acacia House  Lordship Road",
@@ -152,12 +152,12 @@ namespace HackneyRepairs.Tests.Actions
             var mockLogger = new Mock<ILoggerAdapter<PropertyActions>>();
             var PropertyList = new PropertyLevelModel[0];
             var fakeService = new Mock<IHackneyPropertyService>();
-            fakeService.Setup(service => service.GetPropertyListByFirstLineOfAddress(It.IsAny<string>()))
+            fakeService.Setup(service => service.GetPropertyListByFirstLineOfAddress(It.IsAny<string>(), It.IsAny<int>()))
                 .ReturnsAsync(PropertyList);
             var fakeRequestBuilder = new Mock<IHackneyPropertyServiceRequestBuilder>();
             var workOrdersService = new Mock<IHackneyWorkOrdersService>();
             PropertyActions propertyActions = new PropertyActions(fakeService.Object, fakeRequestBuilder.Object, workOrdersService.Object, mockLogger.Object);
-            var results = await propertyActions.FindPropertyByFirstLineOfAddress("elmbridge");
+            var results = await propertyActions.FindPropertyByFirstLineOfAddress("elmbridge", 2);
             var properties = new object[0];
             var json = new { results = properties };
             Assert.Equal(JsonConvert.SerializeObject(json), JsonConvert.SerializeObject(results));
@@ -169,12 +169,12 @@ namespace HackneyRepairs.Tests.Actions
             var mockLogger = new Mock<ILoggerAdapter<PropertyActions>>();
             var fakeService = new Mock<IHackneyPropertyService>();
             PropertyLevelModel[] response = null;
-            fakeService.Setup(service => service.GetPropertyListByFirstLineOfAddress(It.IsAny<string>()))
+            fakeService.Setup(service => service.GetPropertyListByFirstLineOfAddress(It.IsAny<string>(), It.IsAny<int>()))
                 .ReturnsAsync(response);
             var fakeRequestBuilder = new Mock<IHackneyPropertyServiceRequestBuilder>();
             var workOrdersService = new Mock<IHackneyWorkOrdersService>();
             PropertyActions propertyActions = new PropertyActions(fakeService.Object, fakeRequestBuilder.Object, workOrdersService.Object, mockLogger.Object);
-            await Assert.ThrowsAsync<PropertyServiceException>(async () => await propertyActions.FindPropertyByFirstLineOfAddress("elmbridge"));
+            await Assert.ThrowsAsync<PropertyServiceException>(async () => await propertyActions.FindPropertyByFirstLineOfAddress("elmbridge", 2));
         }
         #endregion
 

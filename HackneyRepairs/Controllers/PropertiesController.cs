@@ -116,18 +116,20 @@ namespace HackneyRepairs.Controllers
         /// Gets a property or properties for a particular postcode
         /// </summary>
         /// <param name="address">First line of the propterty address being requested</param>
-        /// <returns>A list of properties matching the specified post code</returns>
+        /// <param name="limit">Maximum number of results to return. Default value of 100</param>
+        /// <returns>A list of properties matching the specified first line of address</returns>
         /// <response code="200">Returns the list of properties</response>
         /// <response code="404">If the property is not found</response>   
         /// <response code="500">If any errors are encountered</response>   
         [HttpGet("fladdress")]
-        public async Task<JsonResult> GetByFirstLineOfAddress(string address)
+        public async Task<JsonResult> GetByFirstLineOfAddress(string address, int limit = 100)
         {
+            //make all characters lowercase
             address = address.ToLower();
             try
             {
                 PropertyActions actions = new PropertyActions(_propertyService, _propertyServiceRequestBuilder, _workordersService, _propertyLoggerAdapter);
-                var result = await actions.FindPropertyByFirstLineOfAddress(address);
+                var result = await actions.FindPropertyByFirstLineOfAddress(address, limit);
                 return ResponseBuilder.Ok(result);
             }
             catch (MissingPropertyException ex)

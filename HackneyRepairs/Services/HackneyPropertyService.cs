@@ -72,10 +72,10 @@ namespace HackneyRepairs.Services
             return response;
         }
 
-        public async Task<PropertyLevelModel[]> GetPropertyListByFirstLineOfAddress(string firstLineOfAddress)
+        public async Task<PropertyLevelModel[]> GetPropertyListByFirstLineOfAddress(string firstLineOfAddress, int limit)
         {
             _logger.LogInformation($"HackneyPropertyService/GetPropertyListByPostCode(): Sent request to upstream data warehouse (Postcode: {firstLineOfAddress})");
-            var response = await _uhWarehouseRepository.GetPropertyDetailsByFirstLineOfAddress(firstLineOfAddress);
+            var response = await _uhWarehouseRepository.GetPropertyDetailsByFirstLineOfAddress(firstLineOfAddress, limit);
             _logger.LogInformation($"HackneyPropertyService/GetPropertyListByPostCode(): Received response from upstream data warehouse (Postcode: {firstLineOfAddress})");
             return response;
         }

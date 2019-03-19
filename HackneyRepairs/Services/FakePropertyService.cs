@@ -145,7 +145,7 @@ namespace HackneyRepairs.Services
             }
         }
        
-        public Task<PropertyLevelModel[]> GetPropertyListByFirstLineOfAddress(string address)
+        public Task<PropertyLevelModel[]> GetPropertyListByFirstLineOfAddress(string address, int limit = 2)
         {
             var PropertyList = new PropertyLevelModel[2];
             PropertyLevelModel[] emptyPropertyList;
