@@ -10,7 +10,7 @@ namespace HackneyRepairs.Interfaces
         Task<PropertyLevelModel> GetPropertyLevelInfo(string reference);
         Task<PropertyInfoResponse> GetPropertyListByPostCodeAsync(ListByPostCodeRequest request);
         Task<PropertyLevelModel[]> GetPropertyListByPostCode(string post_code, int? maxLevel, int? minLevel);
-        Task<PropertyLevelModel[]> GetPropertyListByFirstLineOfAddress(string firstlineofaddress);
+        Task<PropertyLevelModel[]> GetPropertyListByFirstLineOfAddress(string firstlineofaddress, int limit);
         Task<PropertyDetails> GetPropertyByRefAsync(string reference);
         Task<PropertyDetails[]> GetPropertiesByReferences(string[] references);
         Task<PropertyDetails> GetPropertyBlockByRef(string reference);

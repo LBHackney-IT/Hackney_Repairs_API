@@ -126,12 +126,12 @@ namespace HackneyRepairs.Actions
         }
 
         //Return a list of addresses using the first line of address
-        public async Task<object> FindPropertyByFirstLineOfAddress(string firstLineOfAddress)
+        public async Task<object> FindPropertyByFirstLineOfAddress(string firstLineOfAddress, int limit)
         {
             _logger.LogInformation($"Finding property by first line of address: {firstLineOfAddress}");
             try
             {
-                var response = await _propertyService.GetPropertyListByFirstLineOfAddress(firstLineOfAddress);
+                var response = await _propertyService.GetPropertyListByFirstLineOfAddress(firstLineOfAddress, limit);
                 if (response.Any())
                 {
                     GenericFormatter.TrimStringAttributesInEnumerable(response);

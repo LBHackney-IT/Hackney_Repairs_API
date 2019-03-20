@@ -288,16 +288,17 @@ namespace HackneyRepairs.Repository
             }
         }
 
-        public async Task<PropertyLevelModel[]> GetPropertyDetailsByFirstLineOfAddress(string firstLineOfAddress)
+        public async Task<PropertyLevelModel[]> GetPropertyDetailsByFirstLineOfAddress(string firstLineOfAddress, int limit)
         {
             _logger.LogInformation($"Getting details for properties using first line of address {firstLineOfAddress}");
+            string strLimit = limit.ToString();
            
             try
             {
                 using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
                 {
-                    string query = @"
-                        SELECT TOP 50
+                    string query = $@"
+                        SELECT TOP {strLimit}
                             property.prop_ref AS 'PropertyReference',
                             property.level_code AS 'LevelCode',
                             property.major_ref AS 'MajorReference',
@@ -309,7 +310,7 @@ namespace HackneyRepairs.Repository
                         INNER 
                             JOIN lulevel ON property.level_code = lulevel.lu_ref 
                         WHERE 
-                            lower(post_preamble) like @FirstLineOfAddress
+                            lower(address1) like @FirstLineOfAddress
                         ORDER BY property.prop_ref";
                     var properties = connection.Query<PropertyLevelModel>(query, new { FirstLineOfAddress = "%" + firstLineOfAddress + "%" }).ToArray();
                     return properties;
