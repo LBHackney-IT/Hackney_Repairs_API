@@ -312,10 +312,10 @@ namespace HackneyRepairs.Repository
                         WHERE 
                             lower(address1) like @FirstLineOfAddress
                         ORDER BY property.prop_ref";
-                    var properties = connection.Query<PropertyLevelModel>(query, new { FirstLineOfAddress = "%" + firstLineOfAddress + "%" }).ToArray();
+                    var properties = connection.Query<PropertyLevelModel>(query, new { FirstLineOfAddress = firstLineOfAddress }).ToArray();
                     return properties;
                 }
-            }
+            }//{ FirstLineOfAddress = "%" + firstLineOfAddress + "%" }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
