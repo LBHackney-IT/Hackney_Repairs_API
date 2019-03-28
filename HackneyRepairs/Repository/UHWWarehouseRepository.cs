@@ -13,6 +13,7 @@ using HackneyRepairs.Interfaces;
 using HackneyRepairs.Models;
 using HackneyRepairs.PropertyService;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
 
 namespace HackneyRepairs.Repository
 {
@@ -292,7 +293,15 @@ namespace HackneyRepairs.Repository
         {
             _logger.LogInformation($"Getting details for properties using first line of address {firstLineOfAddress}");
             string strLimit = limit.ToString();
-           
+
+            //Create search parameter with required number of wildcards
+            string[] words = firstLineOfAddress.Split(' ');
+            StringBuilder _sb = new StringBuilder();
+            foreach (var word in words)
+                _sb.Append(word + "%");
+
+            firstLineOfAddress = _sb.ToString().ToLower();
+
             try
             {
                 using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))

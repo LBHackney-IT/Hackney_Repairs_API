@@ -8,7 +8,6 @@ using HackneyRepairs.Interfaces;
 using HackneyRepairs.Models;
 using HackneyRepairs.PropertyService;
 using Microsoft.EntityFrameworkCore.Query;
-using System.Text;
 
 namespace HackneyRepairs.Actions
 {
@@ -129,14 +128,6 @@ namespace HackneyRepairs.Actions
         //Return a list of addresses using the first line of address
         public async Task<object> FindPropertyByFirstLineOfAddress(string firstLineOfAddress, int limit)
         {
-            string[] words = firstLineOfAddress.Split(' ');
-            StringBuilder _sb = new StringBuilder();
-
-            foreach (var word in words)
-                _sb.Append(word + "%");
-            
-            firstLineOfAddress = _sb.ToString();
-
             _logger.LogInformation($"Finding property by first line of address: {firstLineOfAddress}");
             try
             {

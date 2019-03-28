@@ -124,10 +124,12 @@ namespace HackneyRepairs.Controllers
         [HttpGet("fladdress")]
         public async Task<JsonResult> GetByFirstLineOfAddress(string address, int limit = 100)
         {
-            //make all characters lowercase
-            address = address.ToLower();
             try
             {
+                //Convert to Regular expression
+                if (String.IsNullOrEmpty(address) || address.Contains('%') || address.Length < 3)
+                    throw new Exception("Invalid address");
+
                 PropertyActions actions = new PropertyActions(_propertyService, _propertyServiceRequestBuilder, _workordersService, _propertyLoggerAdapter);
                 var result = await actions.FindPropertyByFirstLineOfAddress(address, limit);
                 return ResponseBuilder.Ok(result);
