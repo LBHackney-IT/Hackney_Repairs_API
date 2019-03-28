@@ -13,6 +13,7 @@ using HackneyRepairs.Interfaces;
 using HackneyRepairs.Models;
 using HackneyRepairs.PropertyService;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
 
 namespace HackneyRepairs.Repository
 {
@@ -292,7 +293,16 @@ namespace HackneyRepairs.Repository
         {
             _logger.LogInformation($"Getting details for properties using first line of address {firstLineOfAddress}");
             string strLimit = limit.ToString();
-           
+
+            //Create search parameter with required number of wildcards
+            //Make sure non-empty strings are returned
+            string[] words = firstLineOfAddress.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            StringBuilder _sb = new StringBuilder();
+            foreach (var word in words)
+                _sb.Append(word + "%");
+
+            firstLineOfAddress = _sb.ToString().ToLower();
+
             try
             {
                 using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
@@ -312,10 +322,10 @@ namespace HackneyRepairs.Repository
                         WHERE 
                             lower(address1) like @FirstLineOfAddress
                         ORDER BY property.prop_ref";
-                    var properties = connection.Query<PropertyLevelModel>(query, new { FirstLineOfAddress = "%" + firstLineOfAddress + "%" }).ToArray();
+                    var properties = connection.Query<PropertyLevelModel>(query, new { FirstLineOfAddress = firstLineOfAddress }).ToArray();
                     return properties;
                 }
-            }
+            }//{ FirstLineOfAddress = "%" + firstLineOfAddress + "%" }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);

@@ -17,7 +17,7 @@ namespace HackneyRepairs.Services
         private ILoggerAdapter<PropertyActions> _logger;
         public HackneyPropertyService(IUhtRepository uhtRepository, IUHWWarehouseRepository uHWWarehouseRepository, ILoggerAdapter<PropertyActions> logger)
         {
-            //_client = new PropertyServiceClient();
+            _client = new PropertyServiceClient();
             _uhtRepository = uhtRepository;
             _uhWarehouseRepository = uHWWarehouseRepository;
             _logger = logger;
@@ -33,7 +33,7 @@ namespace HackneyRepairs.Services
 
         public Task<PropertyInfoResponse> GetPropertyListByPostCodeAsync(ListByPostCodeRequest request)
         {
-            _client = new PropertyServiceClient();
+            //_client = new PropertyServiceClient();
             _logger.LogInformation($"HackneyPropertyService/GetPropertyListByPostCodeAsync(): Sent request to upstream PropertyServiceClient (Postcode: {request.PostCode})");
             var response = _client.GetPropertyListByPostCodeAsync(request);
             _logger.LogInformation($"HackneyPropertyService/GetPropertyListByPostCodeAsync(): Received response from upstream PropertyServiceClient (Postcode: {request.PostCode})");
