@@ -295,7 +295,8 @@ namespace HackneyRepairs.Repository
             string strLimit = limit.ToString();
 
             //Create search parameter with required number of wildcards
-            string[] words = firstLineOfAddress.Split(' ');
+            //Make sure non-empty strings are returned
+            string[] words = firstLineOfAddress.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             StringBuilder _sb = new StringBuilder();
             foreach (var word in words)
                 _sb.Append(word + "%");
