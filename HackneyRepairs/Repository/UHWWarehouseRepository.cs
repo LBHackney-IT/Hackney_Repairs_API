@@ -298,6 +298,8 @@ namespace HackneyRepairs.Repository
             //Make sure non-empty strings are returned
             string[] words = firstLineOfAddress.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             StringBuilder _sb = new StringBuilder();
+
+            _sb.Append("%");
             foreach (var word in words)
                 _sb.Append(word + "%");
 
