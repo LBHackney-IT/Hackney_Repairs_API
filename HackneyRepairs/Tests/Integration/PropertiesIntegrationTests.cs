@@ -268,7 +268,8 @@ namespace HackneyRepairs.Tests
             json.Append("\"address\":\"Back Office, Robert House, 6 - 15 Florfield Road\",");
             json.Append("\"postcode\":\"E8 1DT\",");
             json.Append("\"propertyReference\":\"52525252\",");
-            json.Append("\"maintainable\":true");
+            json.Append("\"maintainable\":true,");
+            json.Append("\"tenure\":\"Secure\"");
             json.Append("}");
             Assert.Equal(json.ToString(), resultString);
         }
@@ -384,7 +385,8 @@ namespace HackneyRepairs.Tests
             json.Append("\"address\":\"Back Office Block, Robert House, 6 - 15 Florfield Road\",");
             json.Append("\"postcode\":\"E8 1DT\",");
             json.Append("\"propertyReference\":\"525252527\",");
-            json.Append("\"maintainable\":true");
+            json.Append("\"maintainable\":true,");
+            json.Append("\"tenure\":\"Secure\"");
             json.Append("}");
             Assert.Equal(json.ToString(), resultString);
         }
@@ -532,7 +534,8 @@ namespace HackneyRepairs.Tests
             json.Append("\"address\":\"Back Office Estate, Robert House, 6 - 15 Florfield Road\",");
             json.Append("\"postcode\":\"E8 1DT\",");
             json.Append("\"propertyReference\":\"525252527\",");
-            json.Append("\"maintainable\":true");
+            json.Append("\"maintainable\":true,");
+            json.Append("\"tenure\":\"Secure\"");
             json.Append("}");
             Assert.Equal(json.ToString(), resultString);
         }
