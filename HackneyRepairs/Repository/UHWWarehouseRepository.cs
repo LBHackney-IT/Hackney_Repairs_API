@@ -239,14 +239,17 @@ namespace HackneyRepairs.Repository
                             address1 AS 'ShortAddress',
                             post_code AS 'PostCodeValue',
                             ~no_maint AS 'Maintainable', 
-                            prop_ref AS 'PropertyReference',
+                            property.prop_ref AS 'PropertyReference',
                             level_code AS 'LevelCode',
-                            lulevel.lu_desc AS 'Description'
+                            lulevel.lu_desc AS 'Description',
+							tenure.ten_desc AS 'TenureDescription'
                         FROM 
                             property 
                             INNER JOIN lulevel ON property.level_code = lulevel.lu_ref
+							inner join rent on property.prop_ref = rent.prop_ref
+							inner join tenure on rent.tenure = tenure.ten_type
                         WHERE 
-                            prop_ref = @PropertyReference";
+                            property.prop_ref = @PropertyReference";
                     var property = connnection.Query<PropertyDetails>(query, new { PropertyReference = reference }).First();
                     return property;
                 }
