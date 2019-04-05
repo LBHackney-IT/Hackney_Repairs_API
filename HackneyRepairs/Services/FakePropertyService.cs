@@ -63,7 +63,8 @@ namespace HackneyRepairs.Services
                         ShortAddress = "Back Office, Robert House, 6 - 15 Florfield Road    ",
                         PostCodeValue = "E8 1DT",
                         PropertyReference = "52525252",
-                        Maintainable = true
+                        Maintainable = true,
+                        TenureDescription = "Secure"
                     });
                 case "5252":
                     throw new PropertyServiceException();
@@ -186,7 +187,8 @@ namespace HackneyRepairs.Services
                         ShortAddress = "Back Office Block, Robert House, 6 - 15 Florfield Road    ",
                         PostCodeValue = "E8 1DT",
                         PropertyReference = "525252527",
-                        Maintainable = true
+                        Maintainable = true,
+                        TenureDescription = "Secure"
                     });
                 case "5252":
                     throw new PropertyServiceException();
@@ -205,7 +207,8 @@ namespace HackneyRepairs.Services
                         ShortAddress = "Back Office Estate, Robert House, 6 - 15 Florfield Road    ",
                         PostCodeValue = "E8 1DT",
                         PropertyReference = "525252527",
-                        Maintainable = true
+                        Maintainable = true,
+                        TenureDescription = "Secure"
                     });
                 case "5252":
                     throw new PropertyServiceException();

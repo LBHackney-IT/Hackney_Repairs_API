@@ -188,8 +188,9 @@ namespace HackneyRepairs.Tests.Actions
 				ShortAddress = "Front Office, Robert House, 6 - 15 Florfield Road",
 				PostCodeValue = "E8 1DT",
 				PropertyReference = "43453543",
-				Maintainable = false
-			};
+				Maintainable = false,
+                TenureDescription = "Secure"
+            };
 			var fakeService = new Mock<IHackneyPropertyService>();
 			fakeService.Setup(service => service.GetPropertyByRefAsync("43453543")).ReturnsAsync(response);
 			var fakeRequestBuilder = new Mock<IHackneyPropertyServiceRequestBuilder>();
@@ -201,8 +202,9 @@ namespace HackneyRepairs.Tests.Actions
 				address = "Front Office, Robert House, 6 - 15 Florfield Road",
 				postcode = "E8 1DT",
 				propertyReference = "43453543",
-				maintainable = false
-			};
+				maintainable = false,
+                tenure = "Secure"
+            };
 			Assert.Equal(property, results);
 		}
 
@@ -295,7 +297,8 @@ namespace HackneyRepairs.Tests.Actions
 				ShortAddress = "Front Office Block, Robert House, 6 - 15 Florfield Road",
 				PostCodeValue = "E8 1DT",
 				PropertyReference = "43453543",
-				Maintainable = true
+				Maintainable = true,
+                TenureDescription = "Secure"
 			};
 			var fakeService = new Mock<IHackneyPropertyService>();
 			fakeService.Setup(service => service.GetPropertyBlockByRef("43453543"))
@@ -309,8 +312,9 @@ namespace HackneyRepairs.Tests.Actions
 				address = "Front Office Block, Robert House, 6 - 15 Florfield Road",
 				postcode = "E8 1DT",
 				propertyReference = "43453543",
-				maintainable = true
-			};
+				maintainable = true,
+                tenure = "Secure"
+            };
 			Assert.Equal(property, results);
 		}
 
@@ -339,8 +343,9 @@ namespace HackneyRepairs.Tests.Actions
 				ShortAddress = "Front Office Estate, Robert House, 6 - 15 Florfield Road",
 				PostCodeValue = "E8 1DT",
 				PropertyReference = "43453543",
-				Maintainable = true
-			};
+				Maintainable = true,
+                TenureDescription = "Secure"
+            };
 			var fakeService = new Mock<IHackneyPropertyService>();
 			fakeService.Setup(service => service.GetPropertyEstateByRef("43453543"))
 				.ReturnsAsync(response);
@@ -353,8 +358,9 @@ namespace HackneyRepairs.Tests.Actions
 				address = "Front Office Estate, Robert House, 6 - 15 Florfield Road",
 				postcode = "E8 1DT",
 				propertyReference = "43453543",
-				maintainable = true
-			};
+				maintainable = true,
+                tenure = "Secure"
+            };
 			Assert.Equal(property, results);
 		}
 
@@ -367,8 +373,9 @@ namespace HackneyRepairs.Tests.Actions
 				ShortAddress = "An Address Estate",
 				PostCodeValue = "A Postcode",
 				PropertyReference = "52525252",
-				Maintainable = true
-			};
+				Maintainable = true,
+                TenureDescription = "Secure"
+            };
 			var fakeService = new Mock<IHackneyPropertyService>();
 			fakeService.Setup(service => service.GetPropertyEstateByRef("52525252534"))
 				.ReturnsAsync(response);
@@ -378,8 +385,9 @@ namespace HackneyRepairs.Tests.Actions
 				address = "An Address Estate",
 				postcode = "A Postcode",
 				propertyReference = "52525252",
-				maintainable = true
-			};
+				maintainable = true,
+                tenure = "Secure"
+            };
 			var workOrdersService = new Mock<IHackneyWorkOrdersService>();
 			PropertyActions propertyActions = new PropertyActions(fakeService.Object, fakeRequestBuilder.Object, workOrdersService.Object, mockLogger.Object);
 			Assert.Equal(results, await propertyActions.FindPropertyEstateDetailsByRef("52525252534"));

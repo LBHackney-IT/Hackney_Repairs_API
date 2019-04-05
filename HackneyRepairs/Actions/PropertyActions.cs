@@ -292,6 +292,7 @@ namespace HackneyRepairs.Actions
                     postcode = property.PostCodeValue.Trim(),
                     propertyReference = property.PropertyReference.Trim(),
                     maintainable = property.Maintainable,
+                    tenure = property.TenureDescription
                 };
             }
 
@@ -302,7 +303,8 @@ namespace HackneyRepairs.Actions
                 propertyReference = property.PropertyReference.Trim(),
                 maintainable = property.Maintainable,
                 levelCode = property.LevelCode,
-                description = property.Description.Trim()
+                description = property.Description.Trim(),
+                tenure = property.TenureDescription.Trim()
             };
         }
 
