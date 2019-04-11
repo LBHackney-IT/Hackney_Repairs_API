@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace HackneyRepairs.Interfaces
 {
-    public class IHackneyCautionaryContactRequestBuilder
+    public interface IHackneyCautionaryContactServiceRequestBuilder
     {
     }
 }
