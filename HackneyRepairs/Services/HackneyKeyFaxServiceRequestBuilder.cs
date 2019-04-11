@@ -11,9 +11,7 @@ namespace HackneyRepairs.Services
         //Convert to string.Format(@"""{0}"" = {1}", "yes", true);
         //To allow use of parameters
         private readonly StringBuilder _startupXml;
-        //private readonly string _startupXml = @"<KeyfaxData test=""0""><Startup><Company>Hackney_41_OL2</Company><Mode>";
-        //_startupXml = @"ROL</Mode><UserName>Ian</UserName><Password>Global</Password><Tenant>";
-        //_startupXml = _startupXml + @"Mr A Test,10 Station Road, Poole, BH20 8UF</Tenant></Startup></KeyfaxData>";
+  
         public HackneyKeyFaxServiceRequestBuilder()
         {
             _startupXml = new StringBuilder();
@@ -27,12 +25,12 @@ namespace HackneyRepairs.Services
             get { return _startupXml.ToString(); }
         }
 
-        public StartupRequest BuildNewStartupRequest()
-        {
-            KeyFaxService.StartupRequest inValue = new KeyFaxService.StartupRequest();
-            inValue.Body = new KeyFaxService.StartupRequestBody();
-            inValue.Body.startupXml = _startupXml.ToString();
-            return inValue;
-        }   
+        //public StartupRequest BuildNewStartupRequest()
+        //{
+        //    KeyFaxService.StartupRequest inValue = new KeyFaxService.StartupRequest();
+        //    inValue.Body = new KeyFaxService.StartupRequestBody();
+        //    inValue.Body.startupXml = _startupXml.ToString();
+        //    return inValue;
+        //}   
     }
 }

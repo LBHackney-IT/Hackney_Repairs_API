@@ -1,5 +1,6 @@
 ﻿using HackneyRepairs.Interfaces;
 using System.Threading.Tasks;
+using System;
 
 namespace HackneyRepairs.Actions
 {
@@ -20,6 +21,14 @@ namespace HackneyRepairs.Actions
         {
             _logger.LogInformation($"Getting KeyFax Start up URL");
             var response = await _keyfaxService.GetKeyFaxLaunchURL(_requestBuilder.StartUpXML);
+            return response;
+        }
+
+        public async Task<object> GetResults(string keyfaxGUID)
+        {
+            string _companyCode = Environment.GetEnvironmentVariable("KFCompanyCode");
+            _logger.LogInformation($"Getting KeyFax results for GUID: {keyfaxGUID}");
+            var response = await _keyfaxService.GetKeyFaxResults(_companyCode, keyfaxGUID);
             return response;
         }
 

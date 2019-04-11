@@ -24,5 +24,22 @@ namespace HackneyRepairs.Services
             //return Task.Run(() => response);
             return response;
         }
+
+        public async Task<GetResultsResponse> GetKeyFaxResults(string companyCode, string keyfaxGUID)
+        {
+            var responsebody = new GetResultsResponseBody
+            {
+                GetResultsResult =
+            {
+                ResultXml = ""
+            }
+            };
+
+            var response = new GetResultsResponse
+            {
+                Body = responsebody
+            };
+            return response;
+        }
     }
 }

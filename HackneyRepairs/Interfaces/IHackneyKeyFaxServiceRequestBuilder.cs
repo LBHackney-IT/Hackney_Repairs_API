@@ -13,6 +13,6 @@ namespace HackneyRepairs.Interfaces
             get;
         }
 
-        StartupRequest BuildNewStartupRequest();   
+        //StartupRequest BuildNewStartupRequest();   
     }
 }

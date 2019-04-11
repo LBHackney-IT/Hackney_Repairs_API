@@ -15,8 +15,8 @@ namespace HackneyRepairs.Controllers
     [Route("v1/keyfax")]
     public class KeyFaxController : Controller
     {
-        private ILoggerAdapter<KeyFaxActions> _loggerAdapter;
         private readonly IExceptionLogger _exceptionLogger;
+        private ILoggerAdapter<KeyFaxActions> _loggerAdapter;
         private IHackneyKeyFaxService _keyfaxService;
         private IHackneyKeyFaxServiceRequestBuilder _requestBuilder;
 
@@ -56,13 +56,22 @@ namespace HackneyRepairs.Controllers
             }
         }
 
-        //public async Task<JsonResult> GetKeyFaxResults(string kfGUID)
-        //{
+        [HttpGet("kf_result/{resultID}")]
+        public async Task<JsonResult> GetKeyFaxResults(string resultID)
+        {
+            try
+            {
+                KeyFaxActions actions = new KeyFaxActions(_keyfaxService, _requestBuilder, _loggerAdapter);
 
-        //    KeyFaxActions actions = new KeyFaxActions(_repairsService, _requestBuilder, _loggerAdapter);
-        //    var result = await actions.GetStartUpURL(request);
-        //    return ResponseBuilder.Ok(result);
-
-        //}
+                //Keyfax return type is KeyFaxService.GetResultsResponse
+                var result = await actions.GetResults(resultID);
+                return ResponseBuilder.Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _exceptionLogger.CaptureException(ex);
+                return ResponseBuilder.Error(500, "We had some problems processing your request", ex.Message);
+            }
+        }
     }
 }
