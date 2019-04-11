@@ -1,9 +1,10 @@
 ﻿using System.Threading.Tasks;
-using HackneyRepairs.Models;
+using KeyFaxService;
 
 namespace HackneyRepairs.Interfaces
 {
     public interface IHackneyKeyFaxService
     {
+        Task<StartupResponse> GetKeyFaxLaunchURL(string startupRequestXML);
     }
 }

@@ -1,18 +1,26 @@
 ﻿using HackneyRepairs.Interfaces;
+using System.Threading.Tasks;
 
 namespace HackneyRepairs.Actions
 {
     public class KeyFaxActions
     {
-        public IHackneyRepairsService _repairsService;
-        public IHackneyRepairsServiceRequestBuilder _requestBuilder;
+        public IHackneyKeyFaxService _keyfaxService;
+        public IHackneyKeyFaxServiceRequestBuilder _requestBuilder;
         public ILoggerAdapter<KeyFaxActions> _logger;
 
-        public KeyFaxActions(IHackneyRepairsService repairsService, IHackneyRepairsServiceRequestBuilder requestBuilder, ILoggerAdapter<KeyFaxActions> logger)
+        public KeyFaxActions(IHackneyKeyFaxService keyfaxService, IHackneyKeyFaxServiceRequestBuilder requestBuilder, ILoggerAdapter<KeyFaxActions> logger)
         {
-            _repairsService = repairsService;
+            _keyfaxService = keyfaxService;
             _requestBuilder = requestBuilder;
             _logger = logger;
+        }
+
+        public async Task<object> GetStartUpURL()
+        {
+            _logger.LogInformation($"Getting KeyFax Start up URL");
+            var response = await _keyfaxService.GetKeyFaxLaunchURL(_requestBuilder.StartUpXML);
+            return response;
         }
 
         //public async Task<object> GetStartUpURL(RepairRequest request)

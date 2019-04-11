@@ -16,6 +16,9 @@
 
   <PropertyGroup>
     <CodeAnalysisRuleSet>ca.ruleset.xml</CodeAnalysisRuleSet>
+    <ApplicationIcon />
+    <OutputType>WinExe</OutputType>
+    <StartupObject />
   </PropertyGroup>
 
   <ItemGroup>
@@ -35,18 +38,21 @@
     <PackageReference Include="Moq" Version="4.8.2" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.0.3" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.0.2" />
+    <PackageReference Include="System.ServiceModel.Duplex" Version="4.5.3" />
+    <PackageReference Include="System.ServiceModel.NetTcp" Version="4.4.*" />
     <PackageReference Include="System.ServiceModel.Primitives" Version="4.5.3" />
-    <PackageReference Include="System.ServiceModel.Http" Version="4.4.2" />
+    <PackageReference Include="System.ServiceModel.Http" Version="4.5.3" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.4.1" />
     <PackageReference Include="NLog" Version="4.5.5" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.5.4" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.2" />
     <PackageReference Include="Microsoft.TestPlatform.TestHost" Version="15.7.2" />
+    <PackageReference Include="System.ServiceModel.Security" Version="4.5.3" />
     <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="2.5.0" />
     <PackageReference Include="Dapper" Version="1.60.6" />
-    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.6" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.1" />
     <PackageReference Include="SharpRaven" Version="2.4.0" />
     <PackageReference Include="Bogus" Version="24.3.1" />
@@ -83,5 +89,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Builders\RepairBuilder.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services" />
   </ItemGroup>
 </Project>
