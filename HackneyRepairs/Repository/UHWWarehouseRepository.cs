@@ -242,6 +242,7 @@ namespace HackneyRepairs.Repository
                             property.prop_ref AS 'PropertyReference',
                             level_code AS 'LevelCode',
                             lulevel.lu_desc AS 'Description',
+                            tenure.ten_type AS 'TenureCode',
 							tenure.ten_desc AS 'TenureDescription'
                         FROM 
                             property 
@@ -860,53 +861,6 @@ namespace HackneyRepairs.Repository
                     };
                     var notes = connection.Query<Note>(query, queryParameters);
                     return notes;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                throw new UHWWarehouseRepositoryException();
-            }
-        }
-
-        public async Task<CautionaryContactLevelModel[]> GetCautionaryContactByFirstLineOfAddress(string firstLineOfAddress)
-        {
-            string[] words = firstLineOfAddress.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            StringBuilder _sb = new StringBuilder();
-
-            _sb.Append("%");
-            foreach (var word in words)
-                _sb.Append(word + "%");
-
-            firstLineOfAddress = _sb.ToString().ToLower();
-
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
-                {
-                    string query = $@"
-                       SELECT
-                            PropertyReference,
-                            CCContact.ContactNo,
-                            Title,
-                            Forenames,
-                            Surname,
-                            CCAddress.Addr1,
-                            CallerNotes,
-                            alertCode
-                       FROM
-                            CCContactAlert
-                       INNER JOIN
-                            CCContact
-                       ON
-                            CCContactAlert.contactNo = CCContact.ContactNo
-                       INNER JOIN
-                            CCAddress
-                       ON
-                            CCAddress.UPRN = CCContact.UPRN
-                       WHERE CCAddress.Addr1 like '%FirstLineOfAddress%";
-                    var cautionaryContacts = connection.Query<CautionaryContactLevelModel>(query, new { FirstLineOfAddress = firstLineOfAddress }).ToArray();
-                    return cautionaryContacts;
                 }
             }
             catch (Exception ex)
