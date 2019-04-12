@@ -4,14 +4,22 @@ using System.Linq;
 using System.Threading.Tasks;
 using HackneyRepairs.Actions;
 using HackneyRepairs.Interfaces;
+using HackneyRepairs.Tests;
 
 namespace HackneyRepairs.Factories
 {
     public class HackneyCautionaryContactServiceFactory
     {
-        internal IHackneyCautionaryContactService build(IUhtRepository uhtRepository, IUHWWarehouseRepository uHWWarehouseRepository, ILoggerAdapter<CautionaryContactActions> cautionaryContactLoggerAdapter)
+        internal IHackneyCautionaryContactService build(IUHWWarehouseRepository uHWWarehouseRepository, ILoggerAdapter<CautionaryContactActions> logger)
         {
-            throw new NotImplementedException();
+            if (TestStatus.IsRunningInTests == false)
+            {
+                return new Services.HackneyCautionaryContactService(uHWWarehouseRepository, logger);
+            }
+            else
+            {
+                return new Services.FakeCautionaryContactService();
+            }
         }
     }
 }

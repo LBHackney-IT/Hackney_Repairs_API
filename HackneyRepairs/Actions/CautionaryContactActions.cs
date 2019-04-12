@@ -24,13 +24,16 @@ namespace HackneyRepairs.Actions
             try
             {
                 var response = await _cautionaryContactService.GetCautionaryContactByFirstLineOfAddress(firstLineOfAddress);
-                return new object { results = response };
-
+                return new { results = response };
             }
             catch (Exception e)
             {
-
+                _logger.LogError($"Finding property by address: {firstLineOfAddress} returned an error: {e.Message}");
+                throw new CautionaryContactServiceException();
             }
         }
     }
+
+    public class CautionaryContactServiceException : Exception { }
+    public class MissingCautionaryContactException : Exception { }
 }
