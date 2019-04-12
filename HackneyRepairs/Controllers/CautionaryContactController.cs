@@ -17,23 +17,33 @@ namespace HackneyRepairs.Controllers
     public class CautionaryContactController : Controller
     {
         private IHackneyCautionaryContactService _cautionaryContactService;
-        private IHackneyCautionaryContactServiceRequestBuilder _cautionaryContactRequestBuilder;
         private ILoggerAdapter<CautionaryContactActions> _cautionaryContactLoggerAdapter;
         private HackneyConfigurationBuilder _configBuilder;
+        private readonly IExceptionLogger _exceptionLogger;
 
-        public CautionaryContactController(IHackneyCautionaryContactService cautionaryContactService, IHackneyCautionaryContactServiceRequestBuilder cautionaryContactRequestBuilder, ILoggerAdapter<CautionaryContactActions> cautionaryContactLoggerAdapter, IUhtRepository uhtRepository, IUhwRepository uhwRepository, IUHWWarehouseRepository uHWWarehouseRepository)
+        public CautionaryContactController(IHackneyCautionaryContactService cautionaryContactService, ILoggerAdapter<CautionaryContactActions> cautionaryContactLoggerAdapter, IUhtRepository uhtRepository, IUhwRepository uhwRepository, IUHWWarehouseRepository uHWWarehouseRepository, IExceptionLogger exceptionLogger)
         {
             HackneyCautionaryContactServiceFactory cautionaryContactFactory = new HackneyCautionaryContactServiceFactory();
             _configBuilder = new HackneyConfigurationBuilder((Hashtable)Environment.GetEnvironmentVariables(), ConfigurationManager.AppSettings);
             _cautionaryContactService = cautionaryContactFactory.build(uhtRepository, uHWWarehouseRepository, cautionaryContactLoggerAdapter);
-            _cautionaryContactRequestBuilder = HackneyCautionaryContactServiceRequestBuilder(_configBuilder.getConfiguration());
+            _cautionaryContactLoggerAdapter = cautionaryContactLoggerAdapter;
+            _exceptionLogger = exceptionLogger;
         }
 
-        [HttpGet]
-        public async Task<JsonResult> GetCautionaryContactByFirstLineOfAddress()
+        // GET properties
+        /// <summary>
+        /// Gets a property or properties for a particular postcode
+        /// </summary>
+        /// <param name="firstLineOfAddress">First line of the propterty address being requested</param>
+        /// <returns>A list of properties matching the specified first line of address</returns>
+        /// <response code="200">Returns the list of properties</response>
+        /// <response code="404">If the property is not found</response>   
+        /// <response code="500">If any errors are encountered</response>
+        [HttpGet("firstLineOfAddress")]
+        public async Task<JsonResult> GetCautionaryContactByFirstLineOfAddress(string firstLineOfAddress)
         {
-            CautionaryContactActions actions = new CautionaryContactActions(_cautionaryContactService, _cautionaryContactRequestBuilder, _cautionaryContactLoggerAdapter);
-            var result = await actions.GetCautionaryContactByFirstLineOfAddress();
+            CautionaryContactActions actions = new CautionaryContactActions(_cautionaryContactService, _cautionaryContactLoggerAdapter);
+            var result = await actions.GetCautionaryContactByFirstLineOfAddress(firstLineOfAddress);
             return ResponseBuilder.Ok(result);
         }
     }

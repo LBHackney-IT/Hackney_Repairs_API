@@ -9,19 +9,28 @@ namespace HackneyRepairs.Actions
     public class CautionaryContactActions
     {
         private IHackneyCautionaryContactService _cautionaryContactService;
-        private IHackneyCautionaryContactServiceRequestBuilder _cautionaryContactRequestBuilder;
         private ILoggerAdapter<CautionaryContactActions> _cautionaryContactLoggerAdapter;
+        private readonly ILoggerAdapter<CautionaryContactActions> _logger;
 
-        public CautionaryContactActions(IHackneyCautionaryContactService cautionaryContactService, IHackneyCautionaryContactServiceRequestBuilder cautionaryContactRequestBuilder, ILoggerAdapter<CautionaryContactActions> cautionaryContactLoggerAdapter)
+        public CautionaryContactActions(IHackneyCautionaryContactService cautionaryContactService, ILoggerAdapter<CautionaryContactActions> cautionaryContactLoggerAdapter)
         {
             _cautionaryContactService = cautionaryContactService;
-            _cautionaryContactRequestBuilder = cautionaryContactRequestBuilder;
             _cautionaryContactLoggerAdapter = cautionaryContactLoggerAdapter;
         }
 
-        public async Task<object> GetCautionaryContactByFirstLineOfAddress()
+        public async Task<object> GetCautionaryContactByFirstLineOfAddress(string firstLineOfAddress)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"ActionLevel: Getting cautionary contact by first line of address: {firstLineOfAddress}");
+            try
+            {
+                var response = await _cautionaryContactService.GetCautionaryContactByFirstLineOfAddress(firstLineOfAddress);
+                return new object { results = response };
+
+            }
+            catch (Exception e)
+            {
+
+            }
         }
     }
 }
