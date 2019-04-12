@@ -161,7 +161,8 @@ namespace HackneyRepairs.Actions
                 }
                 else
                 {
-                    return BuildPropertyDetails(response);
+                    //return BuildPropertyDetails(response);
+                    return BuildPropertyDetailsTenure(response);
                 }
             }
             catch (MissingPropertyException e)
@@ -304,6 +305,34 @@ namespace HackneyRepairs.Actions
                 maintainable = property.Maintainable,
                 levelCode = property.LevelCode,
                 description = property.Description.Trim(),
+                tenure = property.TenureDescription.Trim()
+            };
+        }
+
+        private object BuildPropertyDetailsTenure(PropertyDetails property)
+        {
+            if (string.IsNullOrEmpty(property.Description))
+            {
+                return new
+                {
+                    address = property.ShortAddress.Trim(),
+                    postcode = property.PostCodeValue.Trim(),
+                    propertyReference = property.PropertyReference.Trim(),
+                    maintainable = property.Maintainable,
+                    tenureCode = property.TenureCode.Trim(),
+                    tenure = property.TenureDescription
+                };
+            }
+
+            return new
+            {
+                address = property.ShortAddress.Trim(),
+                postcode = property.PostCodeValue.Trim(),
+                propertyReference = property.PropertyReference.Trim(),
+                maintainable = property.Maintainable,
+                levelCode = property.LevelCode,
+                description = property.Description.Trim(),
+                tenureCode = property.TenureCode.Trim(),
                 tenure = property.TenureDescription.Trim()
             };
         }
