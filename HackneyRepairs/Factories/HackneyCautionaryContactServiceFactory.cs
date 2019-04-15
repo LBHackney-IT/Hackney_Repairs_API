@@ -10,11 +10,11 @@ namespace HackneyRepairs.Factories
 {
     public class HackneyCautionaryContactServiceFactory
     {
-        internal IHackneyCautionaryContactService build(IUHWWarehouseRepository uHWWarehouseRepository, ILoggerAdapter<CautionaryContactActions> logger)
+        internal IHackneyCautionaryContactService build(IUhwRepository uhwRepository, ILoggerAdapter<CautionaryContactActions> logger)
         {
             if (TestStatus.IsRunningInTests == false)
             {
-                return new Services.HackneyCautionaryContactService(uHWWarehouseRepository, logger);
+                return new Services.HackneyCautionaryContactService(uhwRepository, logger);
             }
             else
             {

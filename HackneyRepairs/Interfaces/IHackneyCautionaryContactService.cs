@@ -8,6 +8,6 @@ namespace HackneyRepairs.Interfaces
 {
     public interface IHackneyCautionaryContactService
     {
-        Task<CautionaryContactLevelModel[]> GetCautionaryContactByFirstLineOfAddress(string firstLineOfAddress);
+        Task<CautionaryContactLevelModel[]> GetCautionaryContactByRef(string reference);
     }
 }

@@ -9,26 +9,25 @@ namespace HackneyRepairs.Actions
     public class CautionaryContactActions
     {
         private IHackneyCautionaryContactService _cautionaryContactService;
-        private ILoggerAdapter<CautionaryContactActions> _cautionaryContactLoggerAdapter;
         private readonly ILoggerAdapter<CautionaryContactActions> _logger;
 
-        public CautionaryContactActions(IHackneyCautionaryContactService cautionaryContactService, ILoggerAdapter<CautionaryContactActions> cautionaryContactLoggerAdapter)
+        public CautionaryContactActions(IHackneyCautionaryContactService cautionaryContactService, ILoggerAdapter<CautionaryContactActions> logger)
         {
             _cautionaryContactService = cautionaryContactService;
-            _cautionaryContactLoggerAdapter = cautionaryContactLoggerAdapter;
+            _logger = logger;
         }
 
-        public async Task<object> GetCautionaryContactByFirstLineOfAddress(string firstLineOfAddress)
+        public async Task<object> GetCautionaryContactByRef(string reference)
         {
-            _logger.LogInformation($"ActionLevel: Getting cautionary contact by first line of address: {firstLineOfAddress}");
+            _logger.LogInformation($"ActionLevel: Getting cautionary contact by first line of address: {reference}");
             try
             {
-                var response = await _cautionaryContactService.GetCautionaryContactByFirstLineOfAddress(firstLineOfAddress);
+                var response = await _cautionaryContactService.GetCautionaryContactByRef(reference);
                 return new { results = response };
             }
             catch (Exception e)
             {
-                _logger.LogError($"Finding property by address: {firstLineOfAddress} returned an error: {e.Message}");
+                _logger.LogError($"Finding property by address: {reference} returned an error: {e.Message}");
                 throw new CautionaryContactServiceException();
             }
         }

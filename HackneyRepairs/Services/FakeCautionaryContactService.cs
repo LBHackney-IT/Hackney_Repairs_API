@@ -9,7 +9,7 @@ namespace HackneyRepairs.Services
 {
     public class FakeCautionaryContactService : IHackneyCautionaryContactService
     {
-        public Task<CautionaryContactLevelModel[]> GetCautionaryContactByFirstLineOfAddress(string firstLineOfAddress)
+        public Task<CautionaryContactLevelModel[]> GetCautionaryContactByRef(string firstLineOfAddress)
         {
             throw new NotImplementedException();
         }

@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace HackneyRepairs.Controllers
 {
     [Produces("application/json")]
-    [Route("v1/cautionary")]
+    [Route("v1/cautionary_contact")]
     public class CautionaryContactController : Controller
     {
         private IHackneyCautionaryContactService _cautionaryContactService;
@@ -23,11 +23,11 @@ namespace HackneyRepairs.Controllers
         private HackneyConfigurationBuilder _configBuilder;
         private readonly IExceptionLogger _exceptionLogger;
 
-        public CautionaryContactController(ILoggerAdapter<CautionaryContactActions> cautionaryContactLoggerAdapter, IUhtRepository uhtRepository, IUhwRepository uhwRepository, IUHWWarehouseRepository uHWWarehouseRepository, IExceptionLogger exceptionLogger)
+        public CautionaryContactController(ILoggerAdapter<CautionaryContactActions> cautionaryContactLoggerAdapter, IUhwRepository uhwRepository, IExceptionLogger exceptionLogger)
         {
             HackneyCautionaryContactServiceFactory cautionaryContactFactory = new HackneyCautionaryContactServiceFactory();
             _configBuilder = new HackneyConfigurationBuilder((Hashtable)Environment.GetEnvironmentVariables(), ConfigurationManager.AppSettings);
-            _cautionaryContactService = cautionaryContactFactory.build(uHWWarehouseRepository, cautionaryContactLoggerAdapter);
+            _cautionaryContactService = cautionaryContactFactory.build(uhwRepository, cautionaryContactLoggerAdapter);
             _cautionaryContactLoggerAdapter = cautionaryContactLoggerAdapter;
             _exceptionLogger = exceptionLogger;
         }
@@ -42,12 +42,12 @@ namespace HackneyRepairs.Controllers
         /// <response code="404">If the property is not found</response>   
         /// <response code="500">If any errors are encountered</response>
         [HttpGet]
-        public async Task<JsonResult> GetCautionaryContactByFirstLineOfAddress(string firstLineOfAddress)
+        public async Task<JsonResult> GetCautionaryContactByRef(string reference)
         {
             try
             {
                 CautionaryContactActions actions = new CautionaryContactActions(_cautionaryContactService, _cautionaryContactLoggerAdapter);
-                var result = await actions.GetCautionaryContactByFirstLineOfAddress(firstLineOfAddress);
+                var result = await actions.GetCautionaryContactByRef(reference);
                 return ResponseBuilder.Ok(result);
             }
             catch (MissingCautionaryContactException ex)
