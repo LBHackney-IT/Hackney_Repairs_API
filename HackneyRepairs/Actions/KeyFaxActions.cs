@@ -31,22 +31,5 @@ namespace HackneyRepairs.Actions
             var response = await _keyfaxService.GetKeyFaxResults(_companyCode, keyfaxGUID);
             return response;
         }
-
-        //public async Task<object> GetStartUpURL(RepairRequest request)
-        //{
-        //    if (request.WorkOrders != null)
-        //    {
-        //        return await CreateRepairWithOrder(request);
-        //    }
-        //    else
-        //    {
-        //        return await CreateRepairWithoutOrder(request);
-        //    }
-        //}
-
-        //public async Task<object> GetKeyFaxResult(string kfGUID)
-        //{
-
-        //}
     }
 }

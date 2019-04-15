@@ -127,7 +127,7 @@ namespace HackneyRepairs.Controllers
             try
             {
                 //Convert to Regular expression
-                if (String.IsNullOrEmpty(address) || address.Contains('%') || address.Length < 3)
+                if (String.IsNullOrEmpty(address))
                     throw new Exception("Invalid address");
 
                 PropertyActions actions = new PropertyActions(_propertyService, _propertyServiceRequestBuilder, _workordersService, _propertyLoggerAdapter);

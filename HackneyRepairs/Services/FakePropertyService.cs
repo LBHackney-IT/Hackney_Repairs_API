@@ -177,6 +177,40 @@ namespace HackneyRepairs.Services
             }
         }
 
+        public Task<PropertyLevelModel[]> GetFacilitiesByPropertyRef(string reference)
+        {
+            var PropertyList = new PropertyLevelModel[2];
+            PropertyLevelModel[] emptyPropertyList;
+            var property1 = new PropertyLevelModel()
+            {
+                Address = "Lift 1296 1-16 Oak House  Lordship Road",
+                Postcode = "N16 0PX",
+                PropertyReference = "1/43453543"
+            };
+            var property2 = new PropertyLevelModel()
+            {
+                Address = "Cleaners Room, Lobby Laburnum Court  Laburnum Street",
+                Postcode = "N16 0PX",
+                PropertyReference = "2/32453245"
+            };
+            PropertyList[0] = property1;
+            PropertyList[1] = property2;
+            switch (reference)
+            {
+                case "00000038":
+                    return Task.Run(() => PropertyList);
+                case "038":
+                    emptyPropertyList = null;
+                    return Task.Run(() => emptyPropertyList);
+                //throw new PropertyServiceException();
+                default:
+                    throw new PropertyServiceException();
+                    //return Task.Run(() => (PropertyLevelModel[])null);
+                    //emptyPropertyList = new PropertyLevelModel[0];
+                    //return Task.Run(() => emptyPropertyList);
+            }
+        }
+
         public Task<PropertyDetails> GetPropertyBlockByRef(string reference)
         {
             switch (reference)
@@ -214,37 +248,6 @@ namespace HackneyRepairs.Services
                     throw new PropertyServiceException();
                 default:
                     return Task.Run(() => (PropertyDetails)null);
-            }
-        }
-
-        public Task<PropertyLevelModel[]> GetFacilitiesByPropertyRef(string reference)
-        {
-            var PropertyList = new PropertyLevelModel[2];
-            PropertyLevelModel[] emptyPropertyList;
-            var property1 = new PropertyLevelModel()
-            {
-                Address = "2 Acacia House  Lordship Road",
-                Postcode = "N16 0PX",
-                PropertyReference = "1/43453543"
-            };
-            var property2 = new PropertyLevelModel()
-            {
-                Address = "4 Acacia House  Lordship Road",
-                Postcode = "N16 0PX",
-                PropertyReference = "2/32453245"
-            };
-            PropertyList[0] = property1;
-            PropertyList[1] = property2;
-            switch (reference)
-            {
-                case "Acacia":
-                    return Task.Run(() => PropertyList);
-                case "Elmbridge":
-                    emptyPropertyList = null;
-                    return Task.Run(() => emptyPropertyList);
-                default:
-                    emptyPropertyList = new PropertyLevelModel[0];
-                    return Task.Run(() => emptyPropertyList);
             }
         }
 
@@ -331,10 +334,5 @@ namespace HackneyRepairs.Services
 					}));
             }
         }
-
-        //public Task<PropertyLevelModel[]> GetPropertyListByFirstLineOfAddress(string firstlineofaddress)
-        //{
-        //    throw new NotImplementedException();
-        //}
     }
 }

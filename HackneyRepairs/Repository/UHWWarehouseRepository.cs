@@ -409,7 +409,7 @@ namespace HackneyRepairs.Repository
                     string query = @"DECLARE @STR NVARCHAR(MAX)
                                     declare @uestate char(16)
                                     set @uestate = @EstateReference
-                                    SET @STR ='SELECT top 50 property.prop_ref AS ''PropertyReference'',
+                                    SET @STR ='SELECT property.prop_ref AS ''PropertyReference'',
                                     property.level_code AS ''LevelCode'',
                                     property.major_ref AS ''MajorReference'',
                                     lulevel.lu_desc AS ''Description'',
@@ -417,9 +417,10 @@ namespace HackneyRepairs.Repository
                                     property.post_code AS ''PostCode''
                                     FROM property (nolock)
                                     INNER JOIN lulevel ON property.level_code = lulevel.lu_ref
-                                    where level_code = ''6'' and (u_estate = @u_estate or major_ref = @u_estate)' 
+                                    where level_code = ''6'' and (u_estate = @u_estate or major_ref = @u_estate) 
+                                    order by level_code' 
                                       If exists(SELECT property.prop_ref from property (nolock) 
-                                        where prop_ref = @uestate and level_code = 2)
+                                        where prop_ref = @uestate and level_code = '2')
                                     exec sp_executesql @STR,N'@u_estate char(16)',@u_estate = @uestate 
                                      else 
                                     select @uestate = u_estate from 
