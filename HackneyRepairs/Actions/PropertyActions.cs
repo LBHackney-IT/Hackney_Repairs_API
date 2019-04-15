@@ -256,6 +256,29 @@ namespace HackneyRepairs.Actions
             }
         }
 
+        public async Task<object> FindFacilitiesByPropertyRef(string reference)
+        {
+            _logger.LogInformation($"Finding the facilities of a property by the property reference: {reference}");
+            try
+            {
+                var response = await _propertyService.GetFacilitiesByPropertyRef(reference);
+                if (response.Any())
+                {
+                    GenericFormatter.TrimStringAttributesInEnumerable(response);
+                }
+
+                return new
+                {
+                    results = response
+                };
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Finding the facilities of a property by the property reference: {reference} returned an error: {e.Message}");
+                throw new PropertyServiceException();
+            }
+        }
+
         private async Task<IEnumerable<string>> GetBlockReferences(string propertyReference)
         {
             var hierarchy = await GetPropertyHierarchy(propertyReference);
