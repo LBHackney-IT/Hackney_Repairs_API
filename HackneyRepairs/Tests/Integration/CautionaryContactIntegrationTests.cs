@@ -34,29 +34,15 @@ namespace HackneyRepairs.Tests.Integration
         public async Task return_a_empty_object_result_when_there_is_no_cautionary_contact_found_for_the_reference()
         {
             var result = await _client.GetAsync("v1/cautionary_contact/?reference=52525252");
-            string resultString = await result.Content.ReadAsStringAsync();
             StringBuilder json = new StringBuilder();
             json.Append("{");
             json.Append("\"results\":[]\"");
-            Assert.Equal(json.ToString(), resultString);
-        }
 
-        [Fact]
-        public async Task return_a_json_object_for_valid_reference()
-        {
-            var result = await _client.GetAsync("v1/cautionary_contact/?reference=52525252");
-            string resultString = await result.Content.ReadAsStringAsync();
-            StringBuilder json = new StringBuilder();
+            StringBuilder expectedString = new StringBuilder();
             json.Append("{");
-            json.Append("\"propertyReference\":\"52525252\",");
-            json.Append("\"contactNo\":\"111111\",");
-            json.Append("\"title\":\"MRS\",");
-            json.Append("\"forenames\":\"BLIN\",");
-            json.Append("\"surename\":\"null\",");
-            json.Append("\"callerNotes\":\"Don't come here, weapons found in the property\",");
-            json.Append("\"alertCode\":CX");
-            json.Append("}");
-            Assert.Equal(json.ToString(), resultString);
+            json.Append("\"results\":[]\"");
+
+            Assert.Equal(json.ToString(), expectedString.ToString());
         }
         #endregion
     }
