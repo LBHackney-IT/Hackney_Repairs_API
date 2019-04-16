@@ -245,9 +245,9 @@ namespace HackneyRepairs.Repository
 							tenure.ten_desc AS 'TenureDescription'
                         FROM 
                             property 
-                            INNER JOIN lulevel ON property.level_code = lulevel.lu_ref
-							inner join rent on property.prop_ref = rent.prop_ref
-							inner join tenure on rent.tenure = tenure.ten_type
+                            LEFT JOIN lulevel ON property.level_code = lulevel.lu_ref
+							LEFT join rent on property.prop_ref = rent.prop_ref
+							LEFT join tenure on rent.tenure = tenure.ten_type
                         WHERE 
                             property.prop_ref = @PropertyReference";
                     var property = connnection.Query<PropertyDetails>(query, new { PropertyReference = reference }).First();
@@ -427,7 +427,6 @@ namespace HackneyRepairs.Repository
                                     property (nolock) where prop_ref = @uestate
                                     exec sp_executesql @STR,N'@u_estate char(16)',@u_estate = @uestate";
                     var property = connection.Query<PropertyLevelModel>(query, new { EstateReference = reference }).ToArray();
-                    //connection.Query<PropertyLevelModel>(query).ToArray();
                     return property;
                 }
             }
