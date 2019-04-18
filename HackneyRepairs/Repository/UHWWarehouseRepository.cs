@@ -331,7 +331,7 @@ namespace HackneyRepairs.Repository
                     var properties = connection.Query<PropertyLevelModel>(query, new { FirstLineOfAddress = firstLineOfAddress }).ToArray();
                     return properties;
                 }
-            }//{ FirstLineOfAddress = "%" + firstLineOfAddress + "%" }
+            }//{ FirstLineOfAddress = "%" + reference + "%" }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
