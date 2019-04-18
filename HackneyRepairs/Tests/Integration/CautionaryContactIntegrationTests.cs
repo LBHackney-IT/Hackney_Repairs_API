@@ -30,20 +30,6 @@ namespace HackneyRepairs.Tests.Integration
             Assert.Equal("application/json", result.Content.Headers.ContentType.MediaType);
         }
 
-        [Fact]
-        public async Task return_a_empty_object_result_when_there_is_no_cautionary_contact_found_for_the_reference()
-        {
-            var result = await _client.GetAsync("v1/cautionary_contact/?reference=52525252");
-            StringBuilder json = new StringBuilder();
-            json.Append("{");
-            json.Append("\"results\":[]\"");
-
-            StringBuilder expectedString = new StringBuilder();
-            json.Append("{");
-            json.Append("\"results\":[]\"");
-
-            Assert.Equal(json.ToString(), expectedString.ToString());
-        }
         #endregion
     }
 }
