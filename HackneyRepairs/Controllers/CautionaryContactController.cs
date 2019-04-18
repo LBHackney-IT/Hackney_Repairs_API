@@ -36,10 +36,10 @@ namespace HackneyRepairs.Controllers
         /// <summary>
         /// Gets the cautionary contact notes for a address
         /// </summary>
-        /// <param name="firstLineOfAddress">First line of the propterty address that the notes are being requested of</param>
-        /// <returns>A list of properties matching the specified first line of address</returns>
+        /// <param name="reference">Use the UH Property reference number to get the alerts</param>
+        /// <returns>A list of cautionary contact details and alerts related to the property</returns>
         /// <response code="200">Returns the list of Cautionary notes</response>
-        /// <response code="404">If the property is not found</response>   
+        /// <response code="404">If the cautionary contact information is not found</response>   
         /// <response code="500">If any errors are encountered</response>
         [HttpGet]
         public async Task<JsonResult> GetCautionaryContactByRef(string reference)

@@ -13,8 +13,8 @@ namespace HackneyRepairs.Tests.Actions
 {
     public class CautionaryContactActionsTests
     {
-        #region Cautionary Contact Data by First Line of Address
-        public async Task find_properties_by_address_returns_a_list_of_properties()
+        #region Cautionary Contact Data by property references
+        public async Task get_cautionary_contacts_alerts_by_uh_property_reference()
         {
             var mockLogger = new Mock<ILoggerAdapter<CautionaryContactActions>>();
             var property1 = new CautionaryContactLevelModel()
