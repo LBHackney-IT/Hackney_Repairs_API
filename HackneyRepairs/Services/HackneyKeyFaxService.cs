@@ -16,7 +16,7 @@ namespace HackneyRepairs.Services
             _logger = logger;
         }
 
-        public async Task<StartupResponse> GetKeyFaxLaunchURL(string startupRequestXML)
+        public async Task<StartupResponse> GetKeyFaxLaunchURLAsync(string startupRequestXML)
         {
             //Create KeyFax soap client object
             _client = new KeyfaxWSSoapClient(KeyfaxWSSoapClient.EndpointConfiguration.KeyfaxWSSoap);
@@ -26,7 +26,7 @@ namespace HackneyRepairs.Services
             return response;
         }
 
-        public async Task<GetResultsResponse> GetKeyFaxResults(string companyCode, string keyfaxGUID)
+        public async Task<GetResultsResponse> GetKeyFaxResultsAsync(string companyCode, string keyfaxGUID)
         {
             //Create KeyFax soap client object
             _client = new KeyfaxWSSoapClient(KeyfaxWSSoapClient.EndpointConfiguration.KeyfaxWSSoap);

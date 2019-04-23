@@ -30,14 +30,14 @@ namespace HackneyRepairs.Controllers
         }
 
         [HttpGet("get_startup_url")]
-        public async Task<JsonResult> GetKeyFaxStartUpURL()
+        public async Task<JsonResult> GetKeyFaxStartUpURLAsync()
         {
             try
             {
                 KeyFaxActions actions = new KeyFaxActions(_keyfaxService, _requestBuilder, _loggerAdapter);
                 
                 //Keyfax return type is KeyFaxService.StartupResponse
-                var result = await actions.GetStartUpURL();
+                var result = await actions.GetStartUpURLAsync();
 
                 //XmlDocument doc = new XmlDocument();
                 //doc.LoadXml(result.ToString());
@@ -57,14 +57,14 @@ namespace HackneyRepairs.Controllers
         }
 
         [HttpGet("kf_result/{resultID}")]
-        public async Task<JsonResult> GetKeyFaxResults(string resultID)
+        public async Task<JsonResult> GetKeyFaxResultsAsync(string resultID)
         {
             try
             {
                 KeyFaxActions actions = new KeyFaxActions(_keyfaxService, _requestBuilder, _loggerAdapter);
 
                 //Keyfax return type is KeyFaxService.GetResultsResponse
-                var result = await actions.GetResults(resultID);
+                var result = await actions.GetResultsAsync(resultID);
                 return ResponseBuilder.Ok(result);
             }
             catch (Exception ex)

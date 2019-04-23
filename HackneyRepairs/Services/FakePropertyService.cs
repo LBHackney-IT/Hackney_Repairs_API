@@ -222,7 +222,7 @@ namespace HackneyRepairs.Services
                         PostCodeValue = "E8 1DT",
                         PropertyReference = "525252527",
                         Maintainable = true,
-                        TenureDescription = "Secure"
+                        TenureDescription = ""
                     });
                 case "5252":
                     throw new PropertyServiceException();
@@ -242,7 +242,7 @@ namespace HackneyRepairs.Services
                         PostCodeValue = "E8 1DT",
                         PropertyReference = "525252527",
                         Maintainable = true,
-                        TenureDescription = "Secure"
+                        TenureDescription = ""
                     });
                 case "5252":
                     throw new PropertyServiceException();

@@ -5,7 +5,7 @@ namespace HackneyRepairs.Interfaces
 {
     public interface IHackneyKeyFaxService
     {
-        Task<StartupResponse> GetKeyFaxLaunchURL(string startupRequestXML);
-        Task<GetResultsResponse> GetKeyFaxResults(string companyCode, string keyfaxGUID);
+        Task<StartupResponse> GetKeyFaxLaunchURLAsync(string startupRequestXML);
+        Task<GetResultsResponse> GetKeyFaxResultsAsync(string companyCode, string keyfaxGUID);
     }
 }

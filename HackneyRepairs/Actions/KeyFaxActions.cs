@@ -17,18 +17,18 @@ namespace HackneyRepairs.Actions
             _logger = logger;
         }
 
-        public async Task<object> GetStartUpURL()
+        public async Task<object> GetStartUpURLAsync()
         {
             _logger.LogInformation($"Getting KeyFax Start up URL");
-            var response = await _keyfaxService.GetKeyFaxLaunchURL(_requestBuilder.StartUpXML);
+            var response = await _keyfaxService.GetKeyFaxLaunchURLAsync(_requestBuilder.StartUpXML);
             return response;
         }
 
-        public async Task<object> GetResults(string keyfaxGUID)
+        public async Task<object> GetResultsAsync(string keyfaxGUID)
         {
             string _companyCode = Environment.GetEnvironmentVariable("KFCompanyCode");
             _logger.LogInformation($"Getting KeyFax results for GUID: {keyfaxGUID}");
-            var response = await _keyfaxService.GetKeyFaxResults(_companyCode, keyfaxGUID);
+            var response = await _keyfaxService.GetKeyFaxResultsAsync(_companyCode, keyfaxGUID);
             return response;
         }
     }

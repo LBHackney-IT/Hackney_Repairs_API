@@ -327,7 +327,7 @@ namespace HackneyRepairs.Actions
                 maintainable = property.Maintainable,
                 levelCode = property.LevelCode,
                 description = property.Description.Trim(),
-                tenure = property.TenureDescription.Trim()
+                tenure = (property.TenureDescription ?? "").Trim()
             };
         }
 
