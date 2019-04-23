@@ -161,14 +161,7 @@ namespace HackneyRepairs.Actions
                 }
                 else
                 {
-                    if (response.TenureCode == null)
-                    {
-                        return BuildPropertyDetails(response, false);
-                    }
-                    else
-                    {
-                        return BuildPropertyDetails(response, true);
-                    }
+                    return BuildPropertyDetails(response);
                 }
             }
             catch (MissingPropertyException e)
@@ -221,7 +214,7 @@ namespace HackneyRepairs.Actions
                 }
                 else
                 {
-                    return BuildPropertyDetails(response, false);
+                    return BuildPropertyDetails(response);
                 }
             }
             catch (MissingPropertyException e)
@@ -248,7 +241,7 @@ namespace HackneyRepairs.Actions
                 }
                 else
                 {
-                    return BuildPropertyDetails(response, false);
+                    return BuildPropertyDetails(response);
                 }
             }
             catch (MissingPropertyException e)
@@ -312,36 +305,9 @@ namespace HackneyRepairs.Actions
             };
         }
 
-        private object BuildPropertyDetails(PropertyDetails property, bool tenureObject)
+        private object BuildPropertyDetails(PropertyDetails property)
         {
             if (string.IsNullOrEmpty(property.Description))
-            {
-                if (tenureObject == false)
-                {
-                    return new
-                    {
-                        address = property.ShortAddress.Trim(),
-                        postcode = property.PostCodeValue.Trim(),
-                        propertyReference = property.PropertyReference.Trim(),
-                        maintainable = property.Maintainable,
-                        tenure = property.TenureDescription
-                    };
-                }
-                else
-                {
-                    return new
-                    {
-                        address = property.ShortAddress.Trim(),
-                        postcode = property.PostCodeValue.Trim(),
-                        propertyReference = property.PropertyReference.Trim(),
-                        maintainable = property.Maintainable,
-                        tenureCode = property.TenureCode.Trim(),
-                        tenure = property.TenureDescription
-                    };
-                }
-            }
-
-            if (tenureObject == false)
             {
                 return new
                 {
@@ -349,12 +315,11 @@ namespace HackneyRepairs.Actions
                     postcode = property.PostCodeValue.Trim(),
                     propertyReference = property.PropertyReference.Trim(),
                     maintainable = property.Maintainable,
-                    levelCode = property.LevelCode,
-                    description = property.Description.Trim(),
-                    tenure = property.TenureDescription.Trim()
+                    tenure = property.TenureDescription
                 };
             }
-            else
+
+            return new
             {
                 address = property.ShortAddress.Trim(),
                 postcode = property.PostCodeValue.Trim(),
@@ -364,7 +329,6 @@ namespace HackneyRepairs.Actions
                 description = property.Description.Trim(),
                 tenure = (property.TenureDescription ?? "").Trim()
             };
-
         }
 
         private object[] BuildPropertiesDetails(PropertyDetails[] property)

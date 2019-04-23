@@ -242,8 +242,7 @@ namespace HackneyRepairs.Repository
                             property.prop_ref AS 'PropertyReference',
                             level_code AS 'LevelCode',
                             lulevel.lu_desc AS 'Description',
-                            tenure.ten_type AS 'TenureCode',
-							tenure.ten_desc AS 'TenureDescription'
+							tenure.ten_desc, AS 'TenureDescription'
                         FROM 
                             property 
                             LEFT JOIN lulevel ON property.level_code = lulevel.lu_ref
@@ -331,7 +330,7 @@ namespace HackneyRepairs.Repository
                     var properties = connection.Query<PropertyLevelModel>(query, new { FirstLineOfAddress = firstLineOfAddress }).ToArray();
                     return properties;
                 }
-            }//{ FirstLineOfAddress = "%" + reference + "%" }
+            }//{ FirstLineOfAddress = "%" + firstLineOfAddress + "%" }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);

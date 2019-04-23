@@ -268,24 +268,22 @@ namespace HackneyRepairs.Tests.Actions
 			{
 				ShortAddress = "Front Office, Robert House, 6 - 15 Florfield Road",
 				PostCodeValue = "E8 1DT",
-				PropertyReference = "43453543",
+				PropertyReference = "52525252",
 				Maintainable = false,
-                TenureCode = "SEC",
                 TenureDescription = "Secure"
             };
 			var fakeService = new Mock<IHackneyPropertyService>();
-			fakeService.Setup(service => service.GetPropertyByRefAsync("43453543")).ReturnsAsync(response);
+			fakeService.Setup(service => service.GetPropertyByRefAsync("52525252")).ReturnsAsync(response);
 			var fakeRequestBuilder = new Mock<IHackneyPropertyServiceRequestBuilder>();
 			var workOrdersService = new Mock<IHackneyWorkOrdersService>();
 			PropertyActions propertyActions = new PropertyActions(fakeService.Object, fakeRequestBuilder.Object, workOrdersService.Object, mockLogger.Object);
-			var results = await propertyActions.FindPropertyDetailsByRef("43453543");
+			var results = await propertyActions.FindPropertyDetailsByRef("52525252");
 			var property = new
 			{
 				address = "Front Office, Robert House, 6 - 15 Florfield Road",
 				postcode = "E8 1DT",
-				propertyReference = "43453543",
+				propertyReference = "52525252",
 				maintainable = false,
-                tenureCode = "SEC",
                 tenure = "Secure"
             };
 			Assert.Equal(property, results);
@@ -381,7 +379,7 @@ namespace HackneyRepairs.Tests.Actions
 				PostCodeValue = "E8 1DT",
 				PropertyReference = "43453543",
 				Maintainable = true,
-                TenureDescription = "Secure"
+                TenureDescription = ""
 			};
 			var fakeService = new Mock<IHackneyPropertyService>();
 			fakeService.Setup(service => service.GetPropertyBlockByRef("43453543"))
@@ -396,7 +394,7 @@ namespace HackneyRepairs.Tests.Actions
 				postcode = "E8 1DT",
 				propertyReference = "43453543",
 				maintainable = true,
-                tenure = "Secure"
+                tenure = ""
             };
 			Assert.Equal(property, results);
 		}
@@ -427,7 +425,7 @@ namespace HackneyRepairs.Tests.Actions
 				PostCodeValue = "E8 1DT",
 				PropertyReference = "43453543",
 				Maintainable = true,
-                TenureDescription = "Secure"
+                TenureDescription = ""
             };
 			var fakeService = new Mock<IHackneyPropertyService>();
 			fakeService.Setup(service => service.GetPropertyEstateByRef("43453543"))
@@ -442,7 +440,7 @@ namespace HackneyRepairs.Tests.Actions
 				postcode = "E8 1DT",
 				propertyReference = "43453543",
 				maintainable = true,
-                tenure = "Secure"
+                tenure = ""
             };
 			Assert.Equal(property, results);
 		}
@@ -457,7 +455,7 @@ namespace HackneyRepairs.Tests.Actions
 				PostCodeValue = "A Postcode",
 				PropertyReference = "52525252",
 				Maintainable = true,
-                TenureDescription = "Secure"
+                TenureDescription = ""
             };
 			var fakeService = new Mock<IHackneyPropertyService>();
 			fakeService.Setup(service => service.GetPropertyEstateByRef("52525252534"))
@@ -469,7 +467,7 @@ namespace HackneyRepairs.Tests.Actions
 				postcode = "A Postcode",
 				propertyReference = "52525252",
 				maintainable = true,
-                tenure = "Secure"
+                tenure = ""
             };
 			var workOrdersService = new Mock<IHackneyWorkOrdersService>();
 			PropertyActions propertyActions = new PropertyActions(fakeService.Object, fakeRequestBuilder.Object, workOrdersService.Object, mockLogger.Object);

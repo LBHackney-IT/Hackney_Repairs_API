@@ -202,6 +202,8 @@ namespace HackneyRepairs.Tests.Integration
             StringBuilder json = new StringBuilder();
             json.Append("[");
             json.Append("{");
+            json.Append("\"code\":400,");
+            json.Append("\"source\":\"/\",");
             json.Append("\"developerMessage\":\"Please provide  a valid repair request\",");
             json.Append("\"userMessage\":\"Please provide  a valid repair request\"");
             json.Append("}");

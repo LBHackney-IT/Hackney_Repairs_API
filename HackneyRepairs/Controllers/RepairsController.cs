@@ -54,7 +54,6 @@ namespace HackneyRepairs.Controllers
             {
                 // Validate the request
                 var validationResult = _repairRequestValidator.Validate(request);
-
                 if (validationResult.Valid)
                 {
                     RepairsActions actions = new RepairsActions(_repairsService, _requestBuilder, _loggerAdapter);
@@ -62,12 +61,19 @@ namespace HackneyRepairs.Controllers
                     return ResponseBuilder.Ok(result);
                 }
 
-                var errors = validationResult.ErrorMessages.Select(error => new ApiErrorMessage
+                //Old errors api response
+                /*var errors = validationResult.ErrorMessages.Select(error => new ApiErrorMessage
                 {
                     DeveloperMessage = error,
                     UserMessage = error
                 }).ToList();
-                return ResponseBuilder.ErrorFromList(400, errors);
+                var errors = validationResult.ErrorDictionary.Select(error => new ApiErrorMessage
+                {
+                    Field = error.Key,
+                    DeveloperMessage = error.Value,
+                    UserMessage = error.Value,
+                }).ToList();*/
+                return ResponseBuilder.ErrorFromList(400, validationResult.RepairApiError);
             }
             catch (Exception ex)
             {

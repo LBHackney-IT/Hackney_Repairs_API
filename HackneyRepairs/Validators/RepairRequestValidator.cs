@@ -18,6 +18,14 @@ namespace HackneyRepairs.Validators
             {
                 validationResult.Valid = false;
                 validationResult.ErrorMessages.Add("Please provide  a valid repair request");
+                validationResult.RepairApiError.Add(new JsonApiErrorMessage
+                {
+                        Code = 400,
+                        DeveloperMessage = "Please provide  a valid repair request",
+                        UserMessage = "Please provide  a valid repair request",
+                        Source = @"/"
+                });
+                
                 return validationResult;
             }
 
@@ -25,6 +33,13 @@ namespace HackneyRepairs.Validators
             {
                 validationResult.Valid = false;
                 validationResult.ErrorMessages.Add("Please provide a valid Problem");
+                validationResult.RepairApiError.Add(new JsonApiErrorMessage
+                {
+                    Code = 400,
+                    DeveloperMessage = "Problem description cannot be null or empty",
+                    UserMessage = "Please provide a valid Problem",
+                    Source = @"/problemDescription"
+                });
             }
 
             if (!string.IsNullOrWhiteSpace(request.PropertyReference))
@@ -34,12 +49,26 @@ namespace HackneyRepairs.Validators
                 {
                     validationResult.Valid = false;
                     validationResult.ErrorMessages.Add("Please provide a valid Property reference");
+                    validationResult.RepairApiError.Add(new JsonApiErrorMessage
+                    {
+                        Code = 400,
+                        DeveloperMessage = "Property reference is invalid",
+                        UserMessage = "Please provide a valid Property reference",
+                        Source = @"/propertyReference"
+                    });
                 }
             }
             else
             {
                 validationResult.Valid = false;
                 validationResult.ErrorMessages.Add("You must provide a Property reference");
+                validationResult.RepairApiError.Add(new JsonApiErrorMessage
+                {
+                    Code = 400,
+                    DeveloperMessage = "Property reference cannot be null or empty",
+                    UserMessage = "You must provide a Property reference",
+                    Source = @"/propertyReference"
+                });
             }
 
             var priorityPattern = "^[UGINEZVMuginezvm]{1}$";
@@ -47,10 +76,19 @@ namespace HackneyRepairs.Validators
             {
                 validationResult.Valid = false;
                 validationResult.ErrorMessages.Add("Please provide a valid Priority");
+                validationResult.RepairApiError.Add(new JsonApiErrorMessage
+                {
+                    Code = 400,
+                    DeveloperMessage = "Priority is invalid",
+                    UserMessage = "Please provide a valid Priority",
+                    Source = @"priority"
+                });
             }
 
             if (request.WorkOrders != null)
             {
+                int _count = 0;
+
                 if (!(request.WorkOrders.Count == 0))
                 {
                     foreach (WorkOrder or in request.WorkOrders)
@@ -62,19 +100,43 @@ namespace HackneyRepairs.Validators
                             {
                                 validationResult.Valid = false;
                                 validationResult.ErrorMessages.Add("If Repair request has workOrders you must provide a valid sorCode");
+                                validationResult.RepairApiError.Add(new JsonApiErrorMessage
+                                {
+                                    Code = 400,
+                                    DeveloperMessage = "sorCode is invalid",
+                                    UserMessage = "If Repair request has workOrders you must provide a valid sorCode",
+                                    Source = $@"/workOrders/{_count}/sorCode"
+                                });
                             }
                         }
                         else
                         {
                             validationResult.Valid = false;
                             validationResult.ErrorMessages.Add("If Repair request has workOrders you must provide a sorCode");
+                            validationResult.RepairApiError.Add(new JsonApiErrorMessage
+                            {
+                                Code = 400,
+                                DeveloperMessage = "sorCode is invalid",
+                                UserMessage = "If Repair request has workOrders you must provide a valid sorCode",
+                                Source = $@"/workOrders/{_count}/sorCode"
+                            });
                         }
+
+                        //increment count in loop
+                        _count++;
                     }
                 }
                 else
                 {
                     validationResult.Valid = false;
                     validationResult.ErrorMessages.Add("If Repair request has workOrders you must provide a valid sorCode");
+                    validationResult.RepairApiError.Add(new JsonApiErrorMessage
+                    {
+                        Code = 400,
+                        DeveloperMessage = "sorCode is invalid",
+                        UserMessage = "If Repair request has workOrders you must provide a valid sorCode",
+                        Source = $@"/workOrders/{_count}/sorCode"
+                    });
                 }
             }
 
@@ -84,6 +146,13 @@ namespace HackneyRepairs.Validators
                 {
                     validationResult.Valid = false;
                     validationResult.ErrorMessages.Add("Contact Name cannot be empty");
+                    validationResult.RepairApiError.Add(new JsonApiErrorMessage
+                    {
+                        Code = 400,
+                        DeveloperMessage = "Contact Name cannot be empty",
+                        UserMessage = "Please provide a name for the contact",
+                        Source = $@"/contact/name"
+                    });
                 }
 
                 var telephonePattern = "^[0-9]{10,11}$";
@@ -92,6 +161,13 @@ namespace HackneyRepairs.Validators
                 {
                     validationResult.Valid = false;
                     validationResult.ErrorMessages.Add("Telephone number must contain minimum of 10 and maximum of 11 digits.");
+                    validationResult.RepairApiError.Add(new JsonApiErrorMessage
+                    {
+                        Code = 400,
+                        DeveloperMessage = "Contact Telephone number is invalid",
+                        UserMessage = "Telephone number must contain minimum of 10 and maximum of 11 digits",
+                        Source = $@"/contact/telephoneNumber"
+                    });
                 }
 
                 if (request.Contact.EmailAddress != null && request.Contact.EmailAddress != string.Empty)
@@ -102,6 +178,13 @@ namespace HackneyRepairs.Validators
                     {
                         validationResult.Valid = false;
                         validationResult.ErrorMessages.Add("Please enter valid Email address");
+                        validationResult.RepairApiError.Add(new JsonApiErrorMessage
+                        {
+                            Code = 400,
+                            DeveloperMessage = "Email address is invalid",
+                            UserMessage = "Please enter valid Email address",
+                            Source = $@"/contact/emailAddress"
+                        });
                     }
                 }
             }
@@ -109,6 +192,13 @@ namespace HackneyRepairs.Validators
             {
                 validationResult.Valid = false;
                 validationResult.ErrorMessages.Add("Please provide a contact");
+                validationResult.RepairApiError.Add(new JsonApiErrorMessage
+                {
+                    Code = 400,
+                    DeveloperMessage = "Contact cannot be null",
+                    UserMessage = "Please provide a contact",
+                    Source = $@"/contact"
+                });
             }
 
             return validationResult;
@@ -120,10 +210,12 @@ namespace HackneyRepairs.Validators
         public RepairRequestValidationResult(RepairRequest request)
         {
             ErrorMessages = new List<string>();
+            RepairApiError = new List<JsonApiErrorMessage>();
             Valid = true;
             RepairRequest = request;
         }
 
         public RepairRequest RepairRequest { get; set; }
+        public List<JsonApiErrorMessage> RepairApiError { get; }
     }
 }

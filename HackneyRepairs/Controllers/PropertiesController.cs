@@ -125,11 +125,7 @@ namespace HackneyRepairs.Controllers
         public async Task<JsonResult> GetByFirstLineOfAddress(string address, int limit = 100)
         {
             try
-            {
-                //Convert to Regular expression
-                if (String.IsNullOrEmpty(address))
-                    throw new Exception("Invalid address");
-
+            { 
                 PropertyActions actions = new PropertyActions(_propertyService, _propertyServiceRequestBuilder, _workordersService, _propertyLoggerAdapter);
                 var result = await actions.FindPropertyByFirstLineOfAddress(address, limit);
                 return ResponseBuilder.Ok(result);
