@@ -270,6 +270,7 @@ namespace HackneyRepairs.Tests.Actions
 				PostCodeValue = "E8 1DT",
 				PropertyReference = "43453543",
 				Maintainable = false,
+                TenureCode = "SEC",
                 TenureDescription = "Secure"
             };
 			var fakeService = new Mock<IHackneyPropertyService>();
@@ -284,6 +285,7 @@ namespace HackneyRepairs.Tests.Actions
 				postcode = "E8 1DT",
 				propertyReference = "43453543",
 				maintainable = false,
+                tenureCode = "SEC",
                 tenure = "Secure"
             };
 			Assert.Equal(property, results);

@@ -64,6 +64,7 @@ namespace HackneyRepairs.Services
                         PostCodeValue = "E8 1DT",
                         PropertyReference = "52525252",
                         Maintainable = true,
+                        TenureCode = "SEC",
                         TenureDescription = "Secure"
                     });
                 case "5252":

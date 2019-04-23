@@ -676,7 +676,7 @@ namespace HackneyRepairs.Repository
             }
         }
 
-		public static string GetCutoffTime()
+        public static string GetCutoffTime()
         {
             DateTime now = DateTime.Now;
             DateTime dtCutoff = new DateTime(now.Year, now.Month, now.Day, 23, 0, 0);
