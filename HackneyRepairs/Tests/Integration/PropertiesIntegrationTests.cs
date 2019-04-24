@@ -235,6 +235,23 @@ namespace HackneyRepairs.Tests
         }
         #endregion
 
+        #region GET facilities details by property reference tests
+        [Fact]
+        public async Task return_a_200_result_for_valid_facilities_request_by_reference()
+        {
+            var result = await _client.GetAsync("v1/properties/00000038/facilities");
+            Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+            Assert.Equal("application/json", result.Content.Headers.ContentType.MediaType);
+        }
+
+        [Fact]
+        public async Task return_a_500_result_when_there_is_an_internal_server_error_for_facilities_by_reference()
+        {
+            var result = await _client.GetAsync("v1/properties/10000038/facilities");
+            Assert.Equal(HttpStatusCode.InternalServerError, result.StatusCode);
+        }
+        #endregion
+
         #region GET Property details by reference tests
         [Fact]
         public async Task return_a_200_result_for_valid_request_by_reference()
@@ -269,7 +286,6 @@ namespace HackneyRepairs.Tests
             json.Append("\"postcode\":\"E8 1DT\",");
             json.Append("\"propertyReference\":\"52525252\",");
             json.Append("\"maintainable\":true,");
-            json.Append("\"tenureCode\":\"SEC\",");
             json.Append("\"tenure\":\"Secure\"");
             json.Append("}");
             Assert.Equal(json.ToString(), resultString);
@@ -387,7 +403,7 @@ namespace HackneyRepairs.Tests
             json.Append("\"postcode\":\"E8 1DT\",");
             json.Append("\"propertyReference\":\"525252527\",");
             json.Append("\"maintainable\":true,");
-            json.Append("\"tenure\":\"Secure\"");
+            json.Append("\"tenure\":\"\"");
             json.Append("}");
             Assert.Equal(json.ToString(), resultString);
         }
@@ -536,7 +552,7 @@ namespace HackneyRepairs.Tests
             json.Append("\"postcode\":\"E8 1DT\",");
             json.Append("\"propertyReference\":\"525252527\",");
             json.Append("\"maintainable\":true,");
-            json.Append("\"tenure\":\"Secure\"");
+            json.Append("\"tenure\":\"\"");
             json.Append("}");
             Assert.Equal(json.ToString(), resultString);
         }

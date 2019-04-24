@@ -34,12 +34,22 @@ namespace HackneyRepairs.Builders
             return jsonResponse;
         }
 
+        //Overload for JSON API error format
+        public static JsonResult ErrorFromList(int errorCode, IEnumerable<JsonApiErrorMessage> errors)
+        {
+            var jsonResponse = new JsonResult(errors)
+            {
+                StatusCode = errorCode
+            };
+            return jsonResponse;
+        }
+
         public static JsonResult Ok(object responseContent)
         {
             var jsonResponse = new JsonResult(responseContent)
             {
                 StatusCode = 200,
-                ContentType = "application/json"
+                ContentType = "application/json" 
             };
 
             return jsonResponse;

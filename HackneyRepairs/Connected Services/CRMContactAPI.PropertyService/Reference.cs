@@ -4598,7 +4598,7 @@ namespace HackneyRepairs.PropertyService
         private string PropertyTypeDescriptionField;
         
         private string ShortAddressField;
-        
+
         private string TenureDescriptionField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]

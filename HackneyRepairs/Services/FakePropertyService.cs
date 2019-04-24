@@ -178,6 +178,40 @@ namespace HackneyRepairs.Services
             }
         }
 
+        public Task<PropertyLevelModel[]> GetFacilitiesByPropertyRef(string reference)
+        {
+            var PropertyList = new PropertyLevelModel[2];
+            PropertyLevelModel[] emptyPropertyList;
+            var property1 = new PropertyLevelModel()
+            {
+                Address = "Lift 1296 1-16 Oak House  Lordship Road",
+                Postcode = "N16 0PX",
+                PropertyReference = "1/43453543"
+            };
+            var property2 = new PropertyLevelModel()
+            {
+                Address = "Cleaners Room, Lobby Laburnum Court  Laburnum Street",
+                Postcode = "N16 0PX",
+                PropertyReference = "2/32453245"
+            };
+            PropertyList[0] = property1;
+            PropertyList[1] = property2;
+            switch (reference)
+            {
+                case "00000038":
+                    return Task.Run(() => PropertyList);
+                case "038":
+                    emptyPropertyList = null;
+                    return Task.Run(() => emptyPropertyList);
+                //throw new PropertyServiceException();
+                default:
+                    throw new PropertyServiceException();
+                    //return Task.Run(() => (PropertyLevelModel[])null);
+                    //emptyPropertyList = new PropertyLevelModel[0];
+                    //return Task.Run(() => emptyPropertyList);
+            }
+        }
+
         public Task<PropertyDetails> GetPropertyBlockByRef(string reference)
         {
             switch (reference)
@@ -189,8 +223,7 @@ namespace HackneyRepairs.Services
                         PostCodeValue = "E8 1DT",
                         PropertyReference = "525252527",
                         Maintainable = true,
-                        TenureCode = "SEC",
-                        TenureDescription = "Secure"
+                        TenureDescription = ""
                     });
                 case "5252":
                     throw new PropertyServiceException();
@@ -210,7 +243,7 @@ namespace HackneyRepairs.Services
                         PostCodeValue = "E8 1DT",
                         PropertyReference = "525252527",
                         Maintainable = true,
-                        TenureDescription = "Secure"
+                        TenureDescription = ""
                     });
                 case "5252":
                     throw new PropertyServiceException();
@@ -219,7 +252,7 @@ namespace HackneyRepairs.Services
             }
         }
 
-		public Task<List<PropertyLevelModel>> GetPropertyLevelInfosForParent(string parentReference)
+        public Task<List<PropertyLevelModel>> GetPropertyLevelInfosForParent(string parentReference)
 		{ 
 			if (string.Equals(parentReference, "99999999"))
             {
@@ -302,10 +335,5 @@ namespace HackneyRepairs.Services
 					}));
             }
         }
-
-        //public Task<PropertyLevelModel[]> GetPropertyListByFirstLineOfAddress(string firstlineofaddress)
-        //{
-        //    throw new NotImplementedException();
-        //}
     }
 }

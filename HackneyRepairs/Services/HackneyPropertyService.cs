@@ -98,7 +98,16 @@ namespace HackneyRepairs.Services
             return property;
         }
 
-		public Task<List<PropertyLevelModel>> GetPropertyLevelInfosForParent(string parentReference)
+        public async Task<PropertyLevelModel[]> GetFacilitiesByPropertyRef(string reference)
+        {
+            //PropertyDetails property = new PropertyDetails();
+            _logger.LogInformation($"HackneyPropertyService/GetPropertyEstateByRef(): Sent request to upstream data warehouse (Property reference: {reference})");
+            var response = await _uhWarehouseRepository.GetFacilitiesByPropertyRef(reference);
+            _logger.LogInformation($"HackneyPropertyService/GetPropertyEstateByRef(): Received response from upstream data warehouse (Property reference: {reference})");
+            return response;
+        }
+
+        public Task<List<PropertyLevelModel>> GetPropertyLevelInfosForParent(string parentReference)
 		{
 			_logger.LogInformation($"HackneyPropertyService/GetPropertyLevelInfosForParent(): Sent request to warehouse repository (property reference: {parentReference})");
 			var response = _uhWarehouseRepository.GetPropertyLevelInfosForParent(parentReference);

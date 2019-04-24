@@ -161,14 +161,7 @@ namespace HackneyRepairs.Actions
                 }
                 else
                 {
-                    if (response.TenureCode == null)
-                    {
-                        return BuildPropertyDetails(response, false);
-                    }
-                    else
-                    {
-                        return BuildPropertyDetails(response, true);
-                    }
+                    return BuildPropertyDetails(response);
                 }
             }
             catch (MissingPropertyException e)
@@ -221,7 +214,7 @@ namespace HackneyRepairs.Actions
                 }
                 else
                 {
-                    return BuildPropertyDetails(response, false);
+                    return BuildPropertyDetails(response);
                 }
             }
             catch (MissingPropertyException e)
@@ -248,7 +241,7 @@ namespace HackneyRepairs.Actions
                 }
                 else
                 {
-                    return BuildPropertyDetails(response, false);
+                    return BuildPropertyDetails(response);
                 }
             }
             catch (MissingPropertyException e)
@@ -259,6 +252,29 @@ namespace HackneyRepairs.Actions
             catch (Exception e)
             {
                 _logger.LogError($"Finding the estate of a property by the property reference: {reference} returned an error: {e.Message}");
+                throw new PropertyServiceException();
+            }
+        }
+
+        public async Task<object> FindFacilitiesByPropertyRef(string reference)
+        {
+            _logger.LogInformation($"Finding the facilities of a property by the property reference: {reference}");
+            try
+            {
+                var response = await _propertyService.GetFacilitiesByPropertyRef(reference);
+                if (response.Any())
+                {
+                    GenericFormatter.TrimStringAttributesInEnumerable(response);
+                }
+
+                return new
+                {
+                    results = response
+                };
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Finding the facilities of a property by the property reference: {reference} returned an error: {e.Message}");
                 throw new PropertyServiceException();
             }
         }
@@ -289,62 +305,30 @@ namespace HackneyRepairs.Actions
             };
         }
 
-        private object BuildPropertyDetails(PropertyDetails property, bool tenureObject)
+        private object BuildPropertyDetails(PropertyDetails property)
         {
             if (string.IsNullOrEmpty(property.Description))
             {
-                if (tenureObject == false)
+                return new
                 {
-                    return new
-                    {
-                        address = property.ShortAddress.Trim(),
-                        postcode = property.PostCodeValue.Trim(),
-                        propertyReference = property.PropertyReference.Trim(),
-                        maintainable = property.Maintainable,
-                        tenure = property.TenureDescription
-                    };
-                }
-                else
-                {
-                    return new
-                    {
-                        address = property.ShortAddress.Trim(),
-                        postcode = property.PostCodeValue.Trim(),
-                        propertyReference = property.PropertyReference.Trim(),
-                        maintainable = property.Maintainable,
-                        tenureCode = property.TenureCode.Trim(),
-                        tenure = property.TenureDescription
-                    };
-                }
+                    address = property.ShortAddress.Trim(),
+                    postcode = property.PostCodeValue.Trim(),
+                    propertyReference = property.PropertyReference.Trim(),
+                    maintainable = property.Maintainable,
+                    tenure = property.TenureDescription
+                };
             }
 
-            if (tenureObject == false)
+            return new
             {
-                return new
-                {
-                    address = property.ShortAddress.Trim(),
-                    postcode = property.PostCodeValue.Trim(),
-                    propertyReference = property.PropertyReference.Trim(),
-                    maintainable = property.Maintainable,
-                    levelCode = property.LevelCode,
-                    description = property.Description.Trim(),
-                    tenure = property.TenureDescription.Trim()
-                };
-            }
-            else
-            {
-                return new
-                {
-                    address = property.ShortAddress.Trim(),
-                    postcode = property.PostCodeValue.Trim(),
-                    propertyReference = property.PropertyReference.Trim(),
-                    maintainable = property.Maintainable,
-                    levelCode = property.LevelCode,
-                    description = property.Description.Trim(),
-                    tenureCode = property.TenureCode.Trim(),
-                    tenure = property.TenureDescription.Trim()
-                };
-            }
+                address = property.ShortAddress.Trim(),
+                postcode = property.PostCodeValue.Trim(),
+                propertyReference = property.PropertyReference.Trim(),
+                maintainable = property.Maintainable,
+                levelCode = property.LevelCode,
+                description = property.Description.Trim(),
+                tenure = (property.TenureDescription ?? "").Trim()
+            };
         }
 
         private object[] BuildPropertiesDetails(PropertyDetails[] property)

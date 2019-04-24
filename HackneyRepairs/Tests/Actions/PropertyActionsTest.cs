@@ -178,6 +178,87 @@ namespace HackneyRepairs.Tests.Actions
         }
         #endregion
 
+        #region property facilities details by reference
+        [Fact]
+        public async Task get_facilities_details_by_property_reference_returns_a_property_object_for_a_valid_request()
+        {
+            var mockLogger = new Mock<ILoggerAdapter<PropertyActions>>();
+            var property1 = new PropertyLevelModel()
+            {
+                Address = "Lift 1296 1-16 Oak House  Lordship Road",
+                Postcode = "N16 0PX",
+                PropertyReference = "1/43453543"
+            };
+            var property2 = new PropertyLevelModel()
+            {
+                Address = "Cleaners Room, Lobby Laburnum Court  Laburnum Street",
+                Postcode = "N16 0PX",
+                PropertyReference = "2/32453245"
+            };
+
+            var PropertyList = new PropertyLevelModel[2];
+            PropertyList[0] = property1;
+            PropertyList[1] = property2;
+            var fakeService = new Mock<IHackneyPropertyService>();
+            fakeService.Setup(service => service.GetFacilitiesByPropertyRef("00000038"))
+               .ReturnsAsync(PropertyList);
+
+            var fakeRequestBuilder = new Mock<IHackneyPropertyServiceRequestBuilder>();
+            var workOrdersService = new Mock<IHackneyWorkOrdersService>();
+            PropertyActions propertyActions = new PropertyActions(fakeService.Object, fakeRequestBuilder.Object, workOrdersService.Object, mockLogger.Object);
+
+            var results = await propertyActions.FindFacilitiesByPropertyRef("00000038");
+            var outputproperty1 = new PropertyLevelModel
+            {
+                Address = "Lift 1296 1-16 Oak House  Lordship Road",
+                Postcode = "N16 0PX",
+                PropertyReference = "1/43453543"
+            };
+            var outputproperty2 = new PropertyLevelModel
+            {
+                Address = "Cleaners Room, Lobby Laburnum Court  Laburnum Street",
+                Postcode = "N16 0PX",
+                PropertyReference = "2/32453245"
+            };
+            var properties = new PropertyLevelModel[2];
+            properties[0] = outputproperty1;
+            properties[1] = outputproperty2;
+            var json = new { results = properties };
+            Assert.Equal(JsonConvert.SerializeObject(json), JsonConvert.SerializeObject(results));
+        }
+
+        [Fact]
+        public async Task get_facilities_details_by_property_reference_raises_an_exception_if_the_property_is_missing()
+        {
+            var mockLogger = new Mock<ILoggerAdapter<PropertyActions>>();
+            var PropertyList = new PropertyLevelModel[0];
+            var fakeService = new Mock<IHackneyPropertyService>();
+            fakeService.Setup(service => service.GetFacilitiesByPropertyRef(It.IsAny<string>()))
+                .ReturnsAsync(PropertyList);
+            var fakeRequestBuilder = new Mock<IHackneyPropertyServiceRequestBuilder>();
+            var workOrdersService = new Mock<IHackneyWorkOrdersService>();
+            PropertyActions propertyActions = new PropertyActions(fakeService.Object, fakeRequestBuilder.Object, workOrdersService.Object, mockLogger.Object);
+            var results = await propertyActions.FindFacilitiesByPropertyRef("038");
+            var properties = new object[0];
+            var json = new { results = properties };
+            Assert.Equal(JsonConvert.SerializeObject(json), JsonConvert.SerializeObject(results));
+        }
+
+        [Fact]
+        public async Task get_facilities_details_by_property_reference_raises_an_exception_if_the_service_responds_with_an_error()
+        {
+            var mockLogger = new Mock<ILoggerAdapter<PropertyActions>>();
+            var fakeService = new Mock<IHackneyPropertyService>();
+            PropertyLevelModel[] response = null;
+            fakeService.Setup(service => service.GetFacilitiesByPropertyRef(It.IsAny<string>()))
+                .ReturnsAsync(response);
+            var fakeRequestBuilder = new Mock<IHackneyPropertyServiceRequestBuilder>();
+            var workOrdersService = new Mock<IHackneyWorkOrdersService>();
+            PropertyActions propertyActions = new PropertyActions(fakeService.Object, fakeRequestBuilder.Object, workOrdersService.Object, mockLogger.Object);
+            await Assert.ThrowsAsync<PropertyServiceException>(async () => await propertyActions.FindFacilitiesByPropertyRef("00000038"));
+        }
+        #endregion
+
         #region property details by reference
         [Fact]
 		public async Task get_property_details_by_reference_returns_a_property_object_for_a_valid_request()
@@ -187,24 +268,22 @@ namespace HackneyRepairs.Tests.Actions
 			{
 				ShortAddress = "Front Office, Robert House, 6 - 15 Florfield Road",
 				PostCodeValue = "E8 1DT",
-				PropertyReference = "43453543",
+				PropertyReference = "52525252",
 				Maintainable = false,
-                TenureCode = "SEC",
                 TenureDescription = "Secure"
             };
 			var fakeService = new Mock<IHackneyPropertyService>();
-			fakeService.Setup(service => service.GetPropertyByRefAsync("43453543")).ReturnsAsync(response);
+			fakeService.Setup(service => service.GetPropertyByRefAsync("52525252")).ReturnsAsync(response);
 			var fakeRequestBuilder = new Mock<IHackneyPropertyServiceRequestBuilder>();
 			var workOrdersService = new Mock<IHackneyWorkOrdersService>();
 			PropertyActions propertyActions = new PropertyActions(fakeService.Object, fakeRequestBuilder.Object, workOrdersService.Object, mockLogger.Object);
-			var results = await propertyActions.FindPropertyDetailsByRef("43453543");
+			var results = await propertyActions.FindPropertyDetailsByRef("52525252");
 			var property = new
 			{
 				address = "Front Office, Robert House, 6 - 15 Florfield Road",
 				postcode = "E8 1DT",
-				propertyReference = "43453543",
+				propertyReference = "52525252",
 				maintainable = false,
-                tenureCode = "SEC",
                 tenure = "Secure"
             };
 			Assert.Equal(property, results);
@@ -300,7 +379,7 @@ namespace HackneyRepairs.Tests.Actions
 				PostCodeValue = "E8 1DT",
 				PropertyReference = "43453543",
 				Maintainable = true,
-                TenureDescription = "Secure"
+                TenureDescription = ""
 			};
 			var fakeService = new Mock<IHackneyPropertyService>();
 			fakeService.Setup(service => service.GetPropertyBlockByRef("43453543"))
@@ -315,7 +394,7 @@ namespace HackneyRepairs.Tests.Actions
 				postcode = "E8 1DT",
 				propertyReference = "43453543",
 				maintainable = true,
-                tenure = "Secure"
+                tenure = ""
             };
 			Assert.Equal(property, results);
 		}
@@ -346,7 +425,7 @@ namespace HackneyRepairs.Tests.Actions
 				PostCodeValue = "E8 1DT",
 				PropertyReference = "43453543",
 				Maintainable = true,
-                TenureDescription = "Secure"
+                TenureDescription = ""
             };
 			var fakeService = new Mock<IHackneyPropertyService>();
 			fakeService.Setup(service => service.GetPropertyEstateByRef("43453543"))
@@ -361,7 +440,7 @@ namespace HackneyRepairs.Tests.Actions
 				postcode = "E8 1DT",
 				propertyReference = "43453543",
 				maintainable = true,
-                tenure = "Secure"
+                tenure = ""
             };
 			Assert.Equal(property, results);
 		}
@@ -376,7 +455,7 @@ namespace HackneyRepairs.Tests.Actions
 				PostCodeValue = "A Postcode",
 				PropertyReference = "52525252",
 				Maintainable = true,
-                TenureDescription = "Secure"
+                TenureDescription = ""
             };
 			var fakeService = new Mock<IHackneyPropertyService>();
 			fakeService.Setup(service => service.GetPropertyEstateByRef("52525252534"))
@@ -388,7 +467,7 @@ namespace HackneyRepairs.Tests.Actions
 				postcode = "A Postcode",
 				propertyReference = "52525252",
 				maintainable = true,
-                tenure = "Secure"
+                tenure = ""
             };
 			var workOrdersService = new Mock<IHackneyWorkOrdersService>();
 			PropertyActions propertyActions = new PropertyActions(fakeService.Object, fakeRequestBuilder.Object, workOrdersService.Object, mockLogger.Object);

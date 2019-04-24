@@ -17,6 +17,7 @@ namespace HackneyRepairs.Interfaces
         Task<PropertyDetails[]> GetPropertiesDetailsByReference(string[] references);
         Task<PropertyDetails> GetPropertyBlockByReference(string reference);
         Task<PropertyDetails> GetPropertyEstateByReference(string reference);
+        Task<PropertyLevelModel[]> GetFacilitiesByPropertyRef(string reference);
         Task<UHWorkOrder> GetWorkOrderByWorkOrderReference(string reference);
         Task<IEnumerable<UHWorkOrder>> GetWorkOrdersByWorkOrderReferences(string[] reference);
         Task<IEnumerable<UHWorkOrder>> GetWorkOrderByPropertyReference(string propertyReference);

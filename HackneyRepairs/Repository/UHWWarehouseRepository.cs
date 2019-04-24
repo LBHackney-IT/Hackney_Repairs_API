@@ -242,13 +242,12 @@ namespace HackneyRepairs.Repository
                             property.prop_ref AS 'PropertyReference',
                             level_code AS 'LevelCode',
                             lulevel.lu_desc AS 'Description',
-                            tenure.ten_type AS 'TenureCode',
-							tenure.ten_desc AS 'TenureDescription'
+							tenure.ten_desc, AS 'TenureDescription'
                         FROM 
                             property 
-                            INNER JOIN lulevel ON property.level_code = lulevel.lu_ref
-							inner join rent on property.prop_ref = rent.prop_ref
-							inner join tenure on rent.tenure = tenure.ten_type
+                            LEFT JOIN lulevel ON property.level_code = lulevel.lu_ref
+							LEFT join rent on property.prop_ref = rent.prop_ref
+							LEFT join tenure on rent.tenure = tenure.ten_type
                         WHERE 
                             property.prop_ref = @PropertyReference";
                     var property = connnection.Query<PropertyDetails>(query, new { PropertyReference = reference }).First();
@@ -331,7 +330,7 @@ namespace HackneyRepairs.Repository
                     var properties = connection.Query<PropertyLevelModel>(query, new { FirstLineOfAddress = firstLineOfAddress }).ToArray();
                     return properties;
                 }
-            }//{ FirstLineOfAddress = "%" + reference + "%" }
+            }//{ FirstLineOfAddress = "%" + firstLineOfAddress + "%" }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
@@ -390,6 +389,44 @@ namespace HackneyRepairs.Repository
                                         FROM property 
                             WHERE prop_ref = @PropertyReference)";
                     var property = connection.Query<PropertyDetails>(query, new { PropertyReference = reference }).FirstOrDefault();
+                    return property;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                throw new UHWWarehouseRepositoryException();
+            }
+        }
+        
+        public async Task<PropertyLevelModel[]> GetFacilitiesByPropertyRef(string reference)
+        {
+            _logger.LogInformation($"Getting  facilities for property {reference}");
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+                {
+                    string query = @"DECLARE @STR NVARCHAR(MAX)
+                                    declare @uestate char(16)
+                                    set @uestate = @EstateReference
+                                    SET @STR ='SELECT property.prop_ref AS ''PropertyReference'',
+                                    property.level_code AS ''LevelCode'',
+                                    property.major_ref AS ''MajorReference'',
+                                    lulevel.lu_desc AS ''Description'',
+                                    property.address1 AS ''Address'',
+                                    property.post_code AS ''PostCode''
+                                    FROM property (nolock)
+                                    INNER JOIN lulevel ON property.level_code = lulevel.lu_ref
+                                    where level_code = ''6'' and (u_estate = @u_estate or major_ref = @u_estate) 
+                                    order by level_code' 
+                                      If exists(SELECT property.prop_ref from property (nolock) 
+                                        where prop_ref = @uestate and level_code = '2')
+                                    exec sp_executesql @STR,N'@u_estate char(16)',@u_estate = @uestate 
+                                     else 
+                                    select @uestate = u_estate from 
+                                    property (nolock) where prop_ref = @uestate
+                                    exec sp_executesql @STR,N'@u_estate char(16)',@u_estate = @uestate";
+                    var property = connection.Query<PropertyLevelModel>(query, new { EstateReference = reference }).ToArray();
                     return property;
                 }
             }

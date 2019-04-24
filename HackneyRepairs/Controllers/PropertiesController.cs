@@ -125,11 +125,7 @@ namespace HackneyRepairs.Controllers
         public async Task<JsonResult> GetByFirstLineOfAddress(string address, int limit = 100)
         {
             try
-            {
-                //Convert to Regular expression
-                if (String.IsNullOrEmpty(address) || address.Contains('%') || address.Length < 3)
-                    throw new Exception("Invalid address");
-
+            { 
                 PropertyActions actions = new PropertyActions(_propertyService, _propertyServiceRequestBuilder, _workordersService, _propertyLoggerAdapter);
                 var result = await actions.FindPropertyByFirstLineOfAddress(address, limit);
                 return ResponseBuilder.Ok(result);
@@ -314,6 +310,41 @@ namespace HackneyRepairs.Controllers
                 if (result == null)
                 {
                     return ResponseBuilder.Error(404, "No estate identified for the property requested", "No estate identified for the property requested");
+                }
+
+                return ResponseBuilder.Ok(result);
+            }
+            catch (MissingPropertyException ex)
+            {
+                _exceptionLogger.CaptureException(ex);
+                return ResponseBuilder.Error(404, "Resource identification error", ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _exceptionLogger.CaptureException(ex);
+                return ResponseBuilder.Error(500, "API Internal Error", ex.Message);
+            }
+        }
+
+        // GET details of a property's facilities by property by reference
+        /// <summary>
+        /// Gets the details of the facilities linked to a property by a given property reference number
+        /// </summary>
+        /// <param name="reference">The reference number of the property</param>
+        /// <returns>Details of the estate the requested property belongs to</returns>
+        /// <response code="200">Returns an array of the facilities linked to a property</response>
+        /// <response code="404">If the facilities are not found</response>   
+        /// <response code="500">If any errors are encountered</response> 
+        [HttpGet("{reference}/facilities")]
+        public async Task<JsonResult> GetFacilitiesByPropertyReference(string reference)
+        {
+            try
+            {
+                PropertyActions actions = new PropertyActions(_propertyService, _propertyServiceRequestBuilder, _workordersService, _propertyLoggerAdapter);
+                var result = await actions.FindFacilitiesByPropertyRef(reference);
+                if (result == null)
+                {
+                    return ResponseBuilder.Error(404, "No facilities identified for the property requested", "No facilities identified for the property requested");
                 }
 
                 return ResponseBuilder.Ok(result);
