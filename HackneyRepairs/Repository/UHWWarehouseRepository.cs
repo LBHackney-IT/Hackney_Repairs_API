@@ -242,7 +242,7 @@ namespace HackneyRepairs.Repository
                             property.prop_ref AS 'PropertyReference',
                             level_code AS 'LevelCode',
                             lulevel.lu_desc AS 'Description',
-							tenure.ten_desc, AS 'TenureDescription'
+							tenure.ten_desc AS 'TenureDescription'
                         FROM 
                             property 
                             LEFT JOIN lulevel ON property.level_code = lulevel.lu_ref
