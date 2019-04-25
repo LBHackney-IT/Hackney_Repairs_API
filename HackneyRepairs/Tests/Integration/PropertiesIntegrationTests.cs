@@ -286,6 +286,7 @@ namespace HackneyRepairs.Tests
             json.Append("\"postcode\":\"E8 1DT\",");
             json.Append("\"propertyReference\":\"52525252\",");
             json.Append("\"maintainable\":true,");
+            json.Append("\"tenureCode\":\"SEC\",");
             json.Append("\"tenure\":\"Secure\"");
             json.Append("}");
             Assert.Equal(json.ToString(), resultString);
@@ -403,6 +404,7 @@ namespace HackneyRepairs.Tests
             json.Append("\"postcode\":\"E8 1DT\",");
             json.Append("\"propertyReference\":\"525252527\",");
             json.Append("\"maintainable\":true,");
+            json.Append("\"tenureCode\":\"\",");
             json.Append("\"tenure\":\"\"");
             json.Append("}");
             Assert.Equal(json.ToString(), resultString);
@@ -552,6 +554,7 @@ namespace HackneyRepairs.Tests
             json.Append("\"postcode\":\"E8 1DT\",");
             json.Append("\"propertyReference\":\"525252527\",");
             json.Append("\"maintainable\":true,");
+            json.Append("\"tenureCode\":\"\",");
             json.Append("\"tenure\":\"\"");
             json.Append("}");
             Assert.Equal(json.ToString(), resultString);

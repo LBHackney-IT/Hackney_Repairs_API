@@ -270,6 +270,7 @@ namespace HackneyRepairs.Tests.Actions
 				PostCodeValue = "E8 1DT",
 				PropertyReference = "52525252",
 				Maintainable = false,
+                TenureCode = "SEC",
                 TenureDescription = "Secure"
             };
 			var fakeService = new Mock<IHackneyPropertyService>();
@@ -284,6 +285,7 @@ namespace HackneyRepairs.Tests.Actions
 				postcode = "E8 1DT",
 				propertyReference = "52525252",
 				maintainable = false,
+                tenureCode = "SEC",
                 tenure = "Secure"
             };
 			Assert.Equal(property, results);
@@ -379,6 +381,7 @@ namespace HackneyRepairs.Tests.Actions
 				PostCodeValue = "E8 1DT",
 				PropertyReference = "43453543",
 				Maintainable = true,
+                TenureCode = "",
                 TenureDescription = ""
 			};
 			var fakeService = new Mock<IHackneyPropertyService>();
@@ -394,6 +397,7 @@ namespace HackneyRepairs.Tests.Actions
 				postcode = "E8 1DT",
 				propertyReference = "43453543",
 				maintainable = true,
+                tenureCode = "",
                 tenure = ""
             };
 			Assert.Equal(property, results);
@@ -425,6 +429,7 @@ namespace HackneyRepairs.Tests.Actions
 				PostCodeValue = "E8 1DT",
 				PropertyReference = "43453543",
 				Maintainable = true,
+                TenureCode = "",
                 TenureDescription = ""
             };
 			var fakeService = new Mock<IHackneyPropertyService>();
@@ -440,6 +445,7 @@ namespace HackneyRepairs.Tests.Actions
 				postcode = "E8 1DT",
 				propertyReference = "43453543",
 				maintainable = true,
+                tenureCode = "",
                 tenure = ""
             };
 			Assert.Equal(property, results);
@@ -455,6 +461,7 @@ namespace HackneyRepairs.Tests.Actions
 				PostCodeValue = "A Postcode",
 				PropertyReference = "52525252",
 				Maintainable = true,
+                TenureCode = "",
                 TenureDescription = ""
             };
 			var fakeService = new Mock<IHackneyPropertyService>();
@@ -467,6 +474,7 @@ namespace HackneyRepairs.Tests.Actions
 				postcode = "A Postcode",
 				propertyReference = "52525252",
 				maintainable = true,
+                tenureCode = "",
                 tenure = ""
             };
 			var workOrdersService = new Mock<IHackneyWorkOrdersService>();
