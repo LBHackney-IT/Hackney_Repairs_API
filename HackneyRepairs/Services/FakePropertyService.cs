@@ -223,6 +223,7 @@ namespace HackneyRepairs.Services
                         PostCodeValue = "E8 1DT",
                         PropertyReference = "525252527",
                         Maintainable = true,
+                        TenureCode = "",
                         TenureDescription = ""
                     });
                 case "5252":
@@ -243,6 +244,7 @@ namespace HackneyRepairs.Services
                         PostCodeValue = "E8 1DT",
                         PropertyReference = "525252527",
                         Maintainable = true,
+                        TenureCode = "",
                         TenureDescription = ""
                     });
                 case "5252":

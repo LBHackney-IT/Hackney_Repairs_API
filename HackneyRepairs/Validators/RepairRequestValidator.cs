@@ -5,11 +5,21 @@ using System.Threading.Tasks;
 using HackneyRepairs.Interfaces;
 using HackneyRepairs.Models;
 using System.Text.RegularExpressions;
+using System.Collections.Specialized;
 
 namespace HackneyRepairs.Validators
 {
     public class RepairRequestValidator : IRepairRequestValidator
     {
+        private NameValueCollection _configuration;
+
+        public RepairRequestValidator()
+        { }
+        public RepairRequestValidator(NameValueCollection configuration)
+        {
+            _configuration = configuration;
+        }
+
         public RepairRequestValidationResult Validate(RepairRequest request)
         {
             var validationResult = new RepairRequestValidationResult(request);
@@ -89,11 +99,23 @@ namespace HackneyRepairs.Validators
             {
                 int _count = 0;
 
-                if (!(request.WorkOrders.Count == 0))
+                if (request.WorkOrders.Count > 0)
                 {
                     foreach (WorkOrder or in request.WorkOrders)
                     {
-                        if (!(or.SorCode == null || or.SorCode.Length == 0))
+                        if (String.IsNullOrEmpty(or.SorCode))
+                        {
+                            validationResult.Valid = false;
+                            validationResult.ErrorMessages.Add("If Repair request has workOrders you must provide a sorCode");
+                            validationResult.RepairApiError.Add(new JsonApiErrorMessage
+                            {
+                                Code = 400,
+                                DeveloperMessage = "sorCode is invalid",
+                                UserMessage = "If Repair request has workOrders you must provide a valid sorCode",
+                                Source = $@"/workOrders/{_count}/sorCode"
+                            });
+                        }
+                        else
                         {
                             var sorPattern = "^[A-Za-z0-9]{7,8}$";
                             if (!Regex.IsMatch(or.SorCode, sorPattern))
@@ -108,18 +130,21 @@ namespace HackneyRepairs.Validators
                                     Source = $@"/workOrders/{_count}/sorCode"
                                 });
                             }
-                        }
-                        else
-                        {
-                            validationResult.Valid = false;
-                            validationResult.ErrorMessages.Add("If Repair request has workOrders you must provide a sorCode");
-                            validationResult.RepairApiError.Add(new JsonApiErrorMessage
+                            else
                             {
-                                Code = 400,
-                                DeveloperMessage = "sorCode is invalid",
-                                UserMessage = "If Repair request has workOrders you must provide a valid sorCode",
-                                Source = $@"/workOrders/{_count}/sorCode"
-                            });
+                                //Check provided sorCode is valid
+                                if (!this.getContractorForSOR(or.SorCode))
+                                {
+                                    validationResult.Valid = false;
+                                    validationResult.RepairApiError.Add(new JsonApiErrorMessage
+                                    {
+                                        Code = 400,
+                                        DeveloperMessage = "sorCode is invalid",
+                                        UserMessage = "If Repair request has workOrders you must provide a valid sorCode",
+                                        Source = $@"/workOrders/{_count}/sorCode"
+                                    });
+                                }
+                            }
                         }
 
                         //increment count in loop
@@ -202,6 +227,25 @@ namespace HackneyRepairs.Validators
             }
 
             return validationResult;
+        }
+
+        //Used to validate sorcode to return JSONAPI source error format
+        //Method duplicated from HackneyRepairsServiceRequestBuilder class
+        private bool getContractorForSOR(string sorCode)
+        {
+            string[] sorLookupOptions = _configuration.Get("UhSorSupplierMapping").Split('|');
+            Dictionary<string, string> sorDictionary = new Dictionary<string, string>();
+
+            foreach (string s in sorLookupOptions)
+            {
+                sorDictionary.Add(s.Split(',')[0], s.Split(',')[1]);
+            }
+
+            //for (int a = 0; a < sorLookupOptions.Length; a++)
+            //{
+            //    sorDictionary.Add(sorLookupOptions[a].Split(',')[0], sorLookupOptions[a].Split(',')[1]);
+            //}
+            return sorDictionary.ContainsKey(sorCode) ? true : false;
         }
     }
 

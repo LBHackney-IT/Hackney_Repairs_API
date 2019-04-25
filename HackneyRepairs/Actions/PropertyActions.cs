@@ -315,6 +315,7 @@ namespace HackneyRepairs.Actions
                     postcode = property.PostCodeValue.Trim(),
                     propertyReference = property.PropertyReference.Trim(),
                     maintainable = property.Maintainable,
+                    tenureCode = property.TenureCode,
                     tenure = property.TenureDescription
                 };
             }
@@ -327,6 +328,7 @@ namespace HackneyRepairs.Actions
                 maintainable = property.Maintainable,
                 levelCode = property.LevelCode,
                 description = property.Description.Trim(),
+                tenureCode = (property.TenureCode ?? "").Trim(),
                 tenure = (property.TenureDescription ?? "").Trim()
             };
         }

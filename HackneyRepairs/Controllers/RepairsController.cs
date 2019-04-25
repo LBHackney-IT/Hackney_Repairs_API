@@ -33,7 +33,8 @@ namespace HackneyRepairs.Controllers
             _configBuilder = new HackneyConfigurationBuilder((Hashtable)Environment.GetEnvironmentVariables(), ConfigurationManager.AppSettings);
             _repairsService = factory.build(uhtRepository, uhwRepository, uHWWarehouseRepository, loggerAdapter);
             _requestBuilder = new HackneyRepairsServiceRequestBuilder(_configBuilder.getConfiguration());
-            _repairRequestValidator = new RepairRequestValidator();
+            //Pass config builder to read unsupported sorcodes from environment variables
+            _repairRequestValidator = new RepairRequestValidator(_configBuilder.getConfiguration());
             _loggerAdapter = loggerAdapter;
             _exceptionLogger = exceptionLogger;
         }
@@ -66,12 +67,6 @@ namespace HackneyRepairs.Controllers
                 {
                     DeveloperMessage = error,
                     UserMessage = error
-                }).ToList();
-                var errors = validationResult.ErrorDictionary.Select(error => new ApiErrorMessage
-                {
-                    Field = error.Key,
-                    DeveloperMessage = error.Value,
-                    UserMessage = error.Value,
                 }).ToList();*/
                 return ResponseBuilder.ErrorFromList(400, validationResult.RepairApiError);
             }
