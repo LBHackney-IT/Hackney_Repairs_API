@@ -132,14 +132,14 @@ namespace HackneyRepairs.Validators
                             }
                             else
                             {
-                                //Check provided sorCode is valid
+                                //Check provided sorCode is a listed sorcode
                                 if (!this.getContractorForSOR(or.SorCode))
                                 {
                                     validationResult.Valid = false;
                                     validationResult.RepairApiError.Add(new JsonApiErrorMessage
                                     {
                                         Code = 400,
-                                        DeveloperMessage = "sorCode is invalid",
+                                        DeveloperMessage = "sorCode provided is prohibited",
                                         UserMessage = "If Repair request has workOrders you must provide a valid sorCode",
                                         Source = $@"/workOrders/{_count}/sorCode"
                                     });

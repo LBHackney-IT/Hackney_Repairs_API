@@ -371,7 +371,7 @@ namespace HackneyRepairs.Repository
         }
 
         public async Task<PropertyDetails> GetPropertyEstateByReference(string reference)
-        { 
+        {
             _logger.LogInformation($"Getting details for property {reference}");
             try
             {
@@ -399,7 +399,52 @@ namespace HackneyRepairs.Repository
                 throw new UHWWarehouseRepositoryException();
             }
         }
-        
+
+        #region old facilities query
+        /// <summary>
+        /// Old facilities query
+        /// </summary>
+        /// <param name="reference"></param>
+        /// <returns></returns>
+        //public async Task<PropertyLevelModel[]> GetFacilitiesByPropertyRef(string reference)
+        //{
+        //    _logger.LogInformation($"Getting  facilities for property {reference}");
+        //    try
+        //    {
+        //        using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+        //        {
+        //            string query = @"DECLARE @STR NVARCHAR(MAX)
+        //                            declare @uestate char(16)
+        //                            set @uestate = @EstateReference
+        //                            SET @STR ='SELECT property.prop_ref AS ''PropertyReference'',
+        //                            property.level_code AS ''LevelCode'',
+        //                            property.major_ref AS ''MajorReference'',
+        //                            lulevel.lu_desc AS ''Description'',
+        //                            property.address1 AS ''Address'',
+        //                            property.post_code AS ''PostCode''
+        //                            FROM property (nolock)
+        //                            INNER JOIN lulevel ON property.level_code = lulevel.lu_ref
+        //                            where level_code = ''6'' and (u_estate = @u_estate or major_ref = @u_estate) 
+        //                            order by level_code' 
+        //                              If exists(SELECT property.prop_ref from property (nolock) 
+        //                                where prop_ref = @uestate and level_code = '2')
+        //                            exec sp_executesql @STR,N'@u_estate char(16)',@u_estate = @uestate 
+        //                             else 
+        //                            select @uestate = u_estate from 
+        //                            property (nolock) where prop_ref = @uestate
+        //                            exec sp_executesql @STR,N'@u_estate char(16)',@u_estate = @uestate";
+        //            var property = connection.Query<PropertyLevelModel>(query, new { EstateReference = reference }).ToArray();
+        //            return property;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex.Message);
+        //        throw new UHWWarehouseRepositoryException();
+        //    }
+        //}
+        #endregion
+
         public async Task<PropertyLevelModel[]> GetFacilitiesByPropertyRef(string reference)
         {
             _logger.LogInformation($"Getting  facilities for property {reference}");
@@ -407,26 +452,30 @@ namespace HackneyRepairs.Repository
             {
                 using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
                 {
-                    string query = @"DECLARE @STR NVARCHAR(MAX)
-                                    declare @uestate char(16)
-                                    set @uestate = @EstateReference
-                                    SET @STR ='SELECT property.prop_ref AS ''PropertyReference'',
-                                    property.level_code AS ''LevelCode'',
-                                    property.major_ref AS ''MajorReference'',
-                                    lulevel.lu_desc AS ''Description'',
-                                    property.address1 AS ''Address'',
-                                    property.post_code AS ''PostCode''
-                                    FROM property (nolock)
-                                    INNER JOIN lulevel ON property.level_code = lulevel.lu_ref
-                                    where level_code = ''6'' and (u_estate = @u_estate or major_ref = @u_estate) 
-                                    order by level_code' 
-                                      If exists(SELECT property.prop_ref from property (nolock) 
-                                        where prop_ref = @uestate and level_code = '2')
-                                    exec sp_executesql @STR,N'@u_estate char(16)',@u_estate = @uestate 
-                                     else 
-                                    select @uestate = u_estate from 
-                                    property (nolock) where prop_ref = @uestate
-                                    exec sp_executesql @STR,N'@u_estate char(16)',@u_estate = @uestate";
+                    string query = @"with property_tree as (
+                            select prop_ref, level_code, major_ref
+                            from property
+                            where prop_ref = @EstateReference 
+                            union all
+                            select p2.prop_ref, p2.level_code, p2.major_ref
+                            from property p2
+                            join property_tree p on p.major_ref = p2.prop_ref 
+                             )
+                            select 
+                            property.prop_ref AS 'PropertyReference',
+                            property.level_code AS 'LevelCode',
+                            property.major_ref AS 'MajorReference',
+                            lulevel.lu_desc AS 'Description', 
+                            property.address1 AS 'Address',
+                            property.post_code AS 'PostCode'
+                            from property
+                            inner JOIN
+                            lulevel on property.level_code = lulevel.lu_ref
+                            where level_code = '6' and major_ref in 
+                            (select p.prop_ref from property_tree p where p.level_code <> '0')
+                            or  ((level_code = '4' or level_code = '3' or level_code = '2') and prop_ref in 
+                            (select p.prop_ref from property_tree p where p.level_code <> '0'))
+                            order by level_code asc";
                     var property = connection.Query<PropertyLevelModel>(query, new { EstateReference = reference }).ToArray();
                     return property;
                 }
