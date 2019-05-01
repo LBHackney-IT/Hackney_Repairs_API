@@ -155,7 +155,47 @@ namespace HackneyRepairs.Repository
             }
         }
 
-		public async Task<List<PropertyLevelModel>> GetPropertyLevelInfosForParent(string reference)
+        //Improved query to use for refactoring   
+        // public async Task<List<PropertyLevelModel>> GetPropertyLevelInfo(string reference)
+        // {
+        //     _logger.LogInformation($"Getting propertiy hierarchical info for: {reference}");
+        //     try
+        //     {
+        //         using (var connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+        //         {
+        //             var query = @"
+        //                     with property_tree as (
+        //                     select prop_ref, level_code, major_ref, address1, post_code
+        //                     from property
+        //                     where prop_ref = @PropertyReference
+        //                     union all
+        //                     select p2.prop_ref, p2.level_code, p2.major_ref, p2.address1, p2.post_code
+        //                     from property p2
+        //                     join property_tree p on p.major_ref = p2.prop_ref 
+        //                      )
+        //                     select 
+        //                     property_tree.prop_ref AS 'PropertyReference',
+        //                     property_tree.level_code AS 'LevelCode',
+        //                     property_tree.major_ref AS 'MajorReference',
+        //                     lulevel.lu_desc AS 'Description', 
+        //                     property_tree.address1 AS 'Address',
+        //                     property_tree.post_code AS 'PostCode'
+        //                     from property_tree
+        //                     inner JOIN lulevel on property_tree.level_code = lulevel.lu_ref
+        //where level_code <> 0
+        //order by level_code desc";
+
+        //             var result = await connection.QueryAsync<PropertyLevelModel>(query, new { PropertyReference = reference });
+        //             return result;
+        //         }
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         _logger.LogError(ex.Message);
+        //         throw new UHWWarehouseRepositoryException();
+        //     }
+        // }
+        public async Task<List<PropertyLevelModel>> GetPropertyLevelInfosForParent(string reference)
         {
             _logger.LogInformation($"Getting propertiy hierarchical info for: {reference}");
             try
