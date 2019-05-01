@@ -27,12 +27,12 @@ namespace HackneyRepairs.Validators
             if (request == null)
             {
                 validationResult.Valid = false;
-                validationResult.ErrorMessages.Add("Please provide  a valid repair request");
+                validationResult.ErrorMessages.Add("Please provide a valid repair request");
                 validationResult.RepairApiError.Add(new JsonApiErrorMessage
                 {
                         Code = 400,
-                        DeveloperMessage = "Please provide  a valid repair request",
-                        UserMessage = "Please provide  a valid repair request",
+                        DeveloperMessage = "Please provide a valid repair request",
+                        UserMessage = "Please provide a valid repair request",
                         Source = @"/"
                 });
                 
@@ -111,7 +111,7 @@ namespace HackneyRepairs.Validators
                             {
                                 Code = 400,
                                 DeveloperMessage = "sorCode is invalid",
-                                UserMessage = "If Repair request has workOrders you must provide a valid sorCode",
+                                UserMessage = "SOR code is missing, please provide a valid SOR code",
                                 Source = $@"/workOrders/{_count}/sorCode"
                             });
                         }
@@ -126,7 +126,7 @@ namespace HackneyRepairs.Validators
                                 {
                                     Code = 400,
                                     DeveloperMessage = "sorCode is invalid",
-                                    UserMessage = "If Repair request has workOrders you must provide a valid sorCode",
+                                    UserMessage = "Please provide a valid SOR code",
                                     Source = $@"/workOrders/{_count}/sorCode"
                                 });
                             }
@@ -241,10 +241,6 @@ namespace HackneyRepairs.Validators
                 sorDictionary.Add(s.Split(',')[0], s.Split(',')[1]);
             }
 
-            //for (int a = 0; a < sorLookupOptions.Length; a++)
-            //{
-            //    sorDictionary.Add(sorLookupOptions[a].Split(',')[0], sorLookupOptions[a].Split(',')[1]);
-            //}
             return sorDictionary.ContainsKey(sorCode) ? true : false;
         }
     }
