@@ -27,11 +27,11 @@ namespace HackneyRepairs.Validators
             if (request == null)
             {
                 validationResult.Valid = false;
-                validationResult.ErrorMessages.Add("Please provide  a valid repair request");
+                validationResult.ErrorMessages.Add("Please provide a valid repair request");
                 validationResult.RepairApiError.Add(new JsonApiErrorMessage
                 {
                         Code = 400,
-                        DeveloperMessage = "Please provide  a valid repair request",
+                        DeveloperMessage = "Please provide a valid repair request",
                         UserMessage = "Please provide a valid repair request",
                         Source = @"/"
                 });
