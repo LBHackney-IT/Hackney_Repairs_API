@@ -15,9 +15,10 @@ namespace HackneyRepairs.Services
         public HackneyKeyFaxServiceRequestBuilder()
         {
             _startupXml = new StringBuilder();
-            _startupXml.Append(@"<KeyfaxData test=""0""><Startup><Company>Hackney_41_OL2</Company><Mode>");
-            _startupXml.Append(@"ROL</Mode><UserName>Ian</UserName><Password>Global</Password><Tenant>");
-            _startupXml.Append(@"Mr A Test,10 Station Road, Poole, BH20 8UF</Tenant></Startup></KeyfaxData>");
+            _startupXml.Append(@"<KeyfaxData test=""0""><Startup><Company>Hackney_Test</Company>");
+            _startupXml.Append(@"<Mode>RD</Mode><UserName>AGILBERTSON</UserName><Password>Global</Password>");
+            //_startupXml.Append(@"<Tenant>Mr A Test, 10 Station Road, Poole, BH20 8UF</Tenant>");
+            _startupXml.Append(@"</Startup></KeyfaxData>");
         }
 
         public string StartUpXML

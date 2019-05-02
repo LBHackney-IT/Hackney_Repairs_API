@@ -25,7 +25,60 @@ namespace HackneyRepairs.Repository
 			_logger = logger;
 		}
 
-		public async Task<DrsOrder> GetWorkOrderDetails(string workOrderReference)
+        public async Task<CautionaryContactLevelModel[]> GetCautionaryContactByRef(string reference)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+                {
+                    string query = $@"SELECT 
+		                   		property.prop_ref AS 'PropertyReference',
+		                        0 AS 'ContactNo',
+		                        '' AS 'Title','' AS 'Forenames',
+		                        '' AS 'Surname',
+      	                        [short_address] as 'Addr1',
+		                        '' AS 'CallerNotes', alertCode
+                              FROM u_alerts
+                              INNER JOIN  property on 
+                              property.prop_ref = ref_key
+                              where ref_key = @Reference";
+
+                    #region old query
+                    //string query = $@"
+                    //   SELECT
+                    //        PropertyReference,
+                    //        CCContact.ContactNo,
+                    //        Title,
+                    //        Forenames,
+                    //        Surname,
+                    //        CCAddress.Addr1,
+                    //        CallerNotes,
+                    //        alertCode
+                    //   FROM
+                    //        CCContactAlert
+                    //   INNER JOIN
+                    //        CCContact
+                    //   ON
+                    //        CCContactAlert.contactNo = CCContact.ContactNo
+                    //   INNER JOIN
+                    //        CCAddress
+                    //   ON
+                    //        CCAddress.UPRN = CCContact.UPRN
+                    //   WHERE PropertyReference = @Reference";
+                    #endregion
+
+                    var cautionaryContacts = connection.Query<CautionaryContactLevelModel>(query, new { Reference = reference }).ToArray();
+                    return cautionaryContacts;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                throw new UHWWarehouseRepositoryException();
+            }
+        }
+
+        public async Task<DrsOrder> GetWorkOrderDetails(string workOrderReference)
 		{
 			_logger.LogInformation($"Getting the work order details from UHT for {workOrderReference}");
 			try
