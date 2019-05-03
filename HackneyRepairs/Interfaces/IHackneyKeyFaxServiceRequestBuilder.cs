@@ -8,11 +8,7 @@ namespace HackneyRepairs.Interfaces
 {
     public interface IHackneyKeyFaxServiceRequestBuilder
     {
-        string StartUpXML
-        {
-            get;
-        }
-
+        string GetStartUpXML();
         //StartupRequest BuildNewStartupRequest();   
     }
 }
