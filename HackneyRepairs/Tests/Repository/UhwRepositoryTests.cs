@@ -26,14 +26,5 @@ namespace HackneyRepairs.Tests.Repository
 
             _simulator.Reset();
         }
-
-        [Fact.WhenUniversalHousingIsRunning]
-        public async void GetCautionaryContactByPropertyReference_should_return_no_cautionary_contact_when_none_exist()
-        {
-            var repo = new UhwRepository((UhwDbContext)_simulator.context, _logger);
-            var cautionaryContact = await repo.GetCautionaryContactByRef("123");
-
-            Assert.Empty(cautionaryContact);
-        }
     }
 }

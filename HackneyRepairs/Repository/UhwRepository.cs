@@ -158,44 +158,6 @@ namespace HackneyRepairs.Repository
             }
         }
 
-        public async Task<CautionaryContactLevelModel[]> GetCautionaryContactByRef(string reference)
-        {
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
-                {
-                    string query = $@"
-                       SELECT
-                            PropertyReference,
-                            CCContact.ContactNo,
-                            Title,
-                            Forenames,
-                            Surname,
-                            CCAddress.Addr1,
-                            CallerNotes,
-                            alertCode
-                       FROM
-                            CCContactAlert
-                       INNER JOIN
-                            CCContact
-                       ON
-                            CCContactAlert.contactNo = CCContact.ContactNo
-                       INNER JOIN
-                            CCAddress
-                       ON
-                            CCAddress.UPRN = CCContact.UPRN
-                       WHERE PropertyReference = @Reference";
-                    var cautionaryContacts = connection.Query<CautionaryContactLevelModel>(query, new { Reference = reference }).ToArray();
-                    return cautionaryContacts;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                throw new UHWWarehouseRepositoryException();
-            }
-        }
-
         public async Task AddNote(FullNoteRequest note)
         {
             var parameters = new DynamicParameters();

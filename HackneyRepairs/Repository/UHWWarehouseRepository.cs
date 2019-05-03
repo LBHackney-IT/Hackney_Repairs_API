@@ -37,7 +37,7 @@ namespace HackneyRepairs.Repository
                 {
                     var query = "SELECT [no_maint] FROM [property] where [prop_ref]= @PropertyReference";
                     var result = connection.Query<bool>(query, new { PropertyReference = propertyReference }).FirstOrDefault();
-                    return Convert.ToBoolean(result);                
+                    return Convert.ToBoolean(result);
                 }
             }
             catch (Exception ex)
@@ -664,7 +664,7 @@ namespace HackneyRepairs.Repository
             {
                 using (var connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
                 {
-					string query = $@"set dateformat ymd;
+                    string query = $@"set dateformat ymd;
                                     SELECT
                                        LTRIM(RTRIM(wo.wo_ref)) AS WorkOrderReference,
                                        LTRIM(RTRIM(r.rq_ref)) AS RepairRequestReference,
@@ -702,7 +702,7 @@ namespace HackneyRepairs.Repository
                 throw new UHWWarehouseRepositoryException();
             }
 
-			return workOrders;
+            return workOrders;
         }
 
         public async Task<IEnumerable<UHWorkOrder>> GetWorkOrdersByPropertyReferences(string[] propertyReferences, DateTime since, DateTime until)
@@ -743,7 +743,7 @@ namespace HackneyRepairs.Repository
                                        WHERE wo.created < @CutoffTime AND wo.created <= @Until
                                        AND wo.created >= @Since
                                        AND wo.prop_ref IN @PropertyReferences AND t.task_no = 1";
-                    
+
                     var queryParameters = new
                     {
                         CutoffTime = GetCutoffTime(),
@@ -856,7 +856,7 @@ namespace HackneyRepairs.Repository
                         WorkOrderReference = workOrderReference
                     };
                     var notes = connection.Query<Note>(query, queryParameters);
-                    return notes; 
+                    return notes;
                 }
             }
             catch (Exception ex)
@@ -939,7 +939,7 @@ namespace HackneyRepairs.Repository
                     {
                         CutoffTime = GetCutoffTime(),
                         NoteId = noteId,
-                        NoteTarget = noteTarget 
+                        NoteTarget = noteTarget
                     };
                     var notes = connection.Query<Note>(query, queryParameters);
                     return notes;
