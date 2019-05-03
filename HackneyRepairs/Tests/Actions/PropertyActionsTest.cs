@@ -384,7 +384,8 @@ namespace HackneyRepairs.Tests.Actions
                 PropertyReference = "43453543",
                 Maintainable = true,
                 TenureCode = "",
-                TenureDescription = ""
+                TenureDescription = "",
+                LettingAreaDescription = ""
             };
             var fakeService = new Mock<IHackneyPropertyService>();
             fakeService.Setup(service => service.GetPropertyBlockByRef("43453543"))
@@ -400,7 +401,8 @@ namespace HackneyRepairs.Tests.Actions
                 propertyReference = "43453543",
                 maintainable = true,
                 tenureCode = "",
-                tenure = ""
+                tenure = "",
+                lettingArea = ""
             };
             Assert.Equal(property, results);
         }
@@ -432,7 +434,8 @@ namespace HackneyRepairs.Tests.Actions
                 PropertyReference = "43453543",
                 Maintainable = true,
                 TenureCode = "",
-                TenureDescription = ""
+                TenureDescription = "",
+                LettingAreaDescription = ""
             };
             var fakeService = new Mock<IHackneyPropertyService>();
             fakeService.Setup(service => service.GetPropertyEstateByRef("43453543"))
@@ -448,7 +451,8 @@ namespace HackneyRepairs.Tests.Actions
                 propertyReference = "43453543",
                 maintainable = true,
                 tenureCode = "",
-                tenure = ""
+                tenure = "",
+                lettingArea = ""
             };
             Assert.Equal(property, results);
         }
@@ -464,7 +468,8 @@ namespace HackneyRepairs.Tests.Actions
                 PropertyReference = "52525252",
                 Maintainable = true,
                 TenureCode = "",
-                TenureDescription = ""
+                TenureDescription = "",
+                LettingAreaDescription = ""
             };
             var fakeService = new Mock<IHackneyPropertyService>();
             fakeService.Setup(service => service.GetPropertyEstateByRef("52525252534"))
@@ -477,7 +482,8 @@ namespace HackneyRepairs.Tests.Actions
                 propertyReference = "52525252",
                 maintainable = true,
                 tenureCode = "",
-                tenure = ""
+                tenure = "",
+                lettingArea = ""
             };
             var workOrdersService = new Mock<IHackneyWorkOrdersService>();
             PropertyActions propertyActions = new PropertyActions(fakeService.Object, fakeRequestBuilder.Object, workOrdersService.Object, mockLogger.Object);

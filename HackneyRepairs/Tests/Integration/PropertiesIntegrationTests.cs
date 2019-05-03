@@ -287,7 +287,8 @@ namespace HackneyRepairs.Tests
             json.Append("\"propertyReference\":\"52525252\",");
             json.Append("\"maintainable\":true,");
             json.Append("\"tenureCode\":\"SEC\",");
-            json.Append("\"tenure\":\"Secure\"");
+            json.Append("\"tenure\":\"Secure\",");
+            json.Append("\"lettingArea\":\"Lordship South TMO (SN) H2556\"");
             json.Append("}");
             Assert.Equal(json.ToString(), resultString);
         }
@@ -405,7 +406,9 @@ namespace HackneyRepairs.Tests
             json.Append("\"propertyReference\":\"525252527\",");
             json.Append("\"maintainable\":true,");
             json.Append("\"tenureCode\":\"\",");
-            json.Append("\"tenure\":\"\"");
+            json.Append("\"tenure\":\"\",");
+            json.Append("\"lettingArea\":null");
+            
             json.Append("}");
             Assert.Equal(json.ToString(), resultString);
         }
@@ -555,7 +558,8 @@ namespace HackneyRepairs.Tests
             json.Append("\"propertyReference\":\"525252527\",");
             json.Append("\"maintainable\":true,");
             json.Append("\"tenureCode\":\"\",");
-            json.Append("\"tenure\":\"\"");
+            json.Append("\"tenure\":\"\",");
+            json.Append("\"lettingArea\":null");
             json.Append("}");
             Assert.Equal(json.ToString(), resultString);
         }

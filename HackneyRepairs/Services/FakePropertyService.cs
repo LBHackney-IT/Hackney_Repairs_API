@@ -65,7 +65,8 @@ namespace HackneyRepairs.Services
                         PropertyReference = "52525252",
                         Maintainable = true,
                         TenureCode = "SEC",
-                        TenureDescription = "Secure"
+                        TenureDescription = "Secure",
+                        LettingAreaDescription = "Lordship South TMO (SN) H2556"
                     });
                 case "5252":
                     throw new PropertyServiceException();
