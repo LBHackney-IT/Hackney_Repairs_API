@@ -154,7 +154,7 @@ namespace HackneyRepairs.Actions
             _logger.LogInformation($"Finding property by reference: {reference}");
             try
             {
-                var response = await _propertyService.GetPropertyByRefAsync(reference);
+                var response = await _propertyService.GetPropertyByRef(reference);
                 if (response == null)
                 {
                     throw new MissingPropertyException();
@@ -316,7 +316,8 @@ namespace HackneyRepairs.Actions
                     propertyReference = property.PropertyReference.Trim(),
                     maintainable = property.Maintainable,
                     tenureCode = property.TenureCode,
-                    tenure = property.TenureDescription
+                    tenure = property.TenureDescription,
+                    lettingArea = property.LettingAreaDescription
                 };
             }
 
@@ -329,7 +330,8 @@ namespace HackneyRepairs.Actions
                 levelCode = property.LevelCode,
                 description = property.Description.Trim(),
                 tenureCode = (property.TenureCode ?? "").Trim(),
-                tenure = (property.TenureDescription ?? "").Trim()
+                tenure = (property.TenureDescription ?? "").Trim(),
+                lettingArea = property.LettingAreaDescription
             };
         }
 

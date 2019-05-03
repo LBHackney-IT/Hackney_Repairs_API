@@ -271,10 +271,11 @@ namespace HackneyRepairs.Tests.Actions
                 PropertyReference = "52525252",
                 Maintainable = false,
                 TenureCode = "SEC",
-                TenureDescription = "Secure"
+                TenureDescription = "Secure",
+                LettingAreaDescription = "Lordship South TMO (SN) H2556"
             };
             var fakeService = new Mock<IHackneyPropertyService>();
-            fakeService.Setup(service => service.GetPropertyByRefAsync("52525252")).ReturnsAsync(response);
+            fakeService.Setup(service => service.GetPropertyByRef("52525252")).ReturnsAsync(response);
             var fakeRequestBuilder = new Mock<IHackneyPropertyServiceRequestBuilder>();
             var workOrdersService = new Mock<IHackneyWorkOrdersService>();
             PropertyActions propertyActions = new PropertyActions(fakeService.Object, fakeRequestBuilder.Object, workOrdersService.Object, mockLogger.Object);
@@ -286,7 +287,8 @@ namespace HackneyRepairs.Tests.Actions
                 propertyReference = "52525252",
                 maintainable = false,
                 tenureCode = "SEC",
-                tenure = "Secure"
+                tenure = "Secure",
+                lettingArea = "Lordship South TMO (SN) H2556"
             };
             Assert.Equal(property, results);
         }
@@ -297,7 +299,7 @@ namespace HackneyRepairs.Tests.Actions
             var mockLogger = new Mock<ILoggerAdapter<PropertyActions>>();
             var response = (PropertyDetails)null;
             var fakeService = new Mock<IHackneyPropertyService>();
-            fakeService.Setup(service => service.GetPropertyByRefAsync(It.IsAny<string>()))
+            fakeService.Setup(service => service.GetPropertyByRef(It.IsAny<string>()))
                 .ReturnsAsync(response);
             var fakeRequestBuilder = new Mock<IHackneyPropertyServiceRequestBuilder>();
             var workOrdersService = new Mock<IHackneyWorkOrdersService>();
@@ -310,7 +312,7 @@ namespace HackneyRepairs.Tests.Actions
         {
             var mockLogger = new Mock<ILoggerAdapter<PropertyActions>>();
             var fakeService = new Mock<IHackneyPropertyService>();
-            fakeService.Setup(service => service.GetPropertyByRefAsync(It.IsAny<string>()))
+            fakeService.Setup(service => service.GetPropertyByRef(It.IsAny<string>()))
                        .ThrowsAsync(new System.Exception());
             var fakeRequestBuilder = new Mock<IHackneyPropertyServiceRequestBuilder>();
             var workOrdersService = new Mock<IHackneyWorkOrdersService>();

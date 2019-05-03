@@ -78,6 +78,41 @@ namespace HackneyRepairs.Repository
             }
         }
 
+        public async Task<PropertyDetails> GetPropertyDetailsByReference(string reference)
+        {
+            _logger.LogInformation($"Getting details for property {reference}");
+            try
+            {
+                using (SqlConnection connnection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+                {
+                    string query = @"SELECT 
+                            address1 AS 'ShortAddress',
+                            post_code AS 'PostCodeValue',
+                            ~no_maint AS 'Maintainable', 
+                            property.prop_ref AS 'PropertyReference',
+                            level_code AS 'LevelCode',
+                            lulevel.lu_desc AS 'Description',
+                            rent.tenure AS 'TenureCode',
+							tenure.ten_desc AS 'TenureDescription',
+							AreaDescription AS 'LettingAreaDescription'
+							FROM 
+                            property 
+                            LEFT JOIN lulevel ON property.level_code = lulevel.lu_ref
+							LEFT join rent on property.prop_ref = rent.prop_ref
+							LEFT join tenure on rent.tenure = tenure.ten_type
+							left join [vw_pcPropertydesc] on property.prop_ref = [vw_pcPropertydesc].prop_ref
+                            WHERE property.prop_ref = @PropertyReference";
+                    var property = connnection.Query<PropertyDetails>(query, new { PropertyReference = reference }).First();
+                    return property;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                throw new UHWWarehouseRepositoryException();
+            }
+        }
+
         public async Task<DrsOrder> GetWorkOrderDetails(string workOrderReference)
 		{
 			_logger.LogInformation($"Getting the work order details from UHT for {workOrderReference}");

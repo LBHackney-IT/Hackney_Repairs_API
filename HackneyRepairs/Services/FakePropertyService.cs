@@ -53,7 +53,7 @@ namespace HackneyRepairs.Services
             }
         }
 
-        public Task<PropertyDetails> GetPropertyByRefAsync(string reference)
+        public Task<PropertyDetails> GetPropertyByRef(string reference)
         {
             switch (reference)
             {
