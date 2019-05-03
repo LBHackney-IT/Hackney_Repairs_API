@@ -92,7 +92,7 @@ namespace HackneyRepairs.Services
             if (result.Count() == 0)
             {
                 _logger.LogInformation($"HackneyWorkOrdersService/GetWorkOrderByPropertyReference(): Repositories returned empty lists, checking if the property exists.");
-                var property = await _uhWarehouseRepository.GetPropertyDetailsByReference(propertyReference);
+                var property = await _uhtRepository.GetPropertyDetailsByReference(propertyReference);
                 if (property == null)
                 {
                     return null;

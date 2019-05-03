@@ -106,7 +106,7 @@ namespace HackneyRepairs.Tests.Services
             var service = new HackneyWorkOrdersServiceTestBuilder()
                 .WithUhtWorkOrdersForPropertyRef("00000019", uhtWorkOrders)
                 .WithUHWarehouseWorkOrdersForPropertyRef("00000019", uhwWorkOrders)
-                .WithUHWarehousePropertyDetails("00000019", null)
+                .WithUhtWarehousePropertyDetails("00000019", null)
                 .Service;
 
             var workOrders = await service.GetWorkOrderByPropertyReference("00000019");
@@ -124,7 +124,7 @@ namespace HackneyRepairs.Tests.Services
             var service = new HackneyWorkOrdersServiceTestBuilder()
                 .WithUhtWorkOrdersForPropertyRef("00000020", uhtWorkOrders)
                 .WithUHWarehouseWorkOrdersForPropertyRef("00000020", uhwWorkOrders)
-                .WithUHWarehousePropertyDetails("00000020", property)
+                .WithUhtWarehousePropertyDetails("00000020", property)
                 .Service;
 
             var workOrders = await service.GetWorkOrderByPropertyReference("00000020");
@@ -171,7 +171,7 @@ namespace HackneyRepairs.Tests.Services
                 .WithUHWarehouseWorkOrdersForPropertyRef("00000020", uhwWorkOrders)
                 .WithUhtWorkOrdersForPropertyRef("00000021", uhtWorkOrders)
                 .WithUHWarehouseWorkOrdersForPropertyRef("00000021", uhwWorkOrders)
-                .WithUHWarehousePropertyDetails("00000020", property)
+                .WithUhtWarehousePropertyDetails("00000020", property)
                 .Service;
 
             DateTime date = DateTime.Now;
@@ -229,9 +229,9 @@ namespace HackneyRepairs.Tests.Services
                 return this;
             }
 
-            public HackneyWorkOrdersServiceTestBuilder WithUHWarehousePropertyDetails(string propertyRef, PropertyDetails property)
+            public HackneyWorkOrdersServiceTestBuilder WithUhtWarehousePropertyDetails(string propertyRef, PropertyDetails property)
             {
-                _uhWarehouseRepositoryMock.Setup(repo => repo.GetPropertyDetailsByReference(propertyRef)).Returns(Task.FromResult<PropertyDetails>(property));
+                _uhtRepositoryMock.Setup(repo => repo.GetPropertyDetailsByReference(propertyRef)).Returns(Task.FromResult<PropertyDetails>(property));
                 return this;
             }
 

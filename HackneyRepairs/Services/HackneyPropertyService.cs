@@ -40,10 +40,10 @@ namespace HackneyRepairs.Services
             return response;
         }
 
-        public Task<PropertyDetails> GetPropertyByRefAsync(string reference)
+        public Task<PropertyDetails> GetPropertyByRef(string reference)
         {
             _logger.LogInformation($"HackneyPropertyService/GetPropertyByRefAsync(): Sent request to upstream PropertyServiceClient (Property reference: {reference})");
-            var response = _uhWarehouseRepository.GetPropertyDetailsByReference(reference);
+            var response = _uhtRepository.GetPropertyDetailsByReference(reference);
             _logger.LogInformation($"HackneyPropertyService/GetPropertyByRefAsync(): Received response from upstream PropertyServiceClient (Property reference: {reference})");
             return response;
         }
