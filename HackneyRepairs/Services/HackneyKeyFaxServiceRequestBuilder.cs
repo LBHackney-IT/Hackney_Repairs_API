@@ -9,8 +9,6 @@ namespace HackneyRepairs.Services
 {
     public class HackneyKeyFaxServiceRequestBuilder : IHackneyKeyFaxServiceRequestBuilder
     {
-        //Convert to string.Format(@"""{0}"" = {1}", "yes", true);
-        //To allow use of parameters
         private StringBuilder _startupXml;
         private NameValueCollection _configuration;
 
@@ -19,16 +17,16 @@ namespace HackneyRepairs.Services
             _configuration = configuration;
         }
 
-        public string GetStartUpXML()
+        public string GetStartUpXML(string returnURL)
         {
             _startupXml = new StringBuilder();
-            _startupXml.Append(string.Format(@"<KeyfaxData test=""0""><Startup>"));
-            _startupXml.Append(string.Format(@"<Mode>{0}</Mode>", _configuration.Get("KFMode")));
-            _startupXml.Append(string.Format(@"<Company>{0}</Company>", _configuration.Get("KFCompany")));
-            _startupXml.Append(string.Format(@"<UserName>{0}</UserName>", _configuration.Get("KFUsername")));
-            _startupXml.Append(string.Format(@"<Password>{0}</Password>", _configuration.Get("KFPassword")));
-            _startupXml.Append(string.Format(@"<ReturnURL>{0}</ReturnURL>", _configuration.Get("KFReturnUrl")));
-            _startupXml.Append(string.Format(@"</Startup></KeyfaxData>")); 
+            _startupXml.Append(@"<KeyfaxData test=""0""><Startup>");
+            _startupXml.AppendFormat(@"<Mode>{0}</Mode>", _configuration.Get("KFMode"));
+            _startupXml.AppendFormat(@"<Company>{0}</Company>", _configuration.Get("KFCompany"));
+            _startupXml.AppendFormat(@"<UserName>{0}</UserName>", _configuration.Get("KFUsername"));
+            _startupXml.AppendFormat(@"<Password>{0}</Password>", _configuration.Get("KFPassword"));
+            _startupXml.AppendFormat(@"<ReturnURL>{0}</ReturnURL>", returnURL);
+            _startupXml.Append(@"</Startup></KeyfaxData>"); 
             return _startupXml.ToString();            
         }
     }

@@ -17,10 +17,10 @@ namespace HackneyRepairs.Actions
             _logger = logger;
         }
 
-        public async Task<object> GetStartUpURLAsync()
+        public async Task<object> GetStartUpURLAsync(string returnURL)
         {
             _logger.LogInformation($"Getting KeyFax Start up URL");
-            var startupXml = _requestBuilder.GetStartUpXML();
+            var startupXml = _requestBuilder.GetStartUpXML(returnURL);
             var response = await _keyfaxService.GetKeyFaxLaunchURLAsync(startupXml);
             return response;
         }

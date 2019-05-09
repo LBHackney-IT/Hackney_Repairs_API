@@ -34,14 +34,14 @@ namespace HackneyRepairs.Controllers
         }
 
         [HttpGet("get_startup_url")]
-        public async Task<JsonResult> GetKeyFaxStartUpURLAsync()
+        public async Task<JsonResult> GetKeyFaxStartUpURLAsync(string returnURL = "http://")
         {
             try
             {
                 KeyFaxActions actions = new KeyFaxActions(_keyfaxService, _requestBuilder, _loggerAdapter);
                 
                 //Keyfax return type is KeyFaxService.StartupResponse
-                var result = await actions.GetStartUpURLAsync();
+                var result = await actions.GetStartUpURLAsync(returnURL);
 
                 //XmlDocument doc = new XmlDocument();
                 //doc.LoadXml(result.ToString());
