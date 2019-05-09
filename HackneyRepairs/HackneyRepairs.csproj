@@ -27,7 +27,6 @@
     <Folder Include="Entities\" />
     <Folder Include="Builders\" />
     <Folder Include="DTOs\" />
-    <Folder Include="Settings\" />
     <Folder Include="Settings\Logging\" />
   </ItemGroup>
 

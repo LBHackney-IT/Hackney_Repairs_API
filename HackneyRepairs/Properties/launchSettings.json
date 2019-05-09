@@ -13,7 +13,12 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "KFMode": "RD",
+        "KFUserName": "IAN",
+        "KFPassword": "Global",
+        "KFReturnUrl": "http://www.hackney.gov.uk",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "KFCompany": "Hackney_Test"
       }
     },
     "HackneyRepairs": {

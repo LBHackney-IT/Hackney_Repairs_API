@@ -8,6 +8,8 @@ using HackneyRepairs.Factories;
 using HackneyRepairs.Services;
 using System.Xml;
 using Newtonsoft.Json;
+using System.Collections;
+using System.Configuration;
 
 namespace HackneyRepairs.Controllers
 {
@@ -17,13 +19,15 @@ namespace HackneyRepairs.Controllers
     {
         private readonly IExceptionLogger _exceptionLogger;
         private ILoggerAdapter<KeyFaxActions> _loggerAdapter;
+        private HackneyConfigurationBuilder _configBuilder;
         private IHackneyKeyFaxService _keyfaxService;
         private IHackneyKeyFaxServiceRequestBuilder _requestBuilder;
 
         public KeyFaxController(ILoggerAdapter<KeyFaxActions> loggerAdapter, IExceptionLogger exceptionLogger)
         {
             var factory = new HackneyKeyFaxServiceFactory();
-            _requestBuilder = new HackneyKeyFaxServiceRequestBuilder();
+            _configBuilder = new HackneyConfigurationBuilder((Hashtable)Environment.GetEnvironmentVariables(), ConfigurationManager.AppSettings);
+            _requestBuilder = new HackneyKeyFaxServiceRequestBuilder(_configBuilder.getConfiguration());
             _keyfaxService = factory.build(loggerAdapter);
             _loggerAdapter = loggerAdapter;
             _exceptionLogger = exceptionLogger;
