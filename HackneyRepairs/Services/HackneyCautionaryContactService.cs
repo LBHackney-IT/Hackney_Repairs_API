@@ -10,18 +10,18 @@ namespace HackneyRepairs.Services
 {
     public class HackneyCautionaryContactService : IHackneyCautionaryContactService
     {
-        private IUhwRepository _uhwRepository;
+        private IUhtRepository _uhtRepository;
         private ILoggerAdapter<CautionaryContactActions> _logger;
-        public HackneyCautionaryContactService(IUhwRepository uhwRepository, ILoggerAdapter<CautionaryContactActions> logger)
+        public HackneyCautionaryContactService(IUhtRepository uhtRepository, ILoggerAdapter<CautionaryContactActions> logger)
         {
-            _uhwRepository = uhwRepository;
+            _uhtRepository = uhtRepository;
             _logger = logger;
         }
 
         public async Task<CautionaryContactLevelModel[]> GetCautionaryContactByRef(string reference)
         {
             _logger.LogInformation($"HackneyCautionaryContactService/GetCautionaryContactByRef(): Sent request to upstream data warehouse (FirstLineOfAddress: {reference})");
-            var response = await _uhwRepository.GetCautionaryContactByRef(reference);
+            var response = await _uhtRepository.GetCautionaryContactByRef(reference);
             _logger.LogInformation($"HackneyCautionaryContactService/GetCautionaryContactByRef(): Received response from upstream data warehouse (FirstLineOfAddress: {reference})");
             return response;
         }

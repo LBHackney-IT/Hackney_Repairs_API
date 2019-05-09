@@ -11,6 +11,5 @@ namespace HackneyRepairs.Interfaces
 		Task<IEnumerable<Note>> GetNotesByWorkOrderReference(string workOrderReference);
         Task<IEnumerable<Note>> GetNoteFeed(int noteId, string noteTarget, int size);
         Task AddNote(FullNoteRequest note);
-        Task<CautionaryContactLevelModel[]> GetCautionaryContactByRef(string reference);
     }
 }

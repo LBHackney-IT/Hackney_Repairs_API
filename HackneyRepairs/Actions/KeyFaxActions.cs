@@ -30,6 +30,7 @@ namespace HackneyRepairs.Actions
             string _companyCode = Environment.GetEnvironmentVariable("KFCompany");
             _logger.LogInformation($"Getting KeyFax results for GUID: {keyfaxGUID}");
             var response = await _keyfaxService.GetKeyFaxResultsAsync(_companyCode, keyfaxGUID);
+            
             return response;
         }
     }
