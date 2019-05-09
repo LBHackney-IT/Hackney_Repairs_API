@@ -38,7 +38,7 @@ namespace HackneyRepairs.Tests.Services
             var request = builder.GetStartUpXML();
             Assert.Contains("Mode", request);
             Assert.Contains("Company", request);
-            Assert.Contains("Username", request);
+            Assert.Contains("UserName", request);
         }        
     }
 }
