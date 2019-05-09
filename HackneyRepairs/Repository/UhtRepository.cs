@@ -94,7 +94,7 @@ namespace HackneyRepairs.Repository
                             lulevel.lu_desc AS 'Description',
                             rent.tenure AS 'TenureCode',
 							tenure.ten_desc AS 'TenureDescription',
-							AreaDescription AS 'LettingAreaDescription'
+							LTRIM(RTRIM([NeighbourhoodDescription])) AS 'LettingAreaDescription'
 							FROM 
                             property 
                             LEFT JOIN lulevel ON property.level_code = lulevel.lu_ref
