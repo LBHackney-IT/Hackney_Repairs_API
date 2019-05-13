@@ -1,6 +1,12 @@
 ﻿using HackneyRepairs.Interfaces;
+using HackneyRepairs.Models;
 using System.Threading.Tasks;
+using System.IO;
+using System.Xml.Serialization;
+using System.Text;
+using System.Text.RegularExpressions;
 using System;
+using System.Xml;
 
 namespace HackneyRepairs.Actions
 {
@@ -30,8 +36,35 @@ namespace HackneyRepairs.Actions
             string _companyCode = Environment.GetEnvironmentVariable("KFCompany");
             _logger.LogInformation($"Getting KeyFax results for GUID: {keyfaxGUID}");
             var response = await _keyfaxService.GetKeyFaxResultsAsync(_companyCode, keyfaxGUID);
-            
-            return response;
+
+            //KeyFaxService.GetResultsResponse return type
+            string resultXml = response.Body.GetResultsResult.ResultXml;
+            KeyfaxData resultObject = DeserializeXML<KeyfaxData>(resultXml);
+
+            return new HackneyKeyfaxDataResponse
+            {
+                FaultText = resultObject.Fault.FaultText,
+                RepairCode = resultObject.Fault.Repair.RepairCode,
+                RepairCodeDesc = resultObject.Fault.Repair.RepairCodeDesc,
+                Priority = resultObject.Fault.Repair.Priority
+            };
+            //return resultObject;
+        }
+
+        private T DeserializeXML<T>(string xmlContent)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(T));
+            T result;
+            MemoryStream memStream = new MemoryStream(Encoding.UTF8.GetBytes(xmlContent));
+
+            //using (TextReader reader = new StringReader(withOutEncoding))
+            //{
+            //    //XmlWriterSettings xWriterSettings = new XmlWriterSettings();
+            //    //xWriterSettings.OmitXmlDeclaration = true;
+            //    //XmlWriter xmlWriter = XmlWriter.Create();
+            //    result = (T)serializer.Deserialize(reader);
+            //}
+            return result = (T)serializer.Deserialize(memStream);
         }
     }
 }

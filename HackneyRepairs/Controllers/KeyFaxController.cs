@@ -60,6 +60,12 @@ namespace HackneyRepairs.Controllers
             }
         }
 
+        // GET Parsed keyfax results
+        /// <summary>
+        /// Returns FaultText, RepairCode, RepairCode Description and Priority
+        /// </summary>
+        /// <param name="resultID">Keyfax GUID</param>
+        /// <returns>Parsed keyfaxdata object result</returns>
         [HttpGet("kf_result/{resultID}")]
         public async Task<JsonResult> GetKeyFaxResultsAsync(string resultID)
         {
