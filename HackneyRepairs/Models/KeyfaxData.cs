@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-//Auto generated class
+﻿//Auto generated class
 namespace HackneyRepairs.Models
 {
     // NOTE: Generated code may require at least .NET Framework 4.5 or .NET Core/Standard 2.0.
@@ -21,6 +16,7 @@ namespace HackneyRepairs.Models
         private byte statusField;
 
         /// <remarks/>
+        [System.Xml.Serialization.XmlElement(IsNullable = true)]
         public KeyfaxDataFault Fault
         {
             get
@@ -630,6 +626,7 @@ namespace HackneyRepairs.Models
         }
 
         /// <remarks/>
+        [System.Xml.Serialization.XmlElement(IsNullable = true)]
         public KeyfaxDataFaultRepair Repair
         {
             get

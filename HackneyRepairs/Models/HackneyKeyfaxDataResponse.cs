@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace HackneyRepairs.Models
+﻿namespace HackneyRepairs.Models
 {
     public class HackneyKeyfaxDataResponse
     {
@@ -11,5 +6,10 @@ namespace HackneyRepairs.Models
         public uint RepairCode { get; set; }
         public string RepairCodeDesc { get; set; }
         public string Priority { get; set; }
+
+        public HackneyKeyfaxDataResponse()
+        {
+            this.RepairCode = 0;
+        }
     }
 }

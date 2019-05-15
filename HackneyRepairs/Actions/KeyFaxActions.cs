@@ -1,12 +1,11 @@
 ﻿using HackneyRepairs.Interfaces;
 using HackneyRepairs.Models;
-using System.Threading.Tasks;
-using System.IO;
-using System.Xml.Serialization;
-using System.Text;
-using System.Text.RegularExpressions;
 using System;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace HackneyRepairs.Actions
 {
@@ -39,8 +38,30 @@ namespace HackneyRepairs.Actions
 
             //KeyFaxService.GetResultsResponse return type
             string resultXml = response.Body.GetResultsResult.ResultXml;
-            KeyfaxData resultObject = DeserializeXML<KeyfaxData>(resultXml);
+            //Check if error string is empty
+            string errorText = response.Body.GetResultsResult.ErrorText;
+            //Keyfax error
+            if (!String.IsNullOrEmpty(errorText))
+                return errorText;
 
+            //Check Keyfax Data object is missing repair object element 
+            //Keyfax response not serializable if element is missing?
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(resultXml);
+            XmlNodeList repair;
+            repair = doc.GetElementsByTagName("Repair");
+            if (repair.Count == 0)
+            {
+                //Read value of advice node
+                repair = doc.GetElementsByTagName("AdviceCodeDesc");
+                string advice = repair[0].InnerText;
+                return new HackneyKeyfaxDataResponse
+                {
+                     RepairCodeDesc = repair[0].InnerText
+                };
+            }
+
+            KeyfaxData resultObject = this.DeserializeXML<KeyfaxData>(resultXml);
             return new HackneyKeyfaxDataResponse
             {
                 FaultText = resultObject.Fault.FaultText,
@@ -48,22 +69,13 @@ namespace HackneyRepairs.Actions
                 RepairCodeDesc = resultObject.Fault.Repair.RepairCodeDesc,
                 Priority = resultObject.Fault.Repair.Priority
             };
-            //return resultObject;
         }
 
         private T DeserializeXML<T>(string xmlContent)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(T));
             T result;
+            XmlSerializer serializer = new XmlSerializer(typeof(T));
             MemoryStream memStream = new MemoryStream(Encoding.UTF8.GetBytes(xmlContent));
-
-            //using (TextReader reader = new StringReader(withOutEncoding))
-            //{
-            //    //XmlWriterSettings xWriterSettings = new XmlWriterSettings();
-            //    //xWriterSettings.OmitXmlDeclaration = true;
-            //    //XmlWriter xmlWriter = XmlWriter.Create();
-            //    result = (T)serializer.Deserialize(reader);
-            //}
             return result = (T)serializer.Deserialize(memStream);
         }
     }
