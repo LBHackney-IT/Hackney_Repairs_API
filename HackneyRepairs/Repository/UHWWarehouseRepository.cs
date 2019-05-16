@@ -306,12 +306,19 @@ namespace HackneyRepairs.Repository
             //Create search parameter with required number of wildcards
             //Make sure non-empty strings are returned
             string[] words = firstLineOfAddress.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            StringBuilder _sb = new StringBuilder();
-
-            _sb.Append("%");
+            StringBuilder _sb = new StringBuilder("(");
+            //build where clause string for search
+            // eg. (charindex('pitcairn', lower(address1)) > 0 and charindex('lift', lower(address1)) > 0)
+            int length = words.Length;
+            int count = 0;
             foreach (var word in words)
-                _sb.Append(word + "%");
+            {
+                _sb.Append($@"charindex('{word}', lower(address1)) > 0");
+                if (++count < length)
+                    _sb.Append(@" and ");
+            }
 
+            _sb.Append(")");
             firstLineOfAddress = _sb.ToString().ToLower();
 
             try
@@ -331,9 +338,10 @@ namespace HackneyRepairs.Repository
                         INNER 
                             JOIN lulevel ON property.level_code = lulevel.lu_ref 
                         WHERE 
-                            lower(address1) like @FirstLineOfAddress
+                            {firstLineOfAddress}
                         ORDER BY property.prop_ref";
-                    var properties = connection.Query<PropertyLevelModel>(query, new { FirstLineOfAddress = firstLineOfAddress }).ToArray();
+                    var properties = connection.Query<PropertyLevelModel>(query).ToArray();
+                    //var properties = connection.Query<PropertyLevelModel>(query, new { FirstLineOfAddress = firstLineOfAddress }).ToArray();
                     return properties;
                 }
             }//{ FirstLineOfAddress = "%" + firstLineOfAddress + "%" }
