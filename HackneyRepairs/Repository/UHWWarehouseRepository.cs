@@ -303,24 +303,27 @@ namespace HackneyRepairs.Repository
             _logger.LogInformation($"Getting details for properties using first line of address {firstLineOfAddress}");
             string strLimit = limit.ToString();
 
-            //Create search parameter with required number of wildcards
             //Make sure non-empty strings are returned
             string[] words = firstLineOfAddress.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             StringBuilder _sb = new StringBuilder("(");
             //build where clause string for search
-            // eg. (charindex('pitcairn', lower(address1)) > 0 and charindex('lift', lower(address1)) > 0)
+            //and parameters for dapper
+            // eg. (charindex(@p, lower(address1)) > 0 and charindex(@pp, lower(address1)) > 0)
+            var p = new DynamicParameters();
             int length = words.Length;
             int count = 0;
+            StringBuilder _sbparams = new StringBuilder("p");
             foreach (var word in words)
             {
-                _sb.Append($@"charindex('{word}', lower(address1)) > 0");
+                _sb.Append($@"charindex(@{_sbparams.ToString()}, lower(address1)) > 0");
+                p.Add($@"@{_sbparams.ToString()}", word);
                 if (++count < length)
                     _sb.Append(@" and ");
+                _sbparams.Append("p");
             }
 
             _sb.Append(")");
             firstLineOfAddress = _sb.ToString().ToLower();
-
             try
             {
                 using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
@@ -340,11 +343,10 @@ namespace HackneyRepairs.Repository
                         WHERE 
                             {firstLineOfAddress}
                         ORDER BY property.prop_ref";
-                    var properties = connection.Query<PropertyLevelModel>(query).ToArray();
-                    //var properties = connection.Query<PropertyLevelModel>(query, new { FirstLineOfAddress = firstLineOfAddress }).ToArray();
+                    var properties = connection.Query<PropertyLevelModel>(query, p).ToArray();
                     return properties;
                 }
-            }//{ FirstLineOfAddress = "%" + firstLineOfAddress + "%" }
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
