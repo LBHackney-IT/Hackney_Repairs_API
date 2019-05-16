@@ -42,15 +42,6 @@ namespace HackneyRepairs.Controllers
                 
                 //Keyfax return type is KeyFaxService.StartupResponse
                 var result = await actions.GetStartUpURLAsync(returnURL);
-
-                //XmlDocument doc = new XmlDocument();
-                //doc.LoadXml(result.ToString());
-                //string json = JsonConvert.SerializeXmlNode(doc);
-                //return new JsonResult(json)
-                //{
-                //    StatusCode = 200,
-                //    ContentType = "application/json"
-                //};
                 return ResponseBuilder.Ok(result);
             }
             catch (Exception ex)
@@ -62,7 +53,7 @@ namespace HackneyRepairs.Controllers
 
         // GET Parsed keyfax results
         /// <summary>
-        /// Returns FaultText, RepairCode, RepairCode Description and Priority
+        /// Returns FaultText, RepairCode, RepairCode-Description and Priority
         /// </summary>
         /// <param name="resultID">Keyfax GUID</param>
         /// <returns>Parsed keyfaxdata object result</returns>
