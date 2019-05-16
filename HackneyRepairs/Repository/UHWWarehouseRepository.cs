@@ -316,14 +316,14 @@ namespace HackneyRepairs.Repository
             foreach (var word in words)
             {
                 _sb.Append($@"charindex(@{_sbparams.ToString()}, lower(address1)) > 0");
-                p.Add($@"@{_sbparams.ToString()}", word);
+                p.Add($@"@{_sbparams.ToString()}", word.ToLower());
                 if (++count < length)
                     _sb.Append(@" and ");
                 _sbparams.Append("p");
             }
 
             _sb.Append(")");
-            firstLineOfAddress = _sb.ToString().ToLower();
+            firstLineOfAddress = _sb.ToString();
             try
             {
                 using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
