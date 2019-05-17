@@ -15,14 +15,16 @@ namespace HackneyRepairs.Services
 		private RepairServiceClient _client;
 		private IUhtRepository _uhtRepository;
 		private IUhwRepository _uhwRepository;
+        private IUhWebRepository _uhWebRepository;
         private IUHWWarehouseRepository _uhWarehouseRepository;
 		private ILoggerAdapter<RepairsActions> _logger;
 
-        public HackneyRepairsService(IUhtRepository uhtRepository, IUhwRepository uhwRepository, IUHWWarehouseRepository uHWWarehouseRepository, ILoggerAdapter<RepairsActions> logger)
+        public HackneyRepairsService(IUhtRepository uhtRepository, IUhwRepository uhwRepository, IUHWWarehouseRepository uHWWarehouseRepository, IUhWebRepository uhwebRepository, ILoggerAdapter<RepairsActions> logger)
 		{
 			_client = new RepairServiceClient();
 			_uhtRepository = uhtRepository;
 			_uhwRepository = uhwRepository;
+            _uhWebRepository = uhwebRepository;
             _uhWarehouseRepository = uHWWarehouseRepository;
 			_logger = logger;
 		}
@@ -138,5 +140,13 @@ namespace HackneyRepairs.Services
 			_logger.LogInformation($"HackneyRepairsService/AddOrderDocumentAsync(): Received response from upstream  UHTdb (Work order ref: {workOrderReference})");
 			return response;
 		}
-	}
+
+        public string GenerateUHSession(string uHUsername)
+        {
+            _logger.LogInformation($"HackneyUHWebSessionService/GenerateUHSession(): Sent request to upstream UH Web warehouse (UHUsername: {uHUsername})");
+            var response = _uhWebRepository.GenerateUHSession(uHUsername);
+            _logger.LogInformation($"HackneyUHWebSessionService/GenerateUHSession(): Received response from upstream UH Web warehouse (UHUsername: {uHUsername})");
+            return response;
+        }
+    }
 }

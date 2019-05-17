@@ -71,7 +71,17 @@ namespace HackneyRepairs.Actions
         private async Task<object> CreateRepairWithOrder(RepairRequest request)
         {
             _logger.LogInformation($"Creating repair with order (prop ref: {request.PropertyReference})");
-            var repairRequest = _requestBuilder.BuildNewRepairTasksRequest(request);
+            string sessionToken = string.Empty;
+            if (!string.IsNullOrEmpty(request.UHUsername))
+            {
+                sessionToken = _repairsService.GenerateUHSession(request.UHUsername);
+                if (sessionToken == null)
+                {
+                    throw new MissingUHWebSessionTokenException();
+                }
+            }
+
+            var repairRequest = string.IsNullOrEmpty(sessionToken) ? _requestBuilder.BuildNewRepairTasksRequest(request) : _requestBuilder.BuildNewRepairTasksRequestAsUser(request, sessionToken);
 
             var response = await _repairsService.CreateRepairWithOrderAsync(repairRequest);
 
@@ -191,6 +201,10 @@ namespace HackneyRepairs.Actions
 
             return repair;
         }
+    }
+
+    public class MissingUHWebSessionTokenException : Exception
+    {
     }
 
 	public class MissingRepairRequestException : Exception

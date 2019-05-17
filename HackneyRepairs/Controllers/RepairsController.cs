@@ -27,11 +27,11 @@ namespace HackneyRepairs.Controllers
         private HackneyConfigurationBuilder _configBuilder;
         private readonly IExceptionLogger _exceptionLogger;
 
-        public RepairsController(ILoggerAdapter<RepairsActions> loggerAdapter, IUhtRepository uhtRepository, IUhwRepository uhwRepository, IUHWWarehouseRepository uHWWarehouseRepository, IExceptionLogger exceptionLogger)
+        public RepairsController(ILoggerAdapter<RepairsActions> loggerAdapter, IUhtRepository uhtRepository, IUhwRepository uhwRepository, IUHWWarehouseRepository uHWWarehouseRepository, IUhWebRepository uhWebRepository, IExceptionLogger exceptionLogger)
         {
             var factory = new HackneyRepairsServiceFactory();
             _configBuilder = new HackneyConfigurationBuilder((Hashtable)Environment.GetEnvironmentVariables(), ConfigurationManager.AppSettings);
-            _repairsService = factory.build(uhtRepository, uhwRepository, uHWWarehouseRepository, loggerAdapter);
+            _repairsService = factory.build(uhtRepository, uhwRepository, uHWWarehouseRepository, uhWebRepository, loggerAdapter);
             _requestBuilder = new HackneyRepairsServiceRequestBuilder(_configBuilder.getConfiguration());
             //Pass config builder to read unsupported sorcodes from environment variables
             _repairRequestValidator = new RepairRequestValidator(_configBuilder.getConfiguration());
