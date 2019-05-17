@@ -309,17 +309,17 @@ namespace HackneyRepairs.Repository
             //build where clause string for search
             //and parameters for dapper
             // eg. (charindex(@p, lower(address1)) > 0 and charindex(@pp, lower(address1)) > 0)
-            var p = new DynamicParameters();
+            var queryparams = new DynamicParameters();
             int length = words.Length;
             int count = 0;
-            StringBuilder _sbparams = new StringBuilder("p");
+            StringBuilder _sbparams = new StringBuilder();
             foreach (var word in words)
             {
-                _sb.Append($@"charindex(@{_sbparams.ToString()}, lower(address1)) > 0");
-                p.Add($@"@{_sbparams.ToString()}", word.ToLower());
+                _sb.Append($@"charindex(@{_sbparams.Append("p").ToString()}, lower(address1)) > 0");
+                //Lower each word used for query 
+                queryparams.Add($@"@{_sbparams.ToString()}", word.ToLower());
                 if (++count < length)
                     _sb.Append(@" and ");
-                _sbparams.Append("p");
             }
 
             _sb.Append(")");
@@ -343,7 +343,7 @@ namespace HackneyRepairs.Repository
                         WHERE 
                             {firstLineOfAddress}
                         ORDER BY property.prop_ref";
-                    var properties = connection.Query<PropertyLevelModel>(query, p).ToArray();
+                    var properties = connection.Query<PropertyLevelModel>(query, queryparams).ToArray();
                     return properties;
                 }
             }
