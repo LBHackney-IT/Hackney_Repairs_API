@@ -1,4 +1,5 @@
-﻿using HackneyRepairs.Interfaces;
+﻿using HackneyRepairs.DbContext;
+using HackneyRepairs.Interfaces;
 using HackneyRepairs.Models;
 using HackneyRepairs.Repository;
 using Moq;
@@ -14,7 +15,7 @@ namespace HackneyRepairs.Tests.Repository
     [Collection("Universal Housing")]
     public class UhWebRepositoryTests
     {
-        private UniversalHousingSimulator<UhwDbContext> _simulator;
+        private UniversalHousingSimulator<UhWebDbContext> _simulator;
         private ILoggerAdapter<UhWebRepository> _logger;
 
         public UhWebRepositoryTests()
@@ -22,9 +23,9 @@ namespace HackneyRepairs.Tests.Repository
             Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "test");
 
             _logger = new Mock<ILoggerAdapter<UhWebRepository>>().Object;
-            //_simulator = new UniversalHousingSimulator<UhWebDbContext>();
+            _simulator = new UniversalHousingSimulator<UhWebDbContext>();
 
-            //_simulator.Reset();
+            _simulator.Reset();
         }
     }
 }
