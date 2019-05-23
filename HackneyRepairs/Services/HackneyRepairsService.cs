@@ -141,9 +141,17 @@ namespace HackneyRepairs.Services
 			return response;
 		}
 
+        public string GetUHUsername(string lbhEmail)
+        {
+            _logger.LogInformation($"HackneyUHWebSessionService/GenerateUHSession(): Sent request to upstream UHWDB  (lbhEmail: {lbhEmail})");
+            var response = _uhwRepository.GetUHUsernameByEmail(lbhEmail);
+            _logger.LogInformation($"HackneyUHWebSessionService/GenerateUHSession(): Received response from upstream UHWDB (lbhEmail: {lbhEmail})");
+            return response;
+        }
+
         public string GenerateUHSession(string uHUsername)
         {
-            _logger.LogInformation($"HackneyUHWebSessionService/GenerateUHSession(): Sent request to upstream UH Web warehouse (UHUsername: {uHUsername})");
+            _logger.LogInformation($"HackneyUHWebSessionService/GenerateUHSession(): Sent request to upstream UH Web database (UHUsername: {uHUsername})");
             var response = _uhWebRepository.GenerateUHSession(uHUsername);
             _logger.LogInformation($"HackneyUHWebSessionService/GenerateUHSession(): Received response from upstream UH Web warehouse (UHUsername: {uHUsername})");
             return response;

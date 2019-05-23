@@ -158,6 +158,32 @@ namespace HackneyRepairs.Repository
             }
         }
 
+        public string GetUHUsernameByEmail(string lbhEmail)
+        {
+            string uhusername = string.Empty;
+            _logger.LogInformation($"Retrieving UHUsername for {lbhEmail}");
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+                {
+                    connection.Open();
+                    //_context.Database.ExecuteSqlCommand(commandString, new { uhusername = UHUsername });
+                    string query = "SELECT [User_ID] FROM[uhwdev].[dbo].[W2User] where [EMail] = @LBHEmail";
+                    uhusername = connection.QuerySingle<string>(query, new { LBHEmail = lbhEmail });
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            finally
+            {
+                _context.Database.CloseConnection();
+            }
+
+            return uhusername;
+        }    
+
         public async Task AddNote(FullNoteRequest note)
         {
             var parameters = new DynamicParameters();
@@ -194,7 +220,7 @@ namespace HackneyRepairs.Repository
             }
 
             return dtCutoff.ToString("yyyy-MM-dd HH:mm:ss");
-        }
+        }        
     }
 
     public class UhwRepositoryException : Exception { }

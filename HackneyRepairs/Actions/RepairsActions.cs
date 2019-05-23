@@ -72,9 +72,11 @@ namespace HackneyRepairs.Actions
         {
             _logger.LogInformation($"Creating repair with order (prop ref: {request.PropertyReference})");
             string sessionToken = string.Empty;
+            string uHUsername = string.Empty;
             if (!string.IsNullOrEmpty(request.LBHEmail))
             {
-                sessionToken = _repairsService.GenerateUHSession(request.LBHEmail);
+                uHUsername = _repairsService.GetUHUsername(request.LBHEmail);
+                sessionToken = _repairsService.GenerateUHSession(uHUsername);
                 if (string.IsNullOrEmpty(sessionToken))
                 {
                     throw new MissingUHWebSessionTokenException();

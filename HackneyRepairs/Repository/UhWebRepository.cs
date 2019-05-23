@@ -37,12 +37,12 @@ namespace HackneyRepairs.Repository
 
                     string commandString = $@"if exists (SELECT ws_userid FROM ws_user where ws_username = @uhusername) 
                                         begin
-                                            update ws_user set current_session_token=NEWID(), last_activity_datetime=getdate() where ws_username = @uhusername
+                                            update ws_user set restrict_contactaccess=0, current_session_token=NEWID(), last_activity_datetime=getdate() where ws_username = @uhusername
                                         end
                                     else
                                         begin
-                                            insert into ws_user (ws_username, ws_access_status, uh_user_login, current_session_token, last_activity_datetime) 
-                                            values (@uhusername, 'E', @uhusername, NEWID(), getdate())
+                                            insert into ws_user (ws_username, ws_access_status, uh_user_login, restrict_contactaccess, current_session_token, last_activity_datetime) 
+                                            values (@uhusername, 'E', @uhusername, 0,NEWID(), getdate())
                                         end";
                     connection.Execute(commandString, new { uhusername = UHUsername });
                     //_context.Database.ExecuteSqlCommand(commandString, new { uhusername = UHUsername });

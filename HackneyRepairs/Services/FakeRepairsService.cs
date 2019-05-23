@@ -212,5 +212,10 @@ namespace HackneyRepairs.Services
         {
             return Guid.NewGuid().ToString();
         }
+
+        public string GetUHUsername(string lBHEmail)
+        {
+            return "HackneyAPI";
+        }
     }
 }
