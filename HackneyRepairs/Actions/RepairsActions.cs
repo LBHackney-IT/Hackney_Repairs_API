@@ -7,6 +7,7 @@ using RepairsService;
 using System.Collections.Generic;
 using HackneyRepairs.DTOs;
 using HackneyRepairs.Formatters;
+using System.Runtime.Serialization;
 
 namespace HackneyRepairs.Actions
 {
@@ -76,6 +77,11 @@ namespace HackneyRepairs.Actions
             if (!string.IsNullOrEmpty(request.LBHEmail))
             {
                 uHUsername = _repairsService.GetUHUsername(request.LBHEmail);
+                if (string.IsNullOrEmpty(uHUsername))
+                {
+                    throw new MissingUHUsernameException();
+                }
+
                 sessionToken = _repairsService.GenerateUHSession(uHUsername);
                 if (string.IsNullOrEmpty(sessionToken))
                 {
@@ -203,6 +209,10 @@ namespace HackneyRepairs.Actions
 
             return repair;
         }
+    }
+    
+    public class MissingUHUsernameException : Exception
+    {        
     }
 
     public class MissingUHWebSessionTokenException : Exception
