@@ -68,9 +68,9 @@ namespace HackneyRepairs.Models
 
         private string isNewField;
 
-        private ushort fault_DialogField;
+        private string fault_DialogField;
 
-        private ushort fault_CategoryField;
+        private string fault_CategoryField;
 
         private byte scriptSetField;
 
@@ -88,7 +88,7 @@ namespace HackneyRepairs.Models
 
         private string recharge_CodeField;
 
-        private decimal recharge_CostField;
+        private object recharge_CostField;
 
         private object repair_NoField;
 
@@ -116,7 +116,7 @@ namespace HackneyRepairs.Models
 
         private object contractor_CodeField;
 
-        private ushort expenditure_CodeField;
+        private string expenditure_CodeField;
 
         private object nominal_CodeField;
 
@@ -184,7 +184,7 @@ namespace HackneyRepairs.Models
         }
 
         /// <remarks/>
-        public ushort Fault_Dialog
+        public string Fault_Dialog
         {
             get
             {
@@ -197,7 +197,7 @@ namespace HackneyRepairs.Models
         }
 
         /// <remarks/>
-        public ushort Fault_Category
+        public string Fault_Category
         {
             get
             {
@@ -314,7 +314,7 @@ namespace HackneyRepairs.Models
         }
 
         /// <remarks/>
-        public decimal Recharge_Cost
+        public object Recharge_Cost
         {
             get
             {
@@ -496,7 +496,7 @@ namespace HackneyRepairs.Models
         }
 
         /// <remarks/>
-        public ushort Expenditure_Code
+        public string Expenditure_Code
         {
             get
             {
@@ -695,9 +695,9 @@ namespace HackneyRepairs.Models
 
         private ushort priorityIdField;
 
-        private uint repairCodeField;
+        private string repairCodeField;
 
-        private uint repairCodeExField;
+        private string repairCodeExField;
 
         private string repairCodeDescField;
 
@@ -705,7 +705,7 @@ namespace HackneyRepairs.Models
 
         private byte unitOfMeasureQuantityField;
 
-        private ushort contractorField;
+        private string contractorField;
 
         private string isDeletedField;
 
@@ -768,7 +768,7 @@ namespace HackneyRepairs.Models
         }
 
         /// <remarks/>
-        public uint RepairCode
+        public string RepairCode
         {
             get
             {
@@ -781,7 +781,7 @@ namespace HackneyRepairs.Models
         }
 
         /// <remarks/>
-        public uint RepairCodeEx
+        public string RepairCodeEx
         {
             get
             {
@@ -833,7 +833,7 @@ namespace HackneyRepairs.Models
         }
 
         /// <remarks/>
-        public ushort Contractor
+        public string Contractor
         {
             get
             {
