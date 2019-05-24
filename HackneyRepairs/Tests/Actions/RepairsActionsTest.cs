@@ -131,7 +131,7 @@ namespace HackneyRepairs.Tests.Actions
                 ProblemDescription = "tap leaking",
                 Priority = "N",
                 PropertyReference = "00000320",
-                UHUsername = "bob",
+                LBHEmail = "bob",
                 Contact = new RepairRequestContact
                 {
                     Name = "Test",

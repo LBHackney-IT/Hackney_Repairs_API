@@ -33,19 +33,21 @@ namespace HackneyRepairs.Repository
 			{
                 using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
                 {
+                    connection.Open();
+
                     string commandString = $@"if exists (SELECT ws_userid FROM ws_user where ws_username = @uhusername) 
                                         begin
-                                            update ws_user set current_session_token=NEWID(), last_activity_date=getdate() where ws_username = @uhusername
+                                            update ws_user set current_session_token=NEWID(), last_activity_datetime=getdate() where ws_username = @uhusername
                                         end
                                     else
                                         begin
-                                            insert into ws_user (ws_username, ws_access_status, uh_user_login, current_session_token, last_activity_date) 
+                                            insert into ws_user (ws_username, ws_access_status, uh_user_login, current_session_token, last_activity_datetime) 
                                             values (@uhusername, 'E', @uhusername, NEWID(), getdate())
                                         end";
-                    _context.Database.ExecuteSqlCommand(commandString, new { uhusername = UHUsername });
-
-                    string query = "SELECT current_session_token FROM ws_user where ws_username = @uhusername";
-                    sessionToken = connection.Query<string>(query, new { uhusername = UHUsername }).FirstOrDefault();                   
+                    connection.Execute(commandString, new { uhusername = UHUsername });
+                    //_context.Database.ExecuteSqlCommand(commandString, new { uhusername = UHUsername });
+                    string query = "SELECT CONVERT(varchar(36),current_session_token) as session_token FROM ws_user where ws_username = @uhusername";
+                    sessionToken = connection.QuerySingle<string>(query, new { uhusername = UHUsername });                    
                 }
 			}
 			catch (Exception ex)
