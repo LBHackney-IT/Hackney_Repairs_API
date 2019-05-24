@@ -7,6 +7,7 @@ using RepairsService;
 using System.Collections.Generic;
 using HackneyRepairs.DTOs;
 using HackneyRepairs.Formatters;
+using System.Runtime.Serialization;
 
 namespace HackneyRepairs.Actions
 {
@@ -71,7 +72,24 @@ namespace HackneyRepairs.Actions
         private async Task<object> CreateRepairWithOrder(RepairRequest request)
         {
             _logger.LogInformation($"Creating repair with order (prop ref: {request.PropertyReference})");
-            var repairRequest = _requestBuilder.BuildNewRepairTasksRequest(request);
+            string sessionToken = string.Empty;
+            string uHUsername = string.Empty;
+            if (!string.IsNullOrEmpty(request.LBHEmail))
+            {
+                uHUsername = _repairsService.GetUHUsername(request.LBHEmail);
+                if (string.IsNullOrEmpty(uHUsername))
+                {
+                    throw new MissingUHUsernameException();
+                }
+
+                sessionToken = _repairsService.GenerateUHSession(uHUsername);
+                if (string.IsNullOrEmpty(sessionToken))
+                {
+                    throw new MissingUHWebSessionTokenException();
+                }
+            }
+
+            var repairRequest = string.IsNullOrEmpty(sessionToken) ? _requestBuilder.BuildNewRepairTasksRequest(request) : _requestBuilder.BuildNewRepairTasksRequestAsUser(request, sessionToken);
 
             var response = await _repairsService.CreateRepairWithOrderAsync(repairRequest);
 
@@ -191,6 +209,14 @@ namespace HackneyRepairs.Actions
 
             return repair;
         }
+    }
+    
+    public class MissingUHUsernameException : Exception
+    {        
+    }
+
+    public class MissingUHWebSessionTokenException : Exception
+    {
     }
 
 	public class MissingRepairRequestException : Exception

@@ -39,7 +39,6 @@ namespace HackneyRepairs.Actions
             //KeyFaxService.GetResultsResponse return type
             string resultXml = response.Body.GetResultsResult.ResultXml;
             //Check if error string is empty
-
             //Keyfax error
             if (!string.IsNullOrEmpty(response.Body.GetResultsResult.ErrorText))
                 return response.Body.GetResultsResult.ErrorText;
@@ -79,8 +78,6 @@ namespace HackneyRepairs.Actions
                 RepairCodeDesc = resultObject2.Fault.Repair.RepairCodeDesc,
                 Priority = resultObject2.Fault.Repair.Priority
             };
-
-            //return resultObject2;
         }
 
         private T DeserializeXML<T>(string xmlContent)

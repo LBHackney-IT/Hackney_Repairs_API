@@ -19,5 +19,7 @@ namespace HackneyRepairs.Interfaces
         Task<int?> UpdateUHTVisitAndBlockTrigger(string workOrderReference, DateTime startDate, DateTime endDate, int orderId, int bookingId, string slotDetail);
         Task<WebResponse> IssueOrderAsync(WorksOrderRequest request);
         Task AddOrderDocumentAsync(string documentType, string workOrderReference, int workOrderId, string processComment);
+        string GenerateUHSession(string uHUsername);
+        string GetUHUsername(string lBHEmail);
     }
 }

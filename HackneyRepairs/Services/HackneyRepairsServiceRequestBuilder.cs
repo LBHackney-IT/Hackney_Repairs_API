@@ -62,7 +62,7 @@ namespace HackneyRepairs.Services
             };
         }
 
-        public NewRepairTasksRequest BuildNewRepairTasksRequest(RepairRequest request)
+        public List<RepairTaskInfo> GetTaskList(RepairRequest request)
         {
             var taskList = new List<RepairTaskInfo>();
             foreach (var workorder in request.WorkOrders)
@@ -75,6 +75,30 @@ namespace HackneyRepairs.Services
                 });
             }
 
+            return taskList;
+        }
+
+        public NewRepairTasksRequest BuildNewRepairTasksRequestAsUser(RepairRequest request, string sessionToken)
+        {
+            return new NewRepairTasksRequest
+            {
+                RepairRequest = new RepairRequestInfo
+                {
+                    Problem = request.ProblemDescription,
+                    Priority = request.Priority.ToUpper(),
+                    PropertyRef = request.PropertyReference,
+                    Name = request.Contact.Name,
+                    Phone = request.Contact.TelephoneNumber
+                },
+                SessionToken = sessionToken,
+                CompanyCode = "001",
+                SourceSystem = GetUhSourceSystem(),
+                TaskList = GetTaskList(request).ToArray()
+            };
+        }
+
+        public NewRepairTasksRequest BuildNewRepairTasksRequest(RepairRequest request)
+        {                        
             return new NewRepairTasksRequest
             {
                 RepairRequest = new RepairRequestInfo
@@ -87,8 +111,13 @@ namespace HackneyRepairs.Services
                 },
                 DirectUser = GetUserCredentials(),
                 SourceSystem = GetUhSourceSystem(),
-                TaskList = taskList.ToArray()
-            };
+                TaskList = GetTaskList(request).ToArray()
+            };                            
+        }
+
+        private string GetUHSessionToken(string uHUsername)
+        {
+            throw new NotImplementedException();
         }
 
         public WorksOrderRequest BuildWorksOrderRequest(string request)

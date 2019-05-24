@@ -7,5 +7,6 @@ namespace HackneyRepairs.Models
 		public string Priority { get; set; }
 		public string PropertyReference { get; set; }
 		public string ProblemDescription { get; set; }
+        public string LBHEmail { get; set; }
 	}
 }

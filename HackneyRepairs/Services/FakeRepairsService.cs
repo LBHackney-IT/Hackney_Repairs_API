@@ -207,5 +207,15 @@ namespace HackneyRepairs.Services
             var fakeElement = new RepairWithWorkOrderDto();
             return Task.Run(() => fakeResponse.Append(fakeElement));
         }
+
+        public string GenerateUHSession(string uHUsername)
+        {
+            return Guid.NewGuid().ToString();
+        }
+
+        public string GetUHUsername(string lBHEmail)
+        {
+            return "HackneyAPI";
+        }
     }
 }
