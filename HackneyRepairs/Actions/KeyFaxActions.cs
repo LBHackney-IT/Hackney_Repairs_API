@@ -39,8 +39,6 @@ namespace HackneyRepairs.Actions
             //KeyFaxService.GetResultsResponse return type
             string resultXml = response.Body.GetResultsResult.ResultXml;
             //Check if error string is empty
-
-
             //Keyfax error
             if (!string.IsNullOrEmpty(response.Body.GetResultsResult.ErrorText))
                 return response.Body.GetResultsResult.ErrorText;
