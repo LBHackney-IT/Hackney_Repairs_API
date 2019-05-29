@@ -95,7 +95,7 @@ namespace HackneyRepairs.Actions
 
             if (!response.Success)
             {
-                throw new RepairsServiceException();
+                throw new RepairsServiceException(response.ErrorMessage);
             }
 
             var workOrderList = response.WorksOrderList;
@@ -105,9 +105,7 @@ namespace HackneyRepairs.Actions
             }
 
             var workOrderItem = workOrderList.FirstOrDefault();
-            // update the request status to 000
-            _repairsService.UpdateRequestStatus(workOrderItem.RepairRequestReference.Trim());
-
+         
             var repairTasksResponse = await GetRepairTasksList(workOrderItem.RepairRequestReference);
             var tasksList = repairTasksResponse.TaskList;
             return new
@@ -135,7 +133,7 @@ namespace HackneyRepairs.Actions
 
             if (!response.Success)
             {
-                throw new RepairsServiceException();
+                throw new RepairsServiceException(response.ErrorMessage);
             }
 
             var repairResponse = response.RepairRequest;
@@ -212,7 +210,7 @@ namespace HackneyRepairs.Actions
     }
     
     public class MissingUHUsernameException : Exception
-    {        
+    {
     }
 
     public class MissingUHWebSessionTokenException : Exception
@@ -225,5 +223,12 @@ namespace HackneyRepairs.Actions
 
 	public class RepairsServiceException : Exception
 	{
-	}
+        public RepairsServiceException()
+        {
+        }
+
+        public RepairsServiceException(string message) : base(message)
+        {
+        }
+    }
 }

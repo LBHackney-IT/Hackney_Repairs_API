@@ -55,20 +55,39 @@ namespace HackneyRepairs.Controllers
             {
                 // Validate the request
                 var validationResult = _repairRequestValidator.Validate(request);
-                if (validationResult.Valid)
-                {
-                    RepairsActions actions = new RepairsActions(_repairsService, _requestBuilder, _loggerAdapter);
-                    var result = await actions.CreateRepair(request);
-                    return ResponseBuilder.Ok(result);
-                }
+                if (!validationResult.Valid)
+                    return ResponseBuilder.ErrorFromList(400, validationResult.RepairApiError);
 
+                RepairsActions actions = new RepairsActions(_repairsService, _requestBuilder, _loggerAdapter);
+                var result = await actions.CreateRepair(request);
+
+                return ResponseBuilder.Ok(result);
+               
                 //Old errors api response
                 /*var errors = validationResult.ErrorMessages.Select(error => new ApiErrorMessage
                 {
                     DeveloperMessage = error,
                     UserMessage = error
-                }).ToList();*/
-                return ResponseBuilder.ErrorFromList(400, validationResult.RepairApiError);
+                }).ToList();*/ 
+            }
+            catch (MissingUHUsernameException ex)
+            {
+                _exceptionLogger.CaptureException(ex);
+                return ResponseBuilder.Error(500, "We couldn't find an Universal Housing account for the currently logged in user. " +
+                    "This is probably because there is no account set up in UH or the registered email " +
+                    "address does not match Azure Active Directory. Please, contact an administrator.", "We had some problems processing your request");
+            }
+            catch (MissingUHWebSessionTokenException ex)
+            {
+                _exceptionLogger.CaptureException(ex);
+                return ResponseBuilder.Error(500, "There was an error authenticating the currently logged in user with Universal Housing. " +
+                    "Please, contact support.", 
+                    "We had some problems processing your request");
+            }
+            catch (RepairsServiceException ex)
+            {
+                _exceptionLogger.CaptureException(ex);
+                return ResponseBuilder.Error(500, "There was an error creating ther repair request: " + ex.Message, ex.Message);
             }
             catch (Exception ex)
             {
