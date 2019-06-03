@@ -14,5 +14,6 @@ namespace HackneyRepairs.Interfaces
         NewRepairTasksRequest BuildNewRepairTasksRequestAsUser(RepairRequest request, string sessionToken);
         NewRepairTasksRequest BuildNewRepairTasksRequest(RepairRequest request);
         WorksOrderRequest BuildWorksOrderRequest(string request);
+        WorksOrderRequest BuildWorksOrderRequestWithSession(string request, string sessionToken);
     }
 }

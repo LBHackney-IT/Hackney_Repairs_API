@@ -120,6 +120,16 @@ namespace HackneyRepairs.Services
             throw new NotImplementedException();
         }
 
+        public WorksOrderRequest BuildWorksOrderRequestWithSession(string request, string sessionToken)
+        {
+            return new WorksOrderRequest
+            {
+                OrderReference = request,
+                SessionToken = sessionToken,
+                SourceSystem = GetUhSourceSystem()
+            };
+        }
+
         public WorksOrderRequest BuildWorksOrderRequest(string request)
         {
             return new WorksOrderRequest
