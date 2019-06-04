@@ -11,6 +11,9 @@ using HackneyRepairs.Models;
 using HackneyRepairs.Repository;
 using Microsoft.AspNetCore.Mvc;
 using HackneyRepairs.Validators;
+using HackneyRepairs.Services;
+using System.Collections;
+using System.Configuration;
 
 namespace HackneyRepairs.Controllers
 {
@@ -21,17 +24,24 @@ namespace HackneyRepairs.Controllers
 		private IHackneyWorkOrdersService _workOrdersService;
 		private ILoggerAdapter<WorkOrdersActions> _workOrderLoggerAdapter;
 
+        private HackneyConfigurationBuilder _configBuilder;
         private IHackneyRepairsService _repairsService;
         private IHackneyRepairsServiceRequestBuilder _requestBuilder;
-        private ILoggerAdapter<RepairsActions> _loggerAdapter;
+        private ILoggerAdapter<RepairsActions> _repairsLoggerAdapter;
 
         private readonly IExceptionLogger _exceptionLogger;
 
-	    public WorkOrdersController(ILoggerAdapter<WorkOrdersActions> workOrderLoggerAdapter, ILoggerAdapter<RepairsActions> loggerAdapter, IUhtRepository uhtRepository, IUhwRepository uhwRepository, IUHWWarehouseRepository uhWarehouseRepository, IExceptionLogger exceptionLogger)
+	    public WorkOrdersController(ILoggerAdapter<WorkOrdersActions> workOrderLoggerAdapter, ILoggerAdapter<RepairsActions> repairsLoggerAdapter, IUhtRepository uhtRepository, IUhwRepository uhwRepository, IUHWWarehouseRepository uhWarehouseRepository, IUhWebRepository uhWebRepository, IExceptionLogger exceptionLogger)
 		{
 			_workOrderLoggerAdapter = workOrderLoggerAdapter;
 		    _exceptionLogger = exceptionLogger;
-            _loggerAdapter = loggerAdapter;
+
+            _repairsLoggerAdapter = repairsLoggerAdapter;
+            var factory = new HackneyRepairsServiceFactory();
+            _configBuilder = new HackneyConfigurationBuilder((Hashtable)Environment.GetEnvironmentVariables(), ConfigurationManager.AppSettings);
+
+            _repairsService = factory.build(uhtRepository, uhwRepository, uhWarehouseRepository, uhWebRepository, _repairsLoggerAdapter);
+            _requestBuilder = new HackneyRepairsServiceRequestBuilder(_configBuilder.getConfiguration());
 
             var workOrderServiceFactory = new HackneyWorkOrdersServiceFactory();
 			_workOrdersService = workOrderServiceFactory.build(uhtRepository, uhwRepository, uhWarehouseRepository, _workOrderLoggerAdapter);
@@ -302,7 +312,7 @@ namespace HackneyRepairs.Controllers
 
             try
             {
-                RepairsActions repairActions = new RepairsActions(_repairsService, _requestBuilder, _loggerAdapter);
+                RepairsActions repairActions = new RepairsActions(_repairsService, _requestBuilder, _repairsLoggerAdapter);
                 var result = await repairActions.IssueOrderAsync(workOrderReference, lbhEmail);
                 return ResponseBuilder.Ok(result);
             }
