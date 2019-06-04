@@ -226,7 +226,7 @@ namespace HackneyRepairs.Tests.Actions
             var repairsActions = new RepairsActions(fakeRepairService.Object, fakeRequestBuilder.Object, mockLogger.Object);
             var result = await repairsActions.CreateRepair(request);
             var workOrders = new object[1];
-            workOrders[0] = new { workOrderReference = "987654", sorCode = "12345678", supplierReference = "00000127" };
+            workOrders[0] = new { workOrderReference = "987654", sorCode = "12345678", supplierRef = "00000127" };
             var response1 = new
             {
                 repairRequestReference = "123456",
@@ -416,7 +416,7 @@ namespace HackneyRepairs.Tests.Actions
             var repairsActions = new RepairsActions(fakeRepairService.Object, fakeRequestBuilder.Object, mockLogger.Object);
             var result = await repairsActions.CreateRepair(request);
             var workOrders = new object[1];
-            workOrders[0] = new { workOrderReference = "987654", sorCode = "12345678", supplierReference = "00000127" };
+            workOrders[0] = new { workOrderReference = "987654", sorCode = "12345678", supplierRef = "00000127" };
             var response1 = new
             {
                 repairRequestReference = "123456",

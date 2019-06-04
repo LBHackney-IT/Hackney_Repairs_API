@@ -89,29 +89,6 @@ namespace HackneyRepairs.Controllers
             }
         }
 
-        /// <summary>
-        /// Creates an appointment
-        /// </summary>
-        /// <param name="workOrderReference">The reference number of the work order for the appointment</param>
-        /// <param name="lbhEmail">Email address of user making issue_order request</param>
-        /// <returns>A JSON object for a successfully created appointment</returns>
-        /// <response code="200">A successfully created repair request</response>
-        [HttpPost("issue_order")]
-        public async Task<JsonResult> IssueOrder(string workOrderReference, string lbhEmail)
-        {
-            try
-            {
-                RepairsActions repairActions = new RepairsActions(_repairsService, _requestBuilder, _loggerAdapter);
-                var result = await repairActions.IssueOrderAsync(workOrderReference, lbhEmail);
-                return ResponseBuilder.Ok(result);
-            }
-            catch (Exception ex)
-            {
-                _exceptionLogger.CaptureException(ex);
-                return ResponseBuilder.Error(500, "We had some problems processing your request", ex.Message);
-            }
-        }
-
         // GET repair by reference
         /// <summary>
         /// Retrieves a repair request

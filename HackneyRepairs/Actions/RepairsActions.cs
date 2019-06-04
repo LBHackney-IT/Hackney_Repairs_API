@@ -111,7 +111,7 @@ namespace HackneyRepairs.Actions
             //Issue Order
             //foreach (WorksOrderDto workorder in workOrderList)
             //{
-            //    _logger.LogInformation($"Issuing order for workorder {workorder.OrderReference}");
+                //_logger.LogInformation($"Issuing order for workorder {workorder.OrderReference}");
 
             //    var worksOrderRequest = _requestBuilder.BuildWorksOrderRequestWithSession(workorder.OrderReference, sessionToken);
             //    var issueOrderResponse = await _repairsService.IssueOrderAsync(worksOrderRequest);
@@ -135,7 +135,7 @@ namespace HackneyRepairs.Actions
                 {
                     workOrderReference = s.WorksOrderReference.Trim(),
                     sorCode = s.JobCode.Trim(),
-                    supplierReference = s.SupplierReference.Trim()
+                    supplierRef = s.SupplierReference.Trim()
                 }).ToArray()
             };
         }
@@ -146,19 +146,16 @@ namespace HackneyRepairs.Actions
             string sessionToken = string.Empty;
             string uHUsername = string.Empty;
 
-            if (!string.IsNullOrEmpty(lbhEmail))
+            uHUsername = _repairsService.GetUHUsername(lbhEmail);
+            if (string.IsNullOrEmpty(uHUsername))
             {
-                uHUsername = _repairsService.GetUHUsername(lbhEmail);
-                if (string.IsNullOrEmpty(uHUsername))
-                {
-                    throw new MissingUHUsernameException();
-                }
+                throw new MissingUHUsernameException();
+            }
 
-                sessionToken = _repairsService.GenerateUHSession(uHUsername);
-                if (string.IsNullOrEmpty(sessionToken))
-                {
-                    throw new MissingUHWebSessionTokenException();
-                }
+            sessionToken = _repairsService.GenerateUHSession(uHUsername);
+            if (string.IsNullOrEmpty(sessionToken))
+            {
+                throw new MissingUHWebSessionTokenException();
             }
 
             var worksOrderRequest = _requestBuilder.BuildWorksOrderRequestWithSession(workOrderReference, sessionToken);
