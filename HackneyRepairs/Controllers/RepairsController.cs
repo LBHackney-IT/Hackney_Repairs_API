@@ -62,13 +62,6 @@ namespace HackneyRepairs.Controllers
                 var result = await actions.CreateRepair(request);
 
                 return ResponseBuilder.Ok(result);
-               
-                //Old errors api response
-                /*var errors = validationResult.ErrorMessages.Select(error => new ApiErrorMessage
-                {
-                    DeveloperMessage = error,
-                    UserMessage = error
-                }).ToList();*/ 
             }
             catch (MissingUHUsernameException ex)
             {

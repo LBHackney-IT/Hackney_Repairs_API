@@ -10,6 +10,10 @@ using HackneyRepairs.Interfaces;
 using HackneyRepairs.Models;
 using HackneyRepairs.Repository;
 using Microsoft.AspNetCore.Mvc;
+using HackneyRepairs.Validators;
+using HackneyRepairs.Services;
+using System.Collections;
+using System.Configuration;
 
 namespace HackneyRepairs.Controllers
 {
@@ -19,14 +23,27 @@ namespace HackneyRepairs.Controllers
 	{
 		private IHackneyWorkOrdersService _workOrdersService;
 		private ILoggerAdapter<WorkOrdersActions> _workOrderLoggerAdapter;
-	    private readonly IExceptionLogger _exceptionLogger;
 
-	    public WorkOrdersController(ILoggerAdapter<WorkOrdersActions> workOrderLoggerAdapter, IUhtRepository uhtRepository, IUhwRepository uhwRepository, IUHWWarehouseRepository uhWarehouseRepository, IExceptionLogger exceptionLogger)
+        private HackneyConfigurationBuilder _configBuilder;
+        private IHackneyRepairsService _repairsService;
+        private IHackneyRepairsServiceRequestBuilder _requestBuilder;
+        private ILoggerAdapter<RepairsActions> _repairsLoggerAdapter;
+
+        private readonly IExceptionLogger _exceptionLogger;
+
+	    public WorkOrdersController(ILoggerAdapter<WorkOrdersActions> workOrderLoggerAdapter, ILoggerAdapter<RepairsActions> repairsLoggerAdapter, IUhtRepository uhtRepository, IUhwRepository uhwRepository, IUHWWarehouseRepository uhWarehouseRepository, IUhWebRepository uhWebRepository, IExceptionLogger exceptionLogger)
 		{
 			_workOrderLoggerAdapter = workOrderLoggerAdapter;
 		    _exceptionLogger = exceptionLogger;
-		    
-		    var workOrderServiceFactory = new HackneyWorkOrdersServiceFactory();
+
+            _repairsLoggerAdapter = repairsLoggerAdapter;
+            var factory = new HackneyRepairsServiceFactory();
+            _configBuilder = new HackneyConfigurationBuilder((Hashtable)Environment.GetEnvironmentVariables(), ConfigurationManager.AppSettings);
+
+            _repairsService = factory.build(uhtRepository, uhwRepository, uhWarehouseRepository, uhWebRepository, _repairsLoggerAdapter);
+            _requestBuilder = new HackneyRepairsServiceRequestBuilder(_configBuilder.getConfiguration());
+
+            var workOrderServiceFactory = new HackneyWorkOrdersServiceFactory();
 			_workOrdersService = workOrderServiceFactory.build(uhtRepository, uhwRepository, uhWarehouseRepository, _workOrderLoggerAdapter);
 		}
 
@@ -278,5 +295,32 @@ namespace HackneyRepairs.Controllers
                 return ResponseBuilder.Error(500, "We had issues processing your request.", ex.Message);
             }
         }
-	}
+
+        /// <summary>
+        /// Creates an appointment
+        /// </summary>
+        /// <param name="workOrderReference">The reference number of the work order for the appointment</param>
+        /// <param name="lbhUserSession"> JSON object with Email address of user making issue_order request</param>
+        /// <returns>A JSON object for a successfully created appointment</returns>
+        /// <response code="200">A successfully created repair request</response>
+        [HttpPut("{workOrderReference}/issue_order")]
+        public async Task<JsonResult> IssueOrder(string workOrderReference, [FromBody]string lbhEmail)
+        {
+            //string lbhEmail = lbhUserSession.GetType().GetProperty("lbhEmail").GetValue(lbhUserSession, null).ToString();
+            if (!EmailValidator.Validate(lbhEmail))
+                return ResponseBuilder.Error(500, "Please check your email address", "We had some problems processing your request");
+
+            try
+            {
+                RepairsActions repairActions = new RepairsActions(_repairsService, _requestBuilder, _repairsLoggerAdapter);
+                var result = await repairActions.IssueOrderAsync(workOrderReference, lbhEmail);
+                return ResponseBuilder.Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _exceptionLogger.CaptureException(ex);
+                return ResponseBuilder.Error(500, "We had some problems processing your request", ex.Message);
+            }
+        }
+    }
 }

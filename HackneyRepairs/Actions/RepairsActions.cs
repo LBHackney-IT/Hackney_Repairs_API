@@ -105,7 +105,23 @@ namespace HackneyRepairs.Actions
             }
 
             var workOrderItem = workOrderList.FirstOrDefault();
-         
+            // update the request status to 000
+            _repairsService.UpdateRequestStatus(workOrderItem.RepairRequestReference.Trim());
+
+            //Issue Order
+            //foreach (WorksOrderDto workorder in workOrderList)
+            //{
+                //_logger.LogInformation($"Issuing order for workorder {workorder.OrderReference}");
+
+            //    var worksOrderRequest = _requestBuilder.BuildWorksOrderRequestWithSession(workorder.OrderReference, sessionToken);
+            //    var issueOrderResponse = await _repairsService.IssueOrderAsync(worksOrderRequest);
+
+            //    if (!issueOrderResponse.Success)
+            //    {
+            //        _logger.LogError(issueOrderResponse.ErrorMessage);
+            //        throw new AppointmentServiceException();
+            //    }
+            //}
             var repairTasksResponse = await GetRepairTasksList(workOrderItem.RepairRequestReference);
             var tasksList = repairTasksResponse.TaskList;
             return new
@@ -119,9 +135,39 @@ namespace HackneyRepairs.Actions
                 {
                     workOrderReference = s.WorksOrderReference.Trim(),
                     sorCode = s.JobCode.Trim(),
-                    supplierReference = s.SupplierReference.Trim()
+                    supplierRef = s.SupplierReference.Trim()
                 }).ToArray()
             };
+        }
+
+        public async Task<object> IssueOrderAsync(string workOrderReference, string lbhEmail)
+        {
+            _logger.LogInformation($"Issuing order for workorder {workOrderReference}");
+            string sessionToken = string.Empty;
+            string uHUsername = string.Empty;
+
+            uHUsername = _repairsService.GetUHUsername(lbhEmail);
+            if (string.IsNullOrEmpty(uHUsername))
+            {
+                throw new MissingUHUsernameException();
+            }
+
+            sessionToken = _repairsService.GenerateUHSession(uHUsername);
+            if (string.IsNullOrEmpty(sessionToken))
+            {
+                throw new MissingUHWebSessionTokenException();
+            }
+
+            var worksOrderRequest = _requestBuilder.BuildWorksOrderRequestWithSession(workOrderReference, sessionToken);
+            var issueOrderResponse = await _repairsService.IssueOrderAsync(worksOrderRequest);
+
+            if (!issueOrderResponse.Success)
+            {
+                _logger.LogError(issueOrderResponse.ErrorMessage);
+                throw new AppointmentServiceException();
+            }
+
+            return issueOrderResponse;
         }
 
         private async Task<object> CreateRepairWithoutOrder(RepairRequest request)

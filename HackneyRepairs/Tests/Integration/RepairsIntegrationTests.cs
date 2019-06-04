@@ -181,7 +181,7 @@ namespace HackneyRepairs.Tests.Integration
             responsejson.Append("{");
             responsejson.Append("\"workOrderReference\":\"987654\",");
             responsejson.Append("\"sorCode\":\"20090190\",");
-            responsejson.Append("\"supplierReference\":\"000000127\"");
+            responsejson.Append("\"supplierRef\":\"000000127\"");
             responsejson.Append("}]");
             responsejson.Append("}");
 

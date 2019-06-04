@@ -193,11 +193,24 @@ namespace HackneyRepairs.Tests.Actions
                     }
                 }.ToArray()
             };
+
+            var worksOrderRequest = new WorksOrderRequest
+            {
+                OrderReference = "987654",
+                SessionToken = "ba1b3444-491b-43ff-9af9-cdf64623f624",
+                SourceSystem = "HackneyAPI"
+            };
+
+            var webResponse = new RepairsService.WebResponse
+            {
+                Success = true
+            };
+                
+            fakeRepairService.Setup(service => service.GetUHUsername("bob@hackney.gov.uk")).Returns("bob");
+            fakeRepairService.Setup(service => service.GenerateUHSession("bob")).Returns("ba1b3444-491b-43ff-9af9-cdf64623f624");
             fakeRepairService.Setup(service => service.CreateRepairWithOrderAsync(repairRequest))
                 .ReturnsAsync(response);
             fakeRepairService.Setup(service => service.UpdateRequestStatus("123456")).ReturnsAsync(true);
-            fakeRepairService.Setup(service => service.GetUHUsername("bob@hackney.gov.uk")).Returns("bob");
-            fakeRepairService.Setup(service => service.GenerateUHSession("bob")).Returns("ba1b3444-491b-43ff-9af9-cdf64623f624");
 
             fakeRepairService.Setup(service => service.GetRepairTasksAsync(It.IsAny<RepairRefRequest>()))
                 .ReturnsAsync(tasksListResponse);
@@ -207,10 +220,13 @@ namespace HackneyRepairs.Tests.Actions
             fakeRequestBuilder.Setup(builder => builder.BuildNewRepairTasksRequestAsUser(request, "ba1b3444-491b-43ff-9af9-cdf64623f624")).Returns(repairRequest);
             fakeRequestBuilder.Setup(builder => builder.BuildRepairRequest("123456")).Returns(new RepairRefRequest());
 
+            //fakeRequestBuilder.Setup(builder => builder.BuildWorksOrderRequestWithSession("987654", "ba1b3444-491b-43ff-9af9-cdf64623f624")).Returns(worksOrderRequest);
+            //fakeRepairService.Setup(service => service.IssueOrderAsync(worksOrderRequest))
+            //    .ReturnsAsync(webResponse);
             var repairsActions = new RepairsActions(fakeRepairService.Object, fakeRequestBuilder.Object, mockLogger.Object);
             var result = await repairsActions.CreateRepair(request);
             var workOrders = new object[1];
-            workOrders[0] = new { workOrderReference = "987654", sorCode = "12345678", supplierReference = "00000127" };
+            workOrders[0] = new { workOrderReference = "987654", sorCode = "12345678", supplierRef = "00000127" };
             var response1 = new
             {
                 repairRequestReference = "123456",
@@ -225,14 +241,84 @@ namespace HackneyRepairs.Tests.Actions
         }
 
         [Fact]
+        public async Task create_works_order_request_with_username_to_issue_order_returns_web_response_object()
+        {
+            var mockLogger = new Mock<ILoggerAdapter<RepairsActions>>();
+            var fakeRepairService = new Mock<IHackneyRepairsService>();
+
+            var worksOrderRequest = new WorksOrderRequest
+            {
+                OrderReference = "987654",
+                SessionToken = "ba1b3444-491b-43ff-9af9-cdf64623f624",
+                SourceSystem = "HackneyAPI"
+            };
+
+            var webResponse = new RepairsService.WebResponse
+            {
+                Success = true
+            };
+
+            fakeRepairService.Setup(service => service.GetUHUsername("bob@hackney.gov.uk")).Returns("bob");
+            fakeRepairService.Setup(service => service.GenerateUHSession("bob")).Returns("ba1b3444-491b-43ff-9af9-cdf64623f624");
+
+            var fakeRequestBuilder = new Mock<IHackneyRepairsServiceRequestBuilder>();
+            fakeRequestBuilder.Setup(builder => builder.BuildWorksOrderRequestWithSession("987654", "ba1b3444-491b-43ff-9af9-cdf64623f624")).Returns(worksOrderRequest);
+
+            fakeRepairService.Setup(service => service.IssueOrderAsync(worksOrderRequest))
+                .ReturnsAsync(webResponse);
+
+            var repairsActions = new RepairsActions(fakeRepairService.Object, fakeRequestBuilder.Object, mockLogger.Object);
+            var result = await repairsActions.IssueOrderAsync("987654", "bob@hackney.gov.uk");
+
+            Assert.Equal(JsonConvert.SerializeObject(webResponse), JsonConvert.SerializeObject(result));
+        }
+
+        [Fact]
         public async Task create_repair_with_work_order_returns_a_created_repair_response_object_with_orders_included()
         {
             var mockLogger = new Mock<ILoggerAdapter<RepairsActions>>();
+            //var request = new RepairRequest
+            //{
+            //    ProblemDescription = "tap leaking",
+            //    Priority = "N",
+            //    PropertyReference = "00000320",
+            //    Contact = new RepairRequestContact
+            //    {
+            //        Name = "Test",
+            //        TelephoneNumber = "0123456789"
+            //    },
+            //    WorkOrders = new List<WorkOrder>
+            //    {
+            //        new WorkOrder
+            //        {
+            //            SorCode = "20090190"
+            //        }
+            //    }
+            //};
+
+            //var repairRequest = new NewRepairTasksRequest
+            //{
+            //    RepairRequest = new RepairRequestInfo
+            //    {
+            //        PropertyRef = request.PropertyReference,
+            //        Priority = request.Priority,
+            //        Problem = request.ProblemDescription
+            //    },
+            //    TaskList = new List<RepairTaskInfo>
+            //    {
+            //        new RepairTaskInfo
+            //        {
+            //            JobCode = "12345678",
+            //            PropertyReference = "00000320",
+            //        }
+            //    }.ToArray()
+            //};
             var request = new RepairRequest
             {
                 ProblemDescription = "tap leaking",
                 Priority = "N",
                 PropertyReference = "00000320",
+                LBHEmail = "bob@hackney.gov.uk",
                 Contact = new RepairRequestContact
                 {
                     Name = "Test",
@@ -262,9 +348,13 @@ namespace HackneyRepairs.Tests.Actions
                         JobCode = "12345678",
                         PropertyReference = "00000320",
                     }
-                }.ToArray()
+                }.ToArray(),
+                SessionToken = "ba1b3444-491b-43ff-9af9-cdf64623f624",
+                CompanyCode = "001"
             };
+
             var fakeRepairService = new Mock<IHackneyRepairsService>();
+
             var response = new WorksOrderListResponse
             {
                 Success = true,
@@ -279,6 +369,7 @@ namespace HackneyRepairs.Tests.Actions
                     }
                 }.ToArray()
             };
+
             var tasksListResponse = new TaskListResponse
             {
                 Success = true,
@@ -292,6 +383,21 @@ namespace HackneyRepairs.Tests.Actions
                     }
                 }.ToArray()
             };
+
+            var worksOrderRequest = new WorksOrderRequest
+            {
+                OrderReference = "987654",
+                SessionToken = "ba1b3444-491b-43ff-9af9-cdf64623f624",
+                SourceSystem = "HackneyAPI"
+            };
+
+            var webResponse = new RepairsService.WebResponse
+            {
+                Success = true
+            };
+
+            fakeRepairService.Setup(service => service.GetUHUsername("bob@hackney.gov.uk")).Returns("bob");
+            fakeRepairService.Setup(service => service.GenerateUHSession("bob")).Returns("ba1b3444-491b-43ff-9af9-cdf64623f624");
             fakeRepairService.Setup(service => service.CreateRepairWithOrderAsync(repairRequest))
                 .ReturnsAsync(response);
             fakeRepairService.Setup(service => service.UpdateRequestStatus("123456")).ReturnsAsync(true);
@@ -300,13 +406,17 @@ namespace HackneyRepairs.Tests.Actions
                 .ReturnsAsync(tasksListResponse);
 
             var fakeRequestBuilder = new Mock<IHackneyRepairsServiceRequestBuilder>();
-            fakeRequestBuilder.Setup(builder => builder.BuildNewRepairTasksRequest(request)).Returns(repairRequest);
+            //fakeRequestBuilder.Setup(builder => builder.BuildNewRepairTasksRequest(request)).Returns(repairRequest);
+            //fakeRequestBuilder.Setup(builder => builder.BuildRepairRequest("123456")).Returns(new RepairRefRequest());
+            fakeRequestBuilder.Setup(builder => builder.BuildNewRepairTasksRequestAsUser(request, "ba1b3444-491b-43ff-9af9-cdf64623f624")).Returns(repairRequest);
             fakeRequestBuilder.Setup(builder => builder.BuildRepairRequest("123456")).Returns(new RepairRefRequest());
-                
+            //fakeRequestBuilder.Setup(builder => builder.BuildWorksOrderRequestWithSession("987654", "ba1b3444-491b-43ff-9af9-cdf64623f624")).Returns(worksOrderRequest);
+            //fakeRepairService.Setup(service => service.IssueOrderAsync(worksOrderRequest))
+            //    .ReturnsAsync(webResponse);
             var repairsActions = new RepairsActions(fakeRepairService.Object, fakeRequestBuilder.Object, mockLogger.Object);
             var result = await repairsActions.CreateRepair(request);
             var workOrders = new object[1];
-            workOrders[0] = new { workOrderReference = "987654", sorCode = "12345678", supplierReference = "00000127" };
+            workOrders[0] = new { workOrderReference = "987654", sorCode = "12345678", supplierRef = "00000127" };
             var response1 = new
             {
                 repairRequestReference = "123456",
