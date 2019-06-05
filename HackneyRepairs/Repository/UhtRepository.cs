@@ -316,7 +316,7 @@ namespace HackneyRepairs.Repository
                             LTRIM(RTRIM(wo.prop_ref)) AS PropertyReference,
                             LTRIM(RTRIM(t.job_code)) AS SORCode,
                             LTRIM(RTRIM(tr.trade_desc)) AS Trade,
-                            wo.sup_ref AS SupplierRef
+                            LTRIM(RTRIM(wo.sup_ref)) AS SupplierRef
                         FROM 
                             rmworder wo
                             INNER JOIN rmreqst r ON wo.rq_ref = r.rq_ref
