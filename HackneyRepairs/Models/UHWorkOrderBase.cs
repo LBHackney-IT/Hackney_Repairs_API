@@ -16,5 +16,7 @@ namespace HackneyRepairs.Models
         public string DLOStatus { get; set; }
         public string ServitorReference { get; set; }
 		public string PropertyReference { get; set; }
-	}
+
+        public string SupplierRef { get; set; }
+    }
 }
