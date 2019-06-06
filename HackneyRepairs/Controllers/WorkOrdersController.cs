@@ -309,6 +309,11 @@ namespace HackneyRepairs.Controllers
             //string lbhEmail = lbhUserSession.GetType().GetProperty("lbhEmail").GetValue(lbhUserSession, null).ToString();
             if (!EmailValidator.Validate(lbhEmail))
                 return ResponseBuilder.Error(500, "Please check your email address", "We had some problems processing your request");
+            var workOrdersActions = new WorkOrdersActions(_workOrdersService, _workOrderLoggerAdapter);
+            var workOrderResult = await workOrdersActions.GetWorkOrder(workOrderReference) as UHWorkOrder;
+
+            if (!SupplierRefDLOValidator.Validate(workOrderResult.SupplierRef))
+                return ResponseBuilder.Error(500, "We cannot issue an order for this supplier reference", "We had some problems processing your request");
 
             try
             {
