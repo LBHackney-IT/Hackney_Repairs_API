@@ -66,9 +66,8 @@ namespace HackneyRepairs.Controllers
             catch (MissingUHUsernameException ex)
             {
                 _exceptionLogger.CaptureException(ex);
-                return ResponseBuilder.Error(500, "We couldn't find an Universal Housing account for the currently logged in user. " +
-                    "This is probably because there is no account set up in UH or the registered email " +
-                    "address does not match Azure Active Directory. Please, contact an administrator.", "We had some problems processing your request");
+                return ResponseBuilder.Error(500, "We were unable to raise the repair. It looks like your user account does not have an " +
+                    "associated Universal Housing (UH) account. Please, contact an administrator.", "We had some problems processing your request");
             }
             catch (MissingUHWebSessionTokenException ex)
             {

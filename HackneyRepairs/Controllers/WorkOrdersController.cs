@@ -297,17 +297,17 @@ namespace HackneyRepairs.Controllers
         }
 
         /// <summary>
-        /// Creates an appointment
+        /// Updates 
         /// </summary>
         /// <param name="workOrderReference">The reference number of the work order for the appointment</param>
-        /// <param name="lbhUserSession"> JSON object with Email address of user making issue_order request</param>
+        /// <param name="lbhEmail"> JSON object with Email address of user making issue_order request</param>
         /// <returns>A JSON object for a successfully created appointment</returns>
-        /// <response code="200">A successfully created repair request</response>
-        [HttpPut("{workOrderReference}/issue_order")]
-        public async Task<JsonResult> IssueOrder(string workOrderReference, [FromBody]string lbhEmail)
+        /// <response code="200">A successfully created order</response>
+        [HttpPost("{workOrderReference}/issue")]
+        public async Task<JsonResult> IssueOrder(string workOrderReference, [FromBody]RepairRequest request)
         {
-            //string lbhEmail = lbhUserSession.GetType().GetProperty("lbhEmail").GetValue(lbhUserSession, null).ToString();
-            if (!EmailValidator.Validate(lbhEmail))
+            //string email = this.Request.Headers["x-lhbEmail"].ToString();
+            if (!EmailValidator.Validate(request.LBHEmail))
                 return ResponseBuilder.Error(500, "Please check your email address", "We had some problems processing your request");
             var workOrdersActions = new WorkOrdersActions(_workOrdersService, _workOrderLoggerAdapter);
             var workOrderResult = await workOrdersActions.GetWorkOrder(workOrderReference) as UHWorkOrder;
@@ -318,7 +318,7 @@ namespace HackneyRepairs.Controllers
             try
             {
                 RepairsActions repairActions = new RepairsActions(_repairsService, _requestBuilder, _repairsLoggerAdapter);
-                var result = await repairActions.IssueOrderAsync(workOrderReference, lbhEmail);
+                var result = await repairActions.IssueOrderAsync(workOrderReference, request.LBHEmail);
                 return ResponseBuilder.Ok(result);
             }
             catch (Exception ex)
