@@ -313,7 +313,10 @@ namespace HackneyRepairs.Controllers
             var workOrderResult = await workOrdersActions.GetWorkOrder(workOrderReference) as UHWorkOrder;
 
             if (!SupplierRefDLOValidator.Validate(workOrderResult.SupplierRef))
-                return ResponseBuilder.Error(500, "We cannot issue an order for this supplier reference", "We had some problems processing your request");
+            {
+                return ResponseBuilder.Error(500, "Could not issue order. The work order is associated to an external supplier and this " +
+                    "process is intended only for orders issued to the DLO.", "We had some problems processing your request");
+            }
 
             try
             {
