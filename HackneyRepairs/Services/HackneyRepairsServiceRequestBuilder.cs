@@ -126,7 +126,8 @@ namespace HackneyRepairs.Services
             {
                 OrderReference = request,
                 SessionToken = sessionToken,
-                SourceSystem = GetUhSourceSystem()
+                SourceSystem = GetUhSourceSystem(),
+                CompanyCode = "001"
             };
         }
 
