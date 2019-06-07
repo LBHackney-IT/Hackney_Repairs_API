@@ -23,6 +23,7 @@ namespace HackneyRepairs.Tests.Integration
             Environment.SetEnvironmentVariable("UhtDb", "connectionString=Test");
             Environment.SetEnvironmentVariable("UhwDb", "connectionString=Test");
             Environment.SetEnvironmentVariable("UhWarehouseDb", "connectionString=Test");
+            Environment.SetEnvironmentVariable("UhWebDb", "connectionString=Test");
             _server = new TestServer(new WebHostBuilder().UseStartup<TestStartup>());
             _client = _server.CreateClient();
         }

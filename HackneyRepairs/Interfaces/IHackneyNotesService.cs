@@ -6,5 +6,6 @@ namespace HackneyRepairs.Interfaces
     public interface IHackneyNotesService
     {
         Task AddNote(FullNoteRequest note);
+        //string GetUHUsername(string lbhEmail);
     }
 }

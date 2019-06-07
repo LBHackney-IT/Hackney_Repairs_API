@@ -68,7 +68,8 @@ namespace HackneyRepairs.Tests.Integration
             postBody.Append("\"objectReference\":\"1234567\", ");
             postBody.Append("\"userId\":\"randomUser\", ");
             postBody.Append("\"text\":\"random text\", ");
-            postBody.Append("\"objectKey\":\"uhorder\" ");
+            postBody.Append("\"objectKey\":\"uhorder\", ");
+            postBody.Append("\"lbhEmail\":\"bob@hackney.gov.uk\" ");
             postBody.Append("}");
 
             _client.DefaultRequestHeaders.Accept.Clear();
@@ -86,7 +87,8 @@ namespace HackneyRepairs.Tests.Integration
             postBody.Append("\"objectReference\":\"0\", ");
             postBody.Append("\"userId\":\"randomUser\", ");
             postBody.Append("\"text\":\"random text\", ");
-            postBody.Append("\"objectKey\":\"uhorder\" ");
+            postBody.Append("\"objectKey\":\"uhorder\", ");
+            postBody.Append("\"lbhEmail\":\"bob@hackney.gov.uk\" ");
             postBody.Append("}");
 
             _client.DefaultRequestHeaders.Accept.Clear();

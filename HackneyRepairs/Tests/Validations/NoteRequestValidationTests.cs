@@ -20,7 +20,8 @@ namespace HackneyRepairs.Tests.Validations
             {
                 ObjectKey = "uhorder",
                 Text = "This text is under 2000 chars",
-                ObjectReference = "12345678"
+                ObjectReference = "12345678",
+                LBHEmail = "bob@hackney.gov.uk"            
             };
         }
 
@@ -68,7 +69,8 @@ namespace HackneyRepairs.Tests.Validations
             {
                 ObjectKey = fakeRandomValue.Lorem.Word(),
                 Text = "",
-                ObjectReference = null
+                ObjectReference = null,
+                LBHEmail = "bob@hackeny.gov.uk"             
             };
             var result = requestValidator.Validate(invalidRequest);
 

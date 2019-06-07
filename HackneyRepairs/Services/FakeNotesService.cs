@@ -8,5 +8,9 @@ namespace HackneyRepairs.Services
     public class FakeNotesService : IHackneyNotesService
     {
         public async Task AddNote(FullNoteRequest note) { }
+        //public string GetUHUsername(string lbhEmail)
+        //{
+        //    return "bob";
+        //}
     }
 }

@@ -21,6 +21,13 @@ namespace HackneyRepairs.Services
         {
             _logger.LogInformation($"HackneyNoteService/AddNote(): Calling UHWRepository for adding note to {note.ObjectKey} object for : {note.ObjectReference})");
             await _uhwRepository.AddNote(note);
-        } 
+        }
+
+        //public string GetUHUsername(string lbhEmail)
+        //{
+        //    _logger.LogInformation($"HackneyNoteService/GetUHUsername(): Calling UHWRepository for getting UHUsername from {lbhEmail} object for : {lbhEmail})");
+        //    var response = _uhwRepository.GetUHUsernameByEmail(lbhEmail);
+        //    return response;
+        //}
     }
 }

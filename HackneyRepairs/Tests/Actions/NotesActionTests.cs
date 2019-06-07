@@ -34,9 +34,10 @@ namespace HackneyRepairs.Tests.Actions
             };
             Mock<IHackneyWorkOrdersService> _workOrderService = new Mock<IHackneyWorkOrdersService>();
             Mock<IHackneyNotesService> _notesService = new Mock<IHackneyNotesService>();
+            Mock<IHackneyRepairsService> _repairsService = new Mock<IHackneyRepairsService>();
             _workOrderService.Setup(service => service.GetNoteFeed(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<int>()))
                              .Returns(Task.FromResult<IEnumerable<Note>>(fakeResponse));
-            NoteActions notesActions = new NoteActions(_workOrderService.Object, _notesService.Object, _mockLogger.Object);
+            NoteActions notesActions = new NoteActions(_workOrderService.Object, _notesService.Object, _repairsService.Object, _mockLogger.Object);
             var response = await notesActions.GetNoteFeed(randomReference, "", randomReference);
 
             Assert.True(response is List<Note>);
@@ -51,9 +52,10 @@ namespace HackneyRepairs.Tests.Actions
             };
             Mock<IHackneyWorkOrdersService> _workOrderService = new Mock<IHackneyWorkOrdersService>();
             Mock<IHackneyNotesService> _notesService = new Mock<IHackneyNotesService>();
+            Mock<IHackneyRepairsService> _repairsService = new Mock<IHackneyRepairsService>();
             _workOrderService.Setup(service => service.GetNoteFeed(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<int>()))
                              .Returns(Task.FromResult<IEnumerable<Note>>(fakeResponse));
-            NoteActions notesActions = new NoteActions(_workOrderService.Object, _notesService.Object, _mockLogger.Object);
+            NoteActions notesActions = new NoteActions(_workOrderService.Object, _notesService.Object, _repairsService.Object, _mockLogger.Object);
             await Assert.ThrowsAsync<MissingNoteTargetException>(async () => await notesActions.GetNoteFeed(randomReference, "notfoundtarget", randomReference));
         }
         #endregion
@@ -64,10 +66,10 @@ namespace HackneyRepairs.Tests.Actions
         {
             Mock<IHackneyWorkOrdersService> _workOrderService = new Mock<IHackneyWorkOrdersService>();
             Mock<IHackneyNotesService> _notesService = new Mock<IHackneyNotesService>();
-
+            Mock<IHackneyRepairsService> _repairsService = new Mock<IHackneyRepairsService>();
             int? response = null;
             _workOrderService.Setup(service => service.GetWorkOrderSid(It.IsAny<string>())).ReturnsAsync(response);
-            NoteActions notesActions = new NoteActions(_workOrderService.Object, _notesService.Object, _mockLogger.Object);
+            NoteActions notesActions = new NoteActions(_workOrderService.Object, _notesService.Object, _repairsService.Object, _mockLogger.Object);
             await Assert.ThrowsAsync<MissingWorkOrderException>(async () => await notesActions.AddNote(new NoteRequest()));
         }
         #endregion
