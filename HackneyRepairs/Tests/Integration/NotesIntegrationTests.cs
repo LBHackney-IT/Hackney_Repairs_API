@@ -23,6 +23,7 @@ namespace HackneyRepairs.Tests.Integration
             Environment.SetEnvironmentVariable("UhWarehouseDb", "database=Test");
             Environment.SetEnvironmentVariable("UhwDb", "database=Test");
             Environment.SetEnvironmentVariable("UhtDb", "database=Test");
+            Environment.SetEnvironmentVariable("UhWebDb", "connectionString=Test");
             _server = new TestServer(new WebHostBuilder().UseStartup<TestStartup>());
             _client = _server.CreateClient();
         }
@@ -68,7 +69,8 @@ namespace HackneyRepairs.Tests.Integration
             postBody.Append("\"objectReference\":\"1234567\", ");
             postBody.Append("\"userId\":\"randomUser\", ");
             postBody.Append("\"text\":\"random text\", ");
-            postBody.Append("\"objectKey\":\"uhorder\" ");
+            postBody.Append("\"objectKey\":\"uhorder\", ");
+            postBody.Append("\"lbhEmail\":\"bob@hackney.gov.uk\" ");
             postBody.Append("}");
 
             _client.DefaultRequestHeaders.Accept.Clear();
@@ -86,7 +88,8 @@ namespace HackneyRepairs.Tests.Integration
             postBody.Append("\"objectReference\":\"0\", ");
             postBody.Append("\"userId\":\"randomUser\", ");
             postBody.Append("\"text\":\"random text\", ");
-            postBody.Append("\"objectKey\":\"uhorder\" ");
+            postBody.Append("\"objectKey\":\"uhorder\", ");
+            postBody.Append("\"lbhEmail\":\"bob@hackney.gov.uk\" ");
             postBody.Append("}");
 
             _client.DefaultRequestHeaders.Accept.Clear();

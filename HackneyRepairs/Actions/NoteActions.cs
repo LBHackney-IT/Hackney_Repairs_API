@@ -12,12 +12,14 @@ namespace HackneyRepairs.Actions
         private readonly ILoggerAdapter<NoteActions> _logger;
         private readonly IHackneyWorkOrdersService _workOrdersService;
         private readonly IHackneyNotesService _notesService;
+        private readonly IHackneyRepairsService _repairsService;
 
-        public NoteActions(IHackneyWorkOrdersService workOrdersService, IHackneyNotesService notesService,  ILoggerAdapter<NoteActions> logger)
+        public NoteActions(IHackneyWorkOrdersService workOrdersService, IHackneyNotesService notesService, IHackneyRepairsService repairsService, ILoggerAdapter<NoteActions> logger)
         {
             _logger = logger;
             _workOrdersService = workOrdersService;
             _notesService = notesService;
+            _repairsService = repairsService;
         }
 
         public async Task<IEnumerable<Note>> GetNoteFeed(int startId, string noteTarget, int size)
@@ -42,6 +44,13 @@ namespace HackneyRepairs.Actions
                 throw new MissingWorkOrderException();
             }
 
+            string uHUsername = _repairsService.GetUHUsername(note.LBHEmail);
+            if (string.IsNullOrEmpty(uHUsername))
+            {
+                throw new MissingUHUsernameException();
+            }
+
+            note.UHUsername = uHUsername;
             var fullNote = BuildFullNote(note, workOrderSid.Value);
             await _notesService.AddNote(fullNote);
         }
@@ -59,7 +68,9 @@ namespace HackneyRepairs.Actions
                 ObjectKey = note.ObjectKey,
                 ObjectReference = note.ObjectReference,
                 WorkOrderSid = workOrderSid,
-                Text = note.Text
+                Text = note.Text,
+                LBHEmail = note.LBHEmail,
+                UHUsername = note.UHUsername
             };
         }
     }

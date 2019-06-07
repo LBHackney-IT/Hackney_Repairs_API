@@ -17,6 +17,12 @@ namespace HackneyRepairs.Validators
             }
             else
             {
+                if (!EmailValidator.Validate(request.LBHEmail))
+                {
+                    validationResult.Valid = false;
+                    validationResult.ErrorMessages.Add("Please check your email address");
+                }
+
                 if (string.IsNullOrWhiteSpace(request.ObjectKey) || !string.Equals(request.ObjectKey.ToLower(), "uhorder"))
                 {
                     validationResult.Valid = false;

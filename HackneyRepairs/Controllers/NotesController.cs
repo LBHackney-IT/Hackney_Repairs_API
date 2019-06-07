@@ -26,16 +26,22 @@ namespace HackneyRepairs.Controllers
         private ILoggerAdapter<WorkOrdersActions> _workOrdersLoggerAdapter;
         private readonly IExceptionLogger _exceptionLogger;
 
-        public NotesController(ILoggerAdapter<NoteActions> logger, ILoggerAdapter<WorkOrdersActions> workOrdersLogger, IUhtRepository uhtRepository, IUhwRepository uhwRepository, IUHWWarehouseRepository uhWarehouseRepository, IExceptionLogger exceptionLogger)
+        private IHackneyRepairsService _repairsService;
+        private ILoggerAdapter<RepairsActions> _repairsLoggerAdapter;
+        public NotesController(ILoggerAdapter<NoteActions> logger, ILoggerAdapter<RepairsActions> loggerAdapter, ILoggerAdapter<WorkOrdersActions> workOrdersLogger, IUhtRepository uhtRepository, IUhwRepository uhwRepository, IUHWWarehouseRepository uhWarehouseRepository, IUhWebRepository uhWebRepository, IExceptionLogger exceptionLogger)
         {
             _workOrdersLoggerAdapter = workOrdersLogger;
             _notesLoggerAdapter = logger;
             var WorkOrdersfactory = new HackneyWorkOrdersServiceFactory();
             var notesfactory = new HackneyNotesServiceFactory();
-            
+
             _workOrdersService = WorkOrdersfactory.build(uhtRepository, uhwRepository, uhWarehouseRepository, _workOrdersLoggerAdapter);
             _notesService = notesfactory.build(uhwRepository, _notesLoggerAdapter);
             _exceptionLogger = exceptionLogger;
+
+            var factory = new HackneyRepairsServiceFactory();
+            _repairsLoggerAdapter = loggerAdapter;
+            _repairsService = factory.build(uhtRepository, uhwRepository, uhWarehouseRepository, uhWebRepository, _repairsLoggerAdapter);
         }
 
         // GET A feed of notes
@@ -67,7 +73,7 @@ namespace HackneyRepairs.Controllers
                 return ResponseBuilder.Error(400, "Missing parameter - notetarget", "Missing parameter - notetarget");
             }
 
-            var notesActions = new NoteActions(_workOrdersService, _notesService, _notesLoggerAdapter);
+            var notesActions = new NoteActions(_workOrdersService, _notesService, _repairsService, _notesLoggerAdapter);
             try
             {
                 var result = await notesActions.GetNoteFeed(startId, noteTarget, resultSize);
@@ -122,7 +128,7 @@ namespace HackneyRepairs.Controllers
                     return ResponseBuilder.ErrorFromList(400, errors);
                 }
 
-                var notesActions = new NoteActions(_workOrdersService, _notesService, _notesLoggerAdapter);
+                var notesActions = new NoteActions(_workOrdersService, _notesService, _repairsService, _notesLoggerAdapter);
 
                 await notesActions.AddNote(request);
                 return NoContent();

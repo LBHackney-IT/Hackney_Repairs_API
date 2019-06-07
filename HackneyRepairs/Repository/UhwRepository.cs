@@ -190,7 +190,7 @@ namespace HackneyRepairs.Repository
             parameters.Add("@NoteType", DefaultNoteType);
             parameters.Add("@NoteText", note.Text);
             parameters.Add("@rmworder_sid", note.WorkOrderSid);
-            parameters.Add("@UserId", Environment.GetEnvironmentVariable("UHUsername"));
+            parameters.Add("@UserId", note.UHUsername);
             try
             {
                 using (var connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
