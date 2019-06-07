@@ -45,38 +45,21 @@ namespace HackneyRepairs.Actions
 
             //Check Keyfax Data object is missing repair object element 
             //Keyfax response not can not deserialize if element is missing?
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(resultXml);
-            XmlNodeList keyfaxDataNode;
-            keyfaxDataNode = doc.GetElementsByTagName("Repair");
-            //if (keyfaxDataNode.Count == 0)
-            //{
-            //    //Read value of advice node
-            //    keyfaxDataNode = doc.GetElementsByTagName("AdviceCodeDesc");
-            //    string advice = keyfaxDataNode[0].InnerText;
-            //    return new HackneyKeyfaxDataResponse
-            //    {
-            //        RepairCodeDesc = keyfaxDataNode[0].InnerText
-            //    };
-            //}
-            HackneyKeyfaxDataResponse resultObject = new HackneyKeyfaxDataResponse();
+            KeyfaxData resultObject = this.DeserializeXML<KeyfaxData>(resultXml);
+            if (resultObject.Fault.Repair == null)
+            {
+                return new HackneyKeyfaxDataResponse
+                {
+                    RepairCodeDesc = resultObject.Fault.Advice.AdviceCodeDesc ?? "No SOR code returned from Keyfax"
+                };
+            }
 
-            //Read each`value required for response from XML
-            //keyfaxDataNode = doc.GetElementsByTagName("FaultText");
-            //resultObject.FaultText = keyfaxDataNode.Count > 0 ? keyfaxDataNode[0].InnerText : null;
-            //keyfaxDataNode = doc.GetElementsByTagName("RepairCode");
-            //resultObject.RepairCode = keyfaxDataNode.Count > 0 ? keyfaxDataNode[0].InnerText : null;
-            //keyfaxDataNode = doc.GetElementsByTagName("RepairCodeDesc");
-            //resultObject.RepairCodeDesc = keyfaxDataNode.Count > 0 ? keyfaxDataNode[0].InnerText : null;
-            //keyfaxDataNode = doc.GetElementsByTagName("Priority");
-            //resultObject.Priority = keyfaxDataNode.Count > 0 ? keyfaxDataNode[0].InnerText : null;
-            KeyfaxData resultObject2 = this.DeserializeXML<KeyfaxData>(resultXml);
             return new HackneyKeyfaxDataResponse
             {
-                FaultText = resultObject2.Fault.FaultText,
-                RepairCode = resultObject2.Fault.Repair.RepairCode,
-                RepairCodeDesc = resultObject2.Fault.Repair.RepairCodeDesc,
-                Priority = resultObject2.Fault.Repair.Priority
+                FaultText = resultObject.Fault.FaultText,
+                RepairCode = resultObject.Fault.Repair.RepairCode,
+                RepairCodeDesc = resultObject.Fault.Repair.RepairCodeDesc,
+                Priority = resultObject.Fault.Repair.Priority
             };
         }
 
