@@ -21,6 +21,7 @@ namespace HackneyRepairs.Services
         {
             _startupXml = new StringBuilder();
             _startupXml.Append(@"<KeyfaxData test=""0""><Startup>");
+            _startupXml.Append(@"<OriginatingSystem>RepairsHub</OriginatingSystem>");
             _startupXml.AppendFormat(@"<Mode>{0}</Mode>", _configuration.Get("KFMode"));
             _startupXml.AppendFormat(@"<Company>{0}</Company>", _configuration.Get("KFCompany"));
             _startupXml.AppendFormat(@"<UserName>{0}</UserName>", _configuration.Get("KFUsername"));
