@@ -25,7 +25,6 @@ namespace HackneyRepairs.Services
             _startupXml.AppendFormat(@"<Mode>{0}</Mode>", _configuration.Get("KFMode"));
             _startupXml.AppendFormat(@"<Company>{0}</Company>", _configuration.Get("KFCompany"));
             _startupXml.AppendFormat(@"<UserName>{0}</UserName>", _configuration.Get("KFUsername"));
-            _startupXml.AppendFormat(@"<Password>{0}</Password>", _configuration.Get("KFPassword"));
             _startupXml.AppendFormat(@"<ReturnURL>{0}</ReturnURL>", returnURL);
             _startupXml.Append(@"</Startup></KeyfaxData>"); 
             return _startupXml.ToString();            
