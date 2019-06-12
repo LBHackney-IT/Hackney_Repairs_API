@@ -25,6 +25,7 @@ namespace HackneyRepairs.Tests.Integration
             Environment.SetEnvironmentVariable("UhwDb", "database=Test");
             Environment.SetEnvironmentVariable("DRSDb", "database=Test");
             Environment.SetEnvironmentVariable("UhWebDb", "database=Test");
+            Environment.SetEnvironmentVariable("UhWarehouseDb", "database=Test");
             _server = new TestServer(new WebHostBuilder()
 				.UseStartup<TestStartup>());
 			_client = _server.CreateClient();
