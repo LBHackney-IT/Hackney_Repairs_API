@@ -50,7 +50,7 @@ namespace HackneyRepairs.Actions
             {
                 return new HackneyKeyfaxDataResponse
                 {
-                    RepairCodeDesc = resultObject.Fault.Advice.AdviceCodeDesc ?? "No SOR code returned from Keyfax"
+                    RepairCodeDesc = resultObject.Fault.Advice != null ? resultObject.Fault.Advice.AdviceCodeDesc : "No SOR code returned from Keyfax"
                 };
             }
 
