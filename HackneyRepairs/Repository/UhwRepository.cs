@@ -168,7 +168,7 @@ namespace HackneyRepairs.Repository
                 {
                     connection.Open();
                     //_context.Database.ExecuteSqlCommand(commandString, new { uhusername = UHUsername });
-                    string query = "SELECT [User_ID] FROM [dbo].[W2User] where [EMail] = @LBHEmail";
+                    string query = "SELECT [User_ID] FROM [dbo].[W2User] where [EMail] = @LBHEmail and Status is null";
                     uhusername = connection.QuerySingle<string>(query, new { LBHEmail = lbhEmail });
                 }
             }
