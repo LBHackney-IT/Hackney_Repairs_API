@@ -1,6 +1,6 @@
 # Autosave files
 *~
-launchSettings.json
+**/appsettings.Development.json
 
 # build
 [Oo]bj/
