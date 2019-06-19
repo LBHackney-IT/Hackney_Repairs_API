@@ -103,11 +103,15 @@ namespace HackneyRepairs.Repository
                                         rq_phone,
                                         worder.wo_ref,
                                         task.sup_ref,
-                                        task.job_code
+                                        task.job_code,
+                                        auser.user_login,
+										auser.username,
+										request.rq_date
                                     FROM
                                         rmreqst AS request
                                         LEFT OUTER JOIN rmworder AS worder ON request.rq_ref = worder.rq_ref
                                         LEFT OUTER JOIN rmtask AS task ON task.wo_ref = worder.wo_ref
+										LEFT OUTER JOIN auser AS auser ON auser.user_code = request.rq_user
                                     WHERE
                                         request.rq_date < '{GetCutoffTime()}' AND
                                         request.rq_ref = '{repairReference}'";
