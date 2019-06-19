@@ -16,8 +16,13 @@
         "KFMode": "RD",
         "KFUserName": "IAN",
         "KFPassword": "Global",
+        "UHWebServicesURL": "http://10.80.65.176/civica-uh-gateway-dev/webservices/",
+        "UhwDb": "Data Source=10.80.65.85,1433;Initial Catalog=uhwdev;user id=HackneyAPIRepairs;password=UqS7kwhA",
+        "UhtDb": "Data Source=10.80.65.85,1433;Initial Catalog=uhtdev;user id=HackneyAPIRepairs;password=UqS7kwhA",
         "KFReturnUrl": "http://www.hackney.gov.uk",
+        "UhWarehouseDb": "Data Source=10.80.65.49,1433;Initial Catalog=StagedDB;user id=HackneyAPIRepairs;password=UqS7kwhA",
         "ASPNETCORE_ENVIRONMENT": "Development",
+        "UhWebDb": "Data Source=10.80.65.85,1433;Initial Catalog=uhwebdev;user id=uhtdev;password=uhtdev",
         "KFCompany": "Hackney_Test"
       }
     },

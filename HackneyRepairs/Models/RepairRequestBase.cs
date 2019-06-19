@@ -8,5 +8,8 @@ namespace HackneyRepairs.Models
 		public string PropertyReference { get; set; }
 		public string ProblemDescription { get; set; }
         public string LBHEmail { get; set; }
+        public string UHUserLogin { get; set; }
+        public string UHUsername { get; set; }
+        public string CreatedDate { get; set; }
 	}
 }

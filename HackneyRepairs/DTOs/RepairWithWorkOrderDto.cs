@@ -12,5 +12,8 @@ namespace HackneyRepairs.DTOs
         public string wo_ref { get; set; }
         public string sup_ref { get; set; }
         public string job_code { get; set; }
+        public string user_login { get; set; }
+        public string username { get; set; }
+        public string rq_date { get; set; }
     }
 }

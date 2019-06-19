@@ -18,5 +18,8 @@ namespace HackneyRepairs.Models
 		public string PropertyReference { get; set; }
 
         public string SupplierRef { get; set; }
+
+        public string UserLogin { get; set; }
+        public string Username { get; set; }
     }
 }

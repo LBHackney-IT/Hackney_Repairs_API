@@ -316,12 +316,15 @@ namespace HackneyRepairs.Repository
                             LTRIM(RTRIM(wo.prop_ref)) AS PropertyReference,
                             LTRIM(RTRIM(t.job_code)) AS SORCode,
                             LTRIM(RTRIM(tr.trade_desc)) AS Trade,
-                            LTRIM(RTRIM(wo.sup_ref)) AS SupplierRef
-                        FROM 
-                            rmworder wo
+                            LTRIM(RTRIM(wo.sup_ref)) AS SupplierRef,
+						    auser.user_login as UserLogin,
+        				    auser.username as Username
+                        FROM
+                           rmworder wo
                             INNER JOIN rmreqst r ON wo.rq_ref = r.rq_ref
-                            INNER JOIN rmtask t ON t.wo_ref = wo.wo_ref
+                            INNER JOIN rmtask t ON t.wo_ref = wo.wo_ref 
                             INNER JOIN rmtrade tr ON tr.trade = t.trade
+							LEFT OUTER JOIN auser AS auser ON auser.user_code = wo.user_code
                         WHERE 
                             wo.wo_ref = @WorkOrderReference AND t.task_no = 1";
 					
@@ -581,11 +584,15 @@ namespace HackneyRepairs.Repository
                                         rq_phone,
                                         worder.wo_ref,
                                         task.sup_ref,
-                                        task.job_code
+                                        task.job_code,
+                                        auser.user_login,
+										auser.username,
+										request.rq_date
                                     FROM
                                         rmreqst AS request
                                         LEFT OUTER JOIN rmworder AS worder ON request.rq_ref = worder.rq_ref
                                         LEFT OUTER JOIN rmtask AS task ON task.wo_ref = worder.wo_ref
+										LEFT OUTER JOIN auser AS auser ON auser.user_code = request.rq_user
                                     WHERE
                                         (request.rq_date > '{GetCutoffTime()}' OR task.created > '{GetCutoffTime()}') AND
                                         request.rq_ref = '{repairReference}'";

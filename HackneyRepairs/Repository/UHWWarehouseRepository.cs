@@ -542,12 +542,15 @@ namespace HackneyRepairs.Repository
                            LTRIM(RTRIM(wo.u_servitor_ref)) AS ServitorReference,
                            LTRIM(RTRIM(wo.prop_ref)) AS PropertyReference,
                            LTRIM(RTRIM(t.job_code)) AS SORCode,
-                           LTRIM(RTRIM(tr.trade_desc)) AS Trade
+                           LTRIM(RTRIM(tr.trade_desc)) AS Trade,
+						   auser.user_login,
+        				   auser.username
                         FROM
                            rmworder wo
                             INNER JOIN rmreqst r ON wo.rq_ref = r.rq_ref
                             INNER JOIN rmtask t ON t.wo_ref = wo.wo_ref 
                             INNER JOIN rmtrade tr ON tr.trade = t.trade
+							LEFT OUTER JOIN auser AS auser ON auser.user_code = wo.user_code
                         WHERE 
                             wo.created < @CutoffTime AND wo.wo_ref IN @PropertyReferences AND t.task_no = 1";
 
