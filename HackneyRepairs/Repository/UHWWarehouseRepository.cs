@@ -543,8 +543,8 @@ namespace HackneyRepairs.Repository
                            LTRIM(RTRIM(wo.prop_ref)) AS PropertyReference,
                            LTRIM(RTRIM(t.job_code)) AS SORCode,
                            LTRIM(RTRIM(tr.trade_desc)) AS Trade,
-						   auser.user_login,
-        				   auser.username
+						   LTRIM(RTRIM(auser.user_login)) as UserLogin,
+        				   LTRIM(RTRIM(auser.username)) as Username
                         FROM
                            rmworder wo
                             INNER JOIN rmreqst r ON wo.rq_ref = r.rq_ref
