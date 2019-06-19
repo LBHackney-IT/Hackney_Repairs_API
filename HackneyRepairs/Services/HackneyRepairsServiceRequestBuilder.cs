@@ -70,6 +70,7 @@ namespace HackneyRepairs.Services
                 taskList.Add(new RepairTaskInfo
                 {
                     PropertyReference = request.PropertyReference,
+                    PriorityCode = request.Priority.ToUpper(),
                     JobCode = workorder.SorCode,
                     SupplierReference = getContractorForSOR(workorder.SorCode)
                 });
