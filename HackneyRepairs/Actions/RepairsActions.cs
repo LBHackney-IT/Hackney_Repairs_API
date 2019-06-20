@@ -79,7 +79,7 @@ namespace HackneyRepairs.Actions
                 uHUsername = _repairsService.GetUHUsername(request.LBHEmail);
                 if (string.IsNullOrEmpty(uHUsername))
                 {
-                    throw new MissingUHUsernameException();
+                    throw new MissingUHUsernameException(string.Format("Could not find UH username for email address '{0}'. The email address needs to be assiged to the UH username.", request.LBHEmail));
                 }
 
                 sessionToken = _repairsService.GenerateUHSession(uHUsername);
@@ -129,22 +129,8 @@ namespace HackneyRepairs.Actions
         public async Task<object> IssueOrderAsync(string workOrderReference, string lbhEmail)
         {
             _logger.LogInformation($"Issuing order for workorder {workOrderReference}");
-            string sessionToken = string.Empty;
-            string uHUsername = string.Empty;
 
-            uHUsername = _repairsService.GetUHUsername(lbhEmail);
-            if (string.IsNullOrEmpty(uHUsername))
-            {
-                throw new MissingUHUsernameException();
-            }
-
-            sessionToken = _repairsService.GenerateUHSession(uHUsername);
-            if (string.IsNullOrEmpty(sessionToken))
-            {
-                throw new MissingUHWebSessionTokenException();
-            }
-
-            var worksOrderRequest = _requestBuilder.BuildWorksOrderRequestWithSession(workOrderReference, sessionToken);
+            var worksOrderRequest = _requestBuilder.BuildWorksOrderRequestWithSession(workOrderReference, GetUHSessionToken(lbhEmail));
             var issueOrderResponse = await _repairsService.IssueOrderAsync(worksOrderRequest);
 
             if (!issueOrderResponse.Success)
@@ -242,10 +228,52 @@ namespace HackneyRepairs.Actions
 
             return repair;
         }
-    }
+
+        public async Task<object> CancelOrderAsync(string workOrderReference, string lbhEmail)
+        {
+            _logger.LogInformation($"Issuing order for workorder {workOrderReference}");            
+
+            var worksOrderRequest = _requestBuilder.BuildWorksOrderRequestWithSession(workOrderReference, GetUHSessionToken(lbhEmail));
+            var cancelOrderResponse = await _repairsService.CancelOrderAsync(worksOrderRequest);
+
+            if (!cancelOrderResponse.Success)
+            {
+                _logger.LogError(cancelOrderResponse.ErrorMessage);
+                throw new RepairsServiceException(cancelOrderResponse.ErrorMessage);
+            }
+
+            return cancelOrderResponse;
+        }
+
+        public string GetUHSessionToken(string lbhEmail)
+        {
+            string sessionToken = string.Empty;
+            string uHUsername = string.Empty;
+            uHUsername = _repairsService.GetUHUsername(lbhEmail);
+            if (string.IsNullOrEmpty(uHUsername))
+            {
+                throw new MissingUHUsernameException(string.Format("Could not find UH username for email address '{0}'. The email address needs to be assiged to the UH username.", lbhEmail));
+            }
+
+            sessionToken = _repairsService.GenerateUHSession(uHUsername);
+            if (string.IsNullOrEmpty(sessionToken))
+            {
+                throw new MissingUHWebSessionTokenException();
+            }
+
+            return sessionToken;
+        }
+    }    
     
     public class MissingUHUsernameException : Exception
     {
+        public MissingUHUsernameException()
+        {
+        }
+
+        public MissingUHUsernameException(string message) : base(message)
+        {
+        }
     }
 
     public class MissingUHWebSessionTokenException : Exception

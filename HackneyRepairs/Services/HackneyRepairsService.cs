@@ -156,5 +156,13 @@ namespace HackneyRepairs.Services
             _logger.LogInformation($"HackneyUHWebSessionService/GenerateUHSession(): Received response from upstream UH Web warehouse (UHUsername: {uHUsername})");
             return response;
         }
+
+        public Task<WebResponse> CancelOrderAsync(WorksOrderRequest request)
+        {
+            _logger.LogInformation($"HackneyRepairsService/CancelOrderAsync(): Sent request to upstream RepairServiceClient (Order ref: {request.OrderReference})");
+            var response = _client.CancelOrderAsync(request);
+            _logger.LogInformation($"HackneyRepairsService/CancelOrderAsync(): Received response from upstream RepairServiceClient (Order ref: {request.OrderReference})");
+            return response;
+        }
     }
 }
