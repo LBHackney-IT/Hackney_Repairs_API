@@ -111,7 +111,7 @@ namespace HackneyRepairs.Validators
                             {
                                 Code = 400,
                                 DeveloperMessage = "sorCode is invalid",
-                                UserMessage = "SOR code is missing, please provide a valid SOR code",
+                                UserMessage = "SOR code is missing. Please provide a valid SOR code",
                                 Source = $@"/workOrders/{_count}/sorCode"
                             });
                         }
@@ -133,16 +133,32 @@ namespace HackneyRepairs.Validators
                             else
                             {
                                 //Check provided sorCode is a listed sorcode
-                                if (!this.getContractorForSOR(or.SorCode))
+                                var validSor = this.getContractorForSOR(or.SorCode);
+
+                                if (!validSor.valid)
                                 {
                                     validationResult.Valid = false;
                                     validationResult.RepairApiError.Add(new JsonApiErrorMessage
                                     {
                                         Code = 400,
                                         DeveloperMessage = "sorCode provided is prohibited",
-                                        UserMessage = "If Repair request has workOrders you must provide a valid sorCode",
+                                        UserMessage = "This SOR code may be unsupported in Repairs Hub or invalid. Please check the SOR code has been entered correctly",
                                         Source = $@"/workOrders/{_count}/sorCode"
                                     });
+                                }
+                                else
+                                {
+                                    if (!SupplierRefDLOValidator.Validate(validSor.supplierRef))
+                                    {
+                                        validationResult.Valid = false;
+                                        validationResult.RepairApiError.Add(new JsonApiErrorMessage
+                                        {
+                                            Code = 400,
+                                            DeveloperMessage = "sorCode provided is for contractors",
+                                            UserMessage = "This SOR code is for contractor jobs that are not supported by Repairs Hub. Please raise this repair in UH",
+                                            Source = $@"/workOrders/{_count}/sorCode"
+                                        });
+                                    }
                                 }
                             }
                         }
@@ -231,17 +247,19 @@ namespace HackneyRepairs.Validators
 
         //Used to validate sorcode to return JSONAPI source error format
         //Method duplicated from HackneyRepairsServiceRequestBuilder class
-        private bool getContractorForSOR(string sorCode)
+        private(bool valid, string supplierRef) getContractorForSOR(string sorCode)
         {
             string[] sorLookupOptions = _configuration.Get("UhSorSupplierMapping").Split('|');
             Dictionary<string, string> sorDictionary = new Dictionary<string, string>();
-
+            
             foreach (string s in sorLookupOptions)
             {
                 sorDictionary.Add(s.Split(',')[0], s.Split(',')[1]);
             }
 
-            return sorDictionary.ContainsKey(sorCode) ? true : false;
+            bool valid = sorDictionary.ContainsKey(sorCode) ? true : false;
+            string supplierRef = valid ? sorDictionary[sorCode] : string.Empty;
+            return (valid, supplierRef);
         }
     }
 
