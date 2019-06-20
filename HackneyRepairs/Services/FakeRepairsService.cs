@@ -217,5 +217,14 @@ namespace HackneyRepairs.Services
         {
             return "HackneyAPI";
         }
+
+        public Task<WebResponse> CancelOrderAsync(WorksOrderRequest worksOrderRequest)
+        {
+            var response = new WebResponse
+            {
+                Success = true
+            };
+            return Task.Run(() => response);
+        }
     }
 }

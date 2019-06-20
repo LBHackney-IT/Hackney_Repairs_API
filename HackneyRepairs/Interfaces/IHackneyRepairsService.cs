@@ -21,5 +21,6 @@ namespace HackneyRepairs.Interfaces
         Task AddOrderDocumentAsync(string documentType, string workOrderReference, int workOrderId, string processComment);
         string GenerateUHSession(string uHUsername);
         string GetUHUsername(string lBHEmail);
+        Task<WebResponse> CancelOrderAsync(WorksOrderRequest worksOrderRequest);
     }
 }

@@ -302,7 +302,7 @@ namespace HackneyRepairs.Controllers
         /// <param name="workOrderReference">The reference number of the work order for the appointment</param>
         /// <param name="lbhEmail"> JSON object with Email address of user making issue_order request</param>
         /// <returns>A JSON object for a successfully created appointment</returns>
-        /// <response code="200">A successfully created order</response>
+        /// <response code="200">A successfully issued order</response>
         [HttpPost("{workOrderReference}/issue")]
         public async Task<JsonResult> IssueOrder(string workOrderReference, [FromBody]RepairRequest request)
         {
@@ -322,6 +322,33 @@ namespace HackneyRepairs.Controllers
             {
                 RepairsActions repairActions = new RepairsActions(_repairsService, _requestBuilder, _repairsLoggerAdapter);
                 var result = await repairActions.IssueOrderAsync(workOrderReference, request.LBHEmail);
+                return ResponseBuilder.Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _exceptionLogger.CaptureException(ex);
+                return ResponseBuilder.Error(500, "We had some problems processing your request", ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Cancel work order 
+        /// </summary>
+        /// <param name="workOrderReference">The reference number of the work order</param>
+        /// <param name="lbhEmail"> JSON object with Email address of user making issue_order request</param>
+        /// <returns>A JSON object for a successfully cancelled work order</returns>
+        /// <response code="200">A successfully cancelled order</response>
+        [HttpPost("{workOrderReference}/cancel")]
+        public async Task<JsonResult> CancelOrder(string workOrderReference, [FromBody]RepairRequest request)
+        {
+            //string email = this.Request.Headers["x-lhbEmail"].ToString();
+            if (!EmailValidator.Validate(request.LBHEmail))
+                return ResponseBuilder.Error(500, "Please check your email address", "We had some problems processing your request");
+            
+            try
+            {
+                RepairsActions repairActions = new RepairsActions(_repairsService, _requestBuilder, _repairsLoggerAdapter);
+                var result = await repairActions.CancelOrderAsync(workOrderReference, request.LBHEmail);
                 return ResponseBuilder.Ok(result);
             }
             catch (Exception ex)
