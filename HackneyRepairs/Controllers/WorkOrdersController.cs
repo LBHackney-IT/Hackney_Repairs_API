@@ -357,5 +357,46 @@ namespace HackneyRepairs.Controllers
                 return ResponseBuilder.Error(500, "We had some problems processing your request", ex.Message);
             }
         }
+
+        // GET Tasks and SORs for a Work Order 
+        /// <summary>
+        /// Returns all tasks and SORs for a work order
+        /// </summary>
+        /// <param name="workOrderReference">Work order reference</param>
+        /// <returns>A list of tasks and SORs entities</returns>
+        /// <response code="200">Returns a list of notes for a work order reference</response>
+        /// <response code="404">If there is no notes found for the work order</response>   
+        /// <response code="500">If any errors are encountered</response>
+        [HttpGet("{workOrderReference}/tasksors")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<JsonResult> GetTasksAndSORsForWorkOrder(string workOrderReference)
+        {
+            var workOrdersActions = new WorkOrdersActions(_workOrdersService, _workOrderLoggerAdapter);
+            IEnumerable<Note> result = new List<Note>();
+            try
+            {
+                result = await workOrdersActions.GetTasksAndSORsForWorkOrder(workOrderReference);
+                return ResponseBuilder.Ok(result);
+            }
+            catch (MissingWorkOrderException ex)
+            {
+                _exceptionLogger.CaptureException(ex);
+
+                return ResponseBuilder.Error(404, "Work order not found", ex.Message);
+            }
+            catch (UhtRepositoryException ex)
+            {
+                _exceptionLogger.CaptureException(ex);
+                return ResponseBuilder.Error(500, "We had issues with connecting to the data source", ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _exceptionLogger.CaptureException(ex);
+                return ResponseBuilder.Error(500, "We had issues processing your request", ex.Message);
+            }
+        }
     }
+
 }

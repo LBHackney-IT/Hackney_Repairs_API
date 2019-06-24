@@ -156,6 +156,26 @@ namespace HackneyRepairs.Actions
             var jsonObject = JsonConvert.SerializeObject(workOrder);
             return JsonConvert.DeserializeObject<UHWorkOrderWithMobileReports>(jsonObject);
         }
+
+        public async Task<IEnumerable<UHWorkOrder>> GetTasksAndSORsForWorkOrder(string workOrderReference)
+        {
+            _logger.LogInformation($"Finding tasks and SORs by work order: {workOrderReference}");
+            var result = await _workOrdersService.GetTasksAndSORsForWorkOrder(workOrderReference);
+            if (result == null)
+            {
+                _logger.LogError($"Work order reference not found Ref: {workOrderReference}");
+                throw new MissingWorkOrderException();
+            }
+
+            if ((result.ToList()).Count == 0)
+            {
+                _logger.LogError($"Tasks and SORs not found for: {workOrderReference}");
+                return result;
+            }
+
+            _logger.LogInformation($"Tasks and SORs returned for: {workOrderReference}");
+            return result;
+        }
     }
 
     public class MissingWorkOrderException : Exception { }
