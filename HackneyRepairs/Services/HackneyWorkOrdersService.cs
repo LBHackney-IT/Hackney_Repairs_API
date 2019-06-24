@@ -243,7 +243,7 @@ namespace HackneyRepairs.Services
         {
             _logger.LogInformation($"HackneyWorkOrdersService/GetTasksAndSORsForWorkOrder(): Sent request to UhWarehouseRepository (WorkOrder reference: {workOrderReference})");
             var warehouseData = await _uhWarehouseRepository.GetTasksAndSORsForWorkOrder(workOrderReference);
-            //var warehouseDataList = warehouseData.
+
             IEnumerable<UHWorkOrder> workOrders = null;
             foreach (var _warehouseData in warehouseData)
             {

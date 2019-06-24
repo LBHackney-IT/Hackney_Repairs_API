@@ -318,11 +318,13 @@ namespace HackneyRepairs.Repository
                             LTRIM(RTRIM(tr.trade_desc)) AS Trade,
                             LTRIM(RTRIM(wo.sup_ref)) AS SupplierRef,
 						    auser.user_login as UserLogin,
-        				    auser.username as Username
+        				    auser.username as Username,
+                            rj.short_desc AS SORCodeDescription
                         FROM
                            rmworder wo
                             INNER JOIN rmreqst r ON wo.rq_ref = r.rq_ref
                             INNER JOIN rmtask t ON t.wo_ref = wo.wo_ref 
+                            LEFT JOIN rmjob rj ON  rj.job_code = t.job_code
                             INNER JOIN rmtrade tr ON tr.trade = t.trade
 							LEFT OUTER JOIN auser AS auser ON auser.user_code = wo.user_code
                         WHERE 
