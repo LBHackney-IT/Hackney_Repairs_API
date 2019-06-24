@@ -374,7 +374,7 @@ namespace HackneyRepairs.Controllers
         public async Task<JsonResult> GetTasksAndSORsForWorkOrder(string workOrderReference)
         {
             var workOrdersActions = new WorkOrdersActions(_workOrdersService, _workOrderLoggerAdapter);
-            IEnumerable<Note> result = new List<Note>();
+            IEnumerable<UHWorkOrder> result = new List<UHWorkOrder>();
             try
             {
                 result = await workOrdersActions.GetTasksAndSORsForWorkOrder(workOrderReference);
@@ -398,5 +398,4 @@ namespace HackneyRepairs.Controllers
             }
         }
     }
-
 }
