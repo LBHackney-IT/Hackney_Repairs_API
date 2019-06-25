@@ -18,39 +18,40 @@ namespace HackneyRepairs.Tests.Actions
         {
             _mockLogger = new Mock<ILoggerAdapter<WorkOrdersActions>>();
         }
-
-   //     #region GetWorkOrder 
-   //     [Fact]
-   //     public async Task get_work_orders_returns_a_work_order()
-   //     {
-   //         Random rnd = new Random();
-   //         string randomReference = rnd.Next(10000000, 99999999).ToString();
-   //         Mock<IHackneyWorkOrdersService> _workOrderService = new Mock<IHackneyWorkOrdersService>();
-   //         _workOrderService.Setup(service => service.GetWorkOrder(It.IsAny<string>()))
-   //                          .ReturnsAsync(new UHWorkOrderWithMobileReports());
-			//WorkOrdersActions workOrdersActions = new WorkOrdersActions(_workOrderService.Object, _mockLogger.Object);
-
-   //         var response = await workOrdersActions.GetWorkOrder(randomReference);
-
-   //         Assert.True(response is UHWorkOrder);
-   //     }
+       
         #region Get notes for work order
         [Fact]
         public async Task get_tasks_and_sors_by_work_order_reference_returns_a_list_of_work_orders()
         {
             Random rnd = new Random();
-            string randomReference = rnd.Next(100000000, 999999999).ToString();
-            List<Note> fakeResponse = new List<Note>
+            string randomReference = rnd.Next(000000, 999999).ToString();
+            IList<UHWorkOrder> fakeResponse = new List<UHWorkOrder>
             {
-                new Note()
+                new UHWorkOrder()
             };
             Mock<IHackneyWorkOrdersService> _workOrderService = new Mock<IHackneyWorkOrdersService>();
-            _workOrderService.Setup(service => service.GetNotesByWorkOrderReference(It.IsAny<string>()))
-                             .Returns(Task.FromResult<IEnumerable<Note>>(fakeResponse));
+            _workOrderService.Setup(service => service.GetTasksAndSORsForWorkOrder(It.IsAny<string>()))
+                             .Returns(Task.FromResult<IEnumerable<UHWorkOrder>>(fakeResponse));
             WorkOrdersActions workOrdersActions = new WorkOrdersActions(_workOrderService.Object, _mockLogger.Object);
-            var response = await workOrdersActions.GetNotesByWorkOrderReference(randomReference);
+            var response = await workOrdersActions.GetTasksAndSORsForWorkOrder(randomReference);
 
-            Assert.True(response is List<Note>);
+            Assert.True(response is List<UHWorkOrder>);
+        }
+
+        //#region GetWorkOrder 
+        [Fact]
+        public async Task get_work_orders_returns_a_work_order()
+        {
+            Random rnd = new Random();
+            string randomReference = rnd.Next(100000, 999999).ToString();
+            Mock<IHackneyWorkOrdersService> _workOrderService = new Mock<IHackneyWorkOrdersService>();
+            _workOrderService.Setup(service => service.GetWorkOrder(It.IsAny<string>()))
+                             .ReturnsAsync(new UHWorkOrderWithMobileReports());
+            WorkOrdersActions workOrdersActions = new WorkOrdersActions(_workOrderService.Object, _mockLogger.Object);
+
+            var response = await workOrdersActions.GetWorkOrder(randomReference);
+
+            Assert.True(response is UHWorkOrder);
         }
 
         [Fact]
