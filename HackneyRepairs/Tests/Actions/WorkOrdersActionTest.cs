@@ -30,10 +30,10 @@ namespace HackneyRepairs.Tests.Actions
                 new UHWorkOrder()
             };
             Mock<IHackneyWorkOrdersService> _workOrderService = new Mock<IHackneyWorkOrdersService>();
-            _workOrderService.Setup(service => service.GetTasksAndSORsForWorkOrder(It.IsAny<string>()))
+            _workOrderService.Setup(service => service.GetTasksForWorkOrder(It.IsAny<string>()))
                              .Returns(Task.FromResult<IEnumerable<UHWorkOrder>>(fakeResponse));
             WorkOrdersActions workOrdersActions = new WorkOrdersActions(_workOrderService.Object, _mockLogger.Object);
-            var response = await workOrdersActions.GetTasksAndSORsForWorkOrder(randomReference);
+            var response = await workOrdersActions.GetTasksForWorkOrder(randomReference);
 
             Assert.True(response is List<UHWorkOrder>);
         }
