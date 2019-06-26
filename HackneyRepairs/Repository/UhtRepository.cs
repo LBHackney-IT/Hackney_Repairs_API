@@ -292,7 +292,7 @@ namespace HackneyRepairs.Repository
 			}
 		}
 
-        public async Task<IEnumerable<UHWorkOrder>> GetTasksAndSORsForWorkOrder(string workOrderReference)
+        public async Task<IEnumerable<UHWorkOrder>> GetTasksForWorkOrder(string workOrderReference)
         {
             IEnumerable<UHWorkOrder> workOrders;
             try

@@ -239,10 +239,10 @@ namespace HackneyRepairs.Services
 			return result;
         }
 
-        public async Task<IEnumerable<UHWorkOrder>> GetTasksAndSORsForWorkOrder(string workOrderReference)
+        public async Task<IEnumerable<UHWorkOrder>> GetTasksForWorkOrder(string workOrderReference)
         {
             _logger.LogInformation($"HackneyWorkOrdersService/GetTasksAndSORsForWorkOrder(): Sent request to UhWarehouseRepository (WorkOrder reference: {workOrderReference})");
-            var warehouseData = await _uhWarehouseRepository.GetTasksAndSORsForWorkOrder(workOrderReference);
+            var warehouseData = await _uhWarehouseRepository.GetTasksForWorkOrder(workOrderReference);
 
             IEnumerable<UHWorkOrder> workOrders = null;
             foreach (var _warehouseData in warehouseData)
@@ -255,7 +255,7 @@ namespace HackneyRepairs.Services
                 return workOrders;
             //return workOrders ?? Enumerable.Empty<UHWorkOrder>();
             _logger.LogInformation($"HackneyWorkOrdersService/GetTasksAndSORsForWorkOrder(): No workOrders found in the warehouse. Request sent to UhtRepository (WorkOrder references: {workOrderReference})");
-            var uhtData = await _uhtRepository.GetTasksAndSORsForWorkOrder(workOrderReference);
+            var uhtData = await _uhtRepository.GetTasksForWorkOrder(workOrderReference);
             return uhtData;
         }
 

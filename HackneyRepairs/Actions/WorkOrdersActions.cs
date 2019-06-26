@@ -146,10 +146,10 @@ namespace HackneyRepairs.Actions
             return await _workOrdersService.GetWorkOrderFeed(startID, resultSize);
         }
 
-        public async Task<IEnumerable<UHWorkOrder>> GetTasksAndSORsForWorkOrder(string workOrderReference)
+        public async Task<IEnumerable<UHWorkOrder>> GetTasksForWorkOrder(string workOrderReference)
         {
             _logger.LogInformation($"Finding tasks and SORs by work order: {workOrderReference}");
-            var result = await _workOrdersService.GetTasksAndSORsForWorkOrder(workOrderReference);
+            var result = await _workOrdersService.GetTasksForWorkOrder(workOrderReference);
             if (result == null)
             {
                 _logger.LogError($"Work order reference not found Ref: {workOrderReference}");

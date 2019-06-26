@@ -29,6 +29,6 @@ namespace HackneyRepairs.Interfaces
         Task<IEnumerable<string>> GetDistinctNoteKeyObjects();
 		Task<List<PropertyLevelModel>> GetPropertyLevelInfosForParent(string reference);
         Task<PropertyLevelModel[]> GetPropertyDetailsByFirstLineOfAddress(string firstLineOfAddress, int limit);
-        Task<IEnumerable<UHWorkOrder>> GetTasksAndSORsForWorkOrder(string workOrderReference);
+        Task<IEnumerable<UHWorkOrder>> GetTasksForWorkOrder(string workOrderReference);
     }
 }

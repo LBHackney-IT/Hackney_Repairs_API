@@ -74,7 +74,7 @@ namespace HackneyRepairs.Services
 			return Task.Run(() => (IEnumerable<UHWorkOrder>)workOrder);
         }
 
-        public Task<IEnumerable<UHWorkOrder>> GetTasksAndSORsForWorkOrder(string workOrderReference)
+        public Task<IEnumerable<UHWorkOrder>> GetTasksForWorkOrder(string workOrderReference)
         {
             if (string.Equals(workOrderReference, "999999"))
             {

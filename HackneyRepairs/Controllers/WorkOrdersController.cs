@@ -364,20 +364,20 @@ namespace HackneyRepairs.Controllers
         /// </summary>
         /// <param name="workOrderReference">Work order reference</param>
         /// <returns>A list of tasks and SORs entities</returns>
-        /// <response code="200">Returns a list of notes for a work order reference</response>
-        /// <response code="404">If there is no notes found for the work order</response>   
+        /// <response code="200">Returns a list of SORs for a work order reference</response>
+        /// <response code="404">If there are no SORs found for the work order</response>   
         /// <response code="500">If any errors are encountered</response>
-        [HttpGet("{workOrderReference}/tasksors")]
+        [HttpGet("{workOrderReference}/tasks")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<JsonResult> GetTasksAndSORsForWorkOrder(string workOrderReference)
+        public async Task<JsonResult> GetTasksForWorkOrder(string workOrderReference)
         {
             var workOrdersActions = new WorkOrdersActions(_workOrdersService, _workOrderLoggerAdapter);
             IEnumerable<UHWorkOrder> result = new List<UHWorkOrder>();
             try
             {
-                result = await workOrdersActions.GetTasksAndSORsForWorkOrder(workOrderReference);
+                result = await workOrdersActions.GetTasksForWorkOrder(workOrderReference);
                 return ResponseBuilder.Ok(result);
             }
             catch (MissingWorkOrderException ex)
