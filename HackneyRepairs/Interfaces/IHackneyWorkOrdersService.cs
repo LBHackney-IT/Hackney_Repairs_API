@@ -17,5 +17,6 @@ namespace HackneyRepairs.Interfaces
         Task<int?> GetWorkOrderSid(string workOrderReference);
         Task<IEnumerable<Note>> GetNoteFeed(int startId, string noteTarget, int size);
         Task<IEnumerable<UHWorkOrderFeed>> GetWorkOrderFeed(string startId, int resultSize);
+        Task<IEnumerable<UHWorkOrder>> GetTasksForWorkOrder(string workOrderReference);
     }
 }

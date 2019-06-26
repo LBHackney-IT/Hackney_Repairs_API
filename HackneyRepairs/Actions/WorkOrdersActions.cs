@@ -9,26 +9,26 @@ using HackneyRepairs.Formatters;
 
 namespace HackneyRepairs.Actions
 {
-	public class WorkOrdersActions
-	{
-		IHackneyWorkOrdersService _workOrdersService;
-		private readonly ILoggerAdapter<WorkOrdersActions> _logger;
+    public class WorkOrdersActions
+    {
+        IHackneyWorkOrdersService _workOrdersService;
+        private readonly ILoggerAdapter<WorkOrdersActions> _logger;
 
-		public WorkOrdersActions(IHackneyWorkOrdersService workOrdersService, ILoggerAdapter<WorkOrdersActions> logger)
-		{
-			_workOrdersService = workOrdersService;
-			_logger = logger;
-		}
+        public WorkOrdersActions(IHackneyWorkOrdersService workOrdersService, ILoggerAdapter<WorkOrdersActions> logger)
+        {
+            _workOrdersService = workOrdersService;
+            _logger = logger;
+        }
 
         public async Task<dynamic> GetWorkOrder(string workOrderReference, bool mobileReports = false)
-		{
-			_logger.LogInformation($"Finding work order details for reference: {workOrderReference}");
+        {
+            _logger.LogInformation($"Finding work order details for reference: {workOrderReference}");
             var result = await _workOrdersService.GetWorkOrder(workOrderReference);
-			if (result == null)
-			{
-				_logger.LogError($"Work order not found for reference: {workOrderReference}");
-				throw new MissingWorkOrderException();
-			}
+            if (result == null)
+            {
+                _logger.LogError($"Work order not found for reference: {workOrderReference}");
+                throw new MissingWorkOrderException();
+            }
 
             if (mobileReports)
             {
@@ -45,9 +45,9 @@ namespace HackneyRepairs.Actions
                 return resultWithMobileReports;
             }
 
-			_logger.LogInformation($"Work order details returned for: {workOrderReference}");
+            _logger.LogInformation($"Work order details returned for: {workOrderReference}");
             return result;
-		}
+        }
 
         public async Task<IEnumerable<UHWorkOrderWithMobileReports>> GetWorkOrders(string[] workOrderReferences, bool withMobileReports = false)
         {
@@ -70,7 +70,7 @@ namespace HackneyRepairs.Actions
                         if (string.IsNullOrWhiteSpace(workOrder.ServitorReference))
                         {
                             _logger.LogError($"Work order {workOrder.WorkOrderReference} does not have a servitor reference, mobile reports cannot be found");
-                        resultWithMobileReports.MobileReports = new List<MobileReport>();
+                            resultWithMobileReports.MobileReports = new List<MobileReport>();
                         }
                         else
                         {
@@ -87,25 +87,25 @@ namespace HackneyRepairs.Actions
             return results;
         }
 
-		public async Task<IEnumerable<UHWorkOrder>> GetWorkOrderByPropertyReference(string propertyReference)
-		{
-			_logger.LogInformation($"Finding work order details for property reference: {propertyReference}");
-			var result = await _workOrdersService.GetWorkOrderByPropertyReference(propertyReference);
+        public async Task<IEnumerable<UHWorkOrder>> GetWorkOrderByPropertyReference(string propertyReference)
+        {
+            _logger.LogInformation($"Finding work order details for property reference: {propertyReference}");
+            var result = await _workOrdersService.GetWorkOrderByPropertyReference(propertyReference);
             if (result == null)
-			{
-				_logger.LogError($"Property not found for property reference: {propertyReference}");
-				throw new MissingPropertyException();
-			}
+            {
+                _logger.LogError($"Property not found for property reference: {propertyReference}");
+                throw new MissingPropertyException();
+            }
 
-			if ((result.ToList()).Count == 0)
-			{
-				_logger.LogError($"Work order not found for property reference: {propertyReference}");
-				return result;
-			}
+            if ((result.ToList()).Count == 0)
+            {
+                _logger.LogError($"Work order not found for property reference: {propertyReference}");
+                return result;
+            }
 
-			_logger.LogInformation($"Work order details returned for property reference: {propertyReference}");
-			return result;
-		}
+            _logger.LogInformation($"Work order details returned for property reference: {propertyReference}");
+            return result;
+        }
 
         public async Task<IEnumerable<UHWorkOrder>> GetWorkOrdersByPropertyReferences(string[] propertyReferences, DateTime since, DateTime until)
         {
@@ -120,30 +120,50 @@ namespace HackneyRepairs.Actions
             return result;
         }
 
-		public async Task<IEnumerable<Note>> GetNotesByWorkOrderReference(string workOrderReference)
-		{
-			_logger.LogInformation($"Finding notes by work order: {workOrderReference}");
-			var result = await _workOrdersService.GetNotesByWorkOrderReference(workOrderReference);
+        public async Task<IEnumerable<Note>> GetNotesByWorkOrderReference(string workOrderReference)
+        {
+            _logger.LogInformation($"Finding notes by work order: {workOrderReference}");
+            var result = await _workOrdersService.GetNotesByWorkOrderReference(workOrderReference);
             if (result == null)
-			{
-				_logger.LogError($"Work order reference not found Ref: {workOrderReference}");
-				throw new MissingWorkOrderException();
-			}
-
-			if ((result.ToList()).Count == 0)
             {
-				_logger.LogError($"Notes not found for: {workOrderReference}");
-				return result;
+                _logger.LogError($"Work order reference not found Ref: {workOrderReference}");
+                throw new MissingWorkOrderException();
             }
 
-			_logger.LogInformation($"Notes returned for: {workOrderReference}");
+            if ((result.ToList()).Count == 0)
+            {
+                _logger.LogError($"Notes not found for: {workOrderReference}");
+                return result;
+            }
+
+            _logger.LogInformation($"Notes returned for: {workOrderReference}");
             return result;
-		}
+        }
 
         public async Task<IEnumerable<UHWorkOrderFeed>> GetWorkOrdersFeed(string startID, int resultSize)
         {
             _logger.LogInformation($"Getting work order feed for {startID}");
             return await _workOrdersService.GetWorkOrderFeed(startID, resultSize);
+        }
+
+        public async Task<IEnumerable<UHWorkOrder>> GetTasksForWorkOrder(string workOrderReference)
+        {
+            _logger.LogInformation($"Finding tasks and SORs by work order: {workOrderReference}");
+            var result = await _workOrdersService.GetTasksForWorkOrder(workOrderReference);
+            if (result == null)
+            {
+                _logger.LogError($"Work order reference not found Ref: {workOrderReference}");
+                throw new MissingWorkOrderException();
+            }
+
+            if ((result.ToList()).Count == 0)
+            {
+                _logger.LogError($"Tasks and SORs not found for: {workOrderReference}");
+                return result;
+            }
+
+            _logger.LogInformation($"Tasks and SORs returned for: {workOrderReference}");
+            return result;
         }
 
         private UHWorkOrderWithMobileReports MapToWorkOrderWithMobileReports(UHWorkOrder workOrder)
@@ -156,7 +176,7 @@ namespace HackneyRepairs.Actions
             var jsonObject = JsonConvert.SerializeObject(workOrder);
             return JsonConvert.DeserializeObject<UHWorkOrderWithMobileReports>(jsonObject);
         }
-    }
+ }
 
     public class MissingWorkOrderException : Exception { }
 	public class MissingNotesException : Exception { }

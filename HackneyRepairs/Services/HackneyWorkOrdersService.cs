@@ -239,6 +239,26 @@ namespace HackneyRepairs.Services
 			return result;
         }
 
+        public async Task<IEnumerable<UHWorkOrder>> GetTasksForWorkOrder(string workOrderReference)
+        {
+            _logger.LogInformation($"HackneyWorkOrdersService/GetTasksAndSORsForWorkOrder(): Sent request to UhWarehouseRepository (WorkOrder reference: {workOrderReference})");
+            var warehouseData = await _uhWarehouseRepository.GetTasksForWorkOrder(workOrderReference);
+
+            IEnumerable<UHWorkOrder> workOrders = null;
+            foreach (var _warehouseData in warehouseData)
+            {
+                if (!IsTerminatedWorkOrder(_warehouseData))
+                    workOrders.Append(_warehouseData);
+            }
+
+            if (workOrders != null)
+                return workOrders;
+            //return workOrders ?? Enumerable.Empty<UHWorkOrder>();
+            _logger.LogInformation($"HackneyWorkOrdersService/GetTasksAndSORsForWorkOrder(): No workOrders found in the warehouse. Request sent to UhtRepository (WorkOrder references: {workOrderReference})");
+            var uhtData = await _uhtRepository.GetTasksForWorkOrder(workOrderReference);
+            return uhtData;
+        }
+
         private bool IsTerminatedWorkOrder(UHWorkOrder workOrder)
         {
             return Array.IndexOf(_terminatedWorkOrderCodes, workOrder.WorkOrderStatus) > -1;

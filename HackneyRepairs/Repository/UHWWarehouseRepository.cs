@@ -852,6 +852,65 @@ namespace HackneyRepairs.Repository
             }
         }
 
+        public async Task<IEnumerable<UHWorkOrder>> GetTasksForWorkOrder(string workOrderReference)
+        {
+            if (IsDevelopmentEnvironment())
+            {
+                return new List<UHWorkOrder>();
+            }
+
+            IEnumerable<UHWorkOrder> workOrders;
+            try
+            {
+                using (var connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+                {
+                    string query = @"set dateformat ymd;
+                        SELECT
+                           LTRIM(RTRIM(wo.wo_ref)) AS WorkOrderReference,
+                           LTRIM(RTRIM(r.rq_ref)) AS RepairRequestReference,
+                           r.rq_problem AS ProblemDescription,
+                           wo.created AS Created,
+                           wo.est_cost AS EstimatedCost,
+                           wo.act_cost AS ActualCost,
+                           wo.completed AS CompletedOn,
+                           wo.date_due AS DateDue,
+                           LTRIM(RTRIM(wo.wo_status)) AS WorkOrderStatus,
+                           LTRIM(RTRIM(wo.u_dlo_status)) AS DLOStatus,
+                           LTRIM(RTRIM(wo.u_servitor_ref)) AS ServitorReference,
+                           LTRIM(RTRIM(wo.prop_ref)) AS PropertyReference,
+                           LTRIM(RTRIM(t.job_code)) AS SORCode,
+                           LTRIM(RTRIM(tr.trade_desc)) AS Trade,
+                           LTRIM(RTRIM(wo.sup_ref)) AS SupplierRef,
+						   auser.user_login,
+        				   auser.username,
+                           rj.short_desc AS SORCodeDescription
+                        FROM
+                           rmworder wo
+                            INNER JOIN rmreqst r ON wo.rq_ref = r.rq_ref
+                            INNER JOIN rmtask t ON t.wo_ref = wo.wo_ref 
+                            LEFT JOIN rmjob rj ON  rj.job_code = t.job_code 
+                            INNER JOIN rmtrade tr ON tr.trade = t.trade
+							LEFT OUTER JOIN auser AS auser ON auser.user_code = wo.user_code
+                        WHERE 
+                            wo.created < @CutoffTime AND wo.wo_ref = @WorkOrderReference";
+
+                    var queryParameters = new
+                    {
+                        CutoffTime = GetCutoffTime(),
+                        WorkOrderReference = workOrderReference
+                    };
+                    workOrders = await connection.QueryAsync<UHWorkOrder>(query, queryParameters);
+                   
+                    return workOrders;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                throw new UHWWarehouseRepositoryException();
+            }
+        }
+
         public async Task<IEnumerable<UHWorkOrderFeed>> GetWorkOrderFeed(string startId, int size)
         {
             if (IsDevelopmentEnvironment())
