@@ -12,5 +12,6 @@ namespace HackneyRepairs.Interfaces
         Task<IEnumerable<Note>> GetNoteFeed(int noteId, string noteTarget, int size);
         Task AddNote(FullNoteRequest note);
         string GetUHUsernameByEmail(string lbhEmail);
+        Task<CautionaryContactLevelModel[]> GetCautionaryContactByRef(string reference);
     }
 }

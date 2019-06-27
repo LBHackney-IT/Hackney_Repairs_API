@@ -23,7 +23,6 @@ namespace HackneyRepairs.Interfaces
         Task<IEnumerable<DetailedAppointment>> GetAppointmentsByWorkOrderReference(string workOrderReference);
         Task<IEnumerable<UHWorkOrderFeed>> GetWorkOrderFeed(string startId, int resultSize);
         Task<int?> GetWorkOrderSid(string workOrderReference);
-        Task<CautionaryContactLevelModel[]> GetCautionaryContactByRef(string reference);
         Task<IEnumerable<UHWorkOrder>> GetTasksForWorkOrder(string workOrderReference);
     }
 }
