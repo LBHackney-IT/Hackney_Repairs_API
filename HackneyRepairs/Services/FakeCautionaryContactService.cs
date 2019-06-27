@@ -15,22 +15,10 @@ namespace HackneyRepairs.Services
             CautionaryContactLevelModel[] emptyCautionaryContactList;
             var cautionaryContact1 = new CautionaryContactLevelModel()
             {
-                PropertyReference = "00000123",
-                ContactNo = 111111,
-                Title = "MRS",
-                Forenames = "BLIN",
-                Surename = "",
-                CallerNotes = "Don't come its not Healthy",
                 alertCode = "CX"
             };
             var cautionaryContact2 = new CautionaryContactLevelModel()
             {
-                PropertyReference = "00000123",
-                ContactNo = 111111,
-                Title = "MRS",
-                Forenames = "BLIN",
-                Surename = "",
-                CallerNotes = "Don't come its not Healthy",
                 alertCode = "CX"
             };
             CautionaryContactList[0] = cautionaryContact1;

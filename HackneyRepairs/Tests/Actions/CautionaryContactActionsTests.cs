@@ -19,22 +19,10 @@ namespace HackneyRepairs.Tests.Actions
             var mockLogger = new Mock<ILoggerAdapter<CautionaryContactActions>>();
             var property1 = new CautionaryContactLevelModel()
             {
-                PropertyReference = "00000123",
-                ContactNo = 111111,
-                Title = "MRS",
-                Forenames = "BLIN",
-                Surename = "",
-                CallerNotes = "Don't come its not Healthy",
                 alertCode = "CX"
             };
             var property2 = new CautionaryContactLevelModel()
             {
-                PropertyReference = "00000123",
-                ContactNo = 111111,
-                Title = "MRS",
-                Forenames = "BLIN",
-                Surename = "",
-                CallerNotes = "Don't come its not Healthy",
                 alertCode = "CX"
             };
 
@@ -52,22 +40,10 @@ namespace HackneyRepairs.Tests.Actions
             var results = await cautionaryContactActions.GetCautionaryContactByRef("Acacia");
             var outputCautionaryContact1 = new CautionaryContactLevelModel
             {
-                PropertyReference = "00000123",
-                ContactNo = 111111,
-                Title = "MRS",
-                Forenames = "BLIN",
-                Surename = "",
-                CallerNotes = "Don't come its not Healthy",
                 alertCode = "CX"
             };
             var outputCautionaryContact2 = new CautionaryContactLevelModel
             {
-                PropertyReference = "00000123",
-                ContactNo = 111111,
-                Title = "MRS",
-                Forenames = "BLIN",
-                Surename = "",
-                CallerNotes = "Don't come its not Healthy",
                 alertCode = "CX"
             };
             var properties = new CautionaryContactLevelModel[2];

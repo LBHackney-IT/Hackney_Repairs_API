@@ -228,24 +228,24 @@ namespace HackneyRepairs.Repository
             {
                 using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
                 {
-                    string query = $@" select PropertyReference, alertcode from
+                    string query = $@" select alertcode from
                                      (
-                                      select 'Address' as ccType,[PropertyReference],
-                                      [alertCode], startdate, enddate
+                                      select [PropertyReference],
+                                      [alertCode]
                                       from [CCAddress]
                                       INNER JOIN [ccAddressAlert] ON
                                       [ccAddressAlert].[addressNo] = [CCAddress].[UPRN]
                                       where enddate is null AND [PropertyReference] = @Reference  
                                       UNION ALL
-                                      select 'Contact' as ccType, [PropertyReference],
-                                      [alertCode], startdate, enddate
+                                      select [PropertyReference],
+                                      [alertCode]
                                        FROM [CCContactAlert]
 	                                    INNER JOIN [CCContact] ON
 	                                    CCContactAlert.contactNo = CCContact.ContactNo
 	                                    INNER JOIN [CCAddress] ON
 	                                    CCAddress.UPRN = CCContact.UPRN
                                         WHERE enddate is null AND PropertyReference = @Reference 
-	                                    ) derived group by alertcode, [PropertyReference]";
+	                                    ) derived group by alertcode";
 
                     var cautionaryContacts = connection.Query<CautionaryContactLevelModel>(query, new { Reference = reference }).ToArray();
                     return cautionaryContacts;
