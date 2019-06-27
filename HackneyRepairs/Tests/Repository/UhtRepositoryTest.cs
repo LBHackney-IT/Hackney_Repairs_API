@@ -36,15 +36,6 @@ namespace HackneyRepairs.Tests.Repository
         }
 
         [Fact.WhenUniversalHousingIsRunning]
-        public async void GetCautionaryContactByPropertyReference_should_return_no_cautionary_contact_when_none_exist()
-        {
-            var repo = new UhtRepository((UhtDbContext)_simulator.context, _logger);
-            var cautionaryContact = await repo.GetCautionaryContactByRef("123");
-
-            Assert.Empty(cautionaryContact);
-        }
-
-        [Fact.WhenUniversalHousingIsRunning]
         public async void GetWorkOrderByPropertyReference_should_return_a_work_order_when_one_exists_for_the_property()
         {
             _simulator.InsertTrade(trade: "DR", trade_desc: "Door Repair");
