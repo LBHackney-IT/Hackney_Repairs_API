@@ -220,7 +220,43 @@ namespace HackneyRepairs.Repository
             }
 
             return dtCutoff.ToString("yyyy-MM-dd HH:mm:ss");
-        }        
+        }
+
+        public async Task<CautionaryContactLevelModel[]> GetCautionaryContactByRef(string reference)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+                {
+                    string query = $@" select PropertyReference, alertcode from
+                                     (
+                                      select 'Address' as ccType,[PropertyReference],
+                                      [alertCode], startdate, enddate
+                                      from [CCAddress]
+                                      INNER JOIN [ccAddressAlert] ON
+                                      [ccAddressAlert].[addressNo] = [CCAddress].[UPRN]
+                                      where enddate is null AND [PropertyReference] = @Reference  
+                                      UNION ALL
+                                      select 'Contact' as ccType, [PropertyReference],
+                                      [alertCode], startdate, enddate
+                                       FROM [CCContactAlert]
+	                                    INNER JOIN [CCContact] ON
+	                                    CCContactAlert.contactNo = CCContact.ContactNo
+	                                    INNER JOIN [CCAddress] ON
+	                                    CCAddress.UPRN = CCContact.UPRN
+                                        WHERE enddate is null AND PropertyReference = @Reference 
+	                                    ) derived group by alertcode, [PropertyReference]";
+
+                    var cautionaryContacts = connection.Query<CautionaryContactLevelModel>(query, new { Reference = reference }).ToArray();
+                    return cautionaryContacts;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                throw new UhwRepositoryException();
+            }
+        }
     }
 
     public class UhwRepositoryException : Exception { }

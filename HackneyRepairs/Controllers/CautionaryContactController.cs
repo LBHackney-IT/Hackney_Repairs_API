@@ -23,11 +23,11 @@ namespace HackneyRepairs.Controllers
         private HackneyConfigurationBuilder _configBuilder;
         private readonly IExceptionLogger _exceptionLogger;
 
-        public CautionaryContactController(ILoggerAdapter<CautionaryContactActions> cautionaryContactLoggerAdapter, IUhtRepository uhtRepository, IExceptionLogger exceptionLogger)
+        public CautionaryContactController(ILoggerAdapter<CautionaryContactActions> cautionaryContactLoggerAdapter, IUhwRepository uhwRepository, IExceptionLogger exceptionLogger)
         {
             HackneyCautionaryContactServiceFactory cautionaryContactFactory = new HackneyCautionaryContactServiceFactory();
             _configBuilder = new HackneyConfigurationBuilder((Hashtable)Environment.GetEnvironmentVariables(), ConfigurationManager.AppSettings);
-            _cautionaryContactService = cautionaryContactFactory.build(uhtRepository, cautionaryContactLoggerAdapter);
+            _cautionaryContactService = cautionaryContactFactory.build(uhwRepository, cautionaryContactLoggerAdapter);
             _cautionaryContactLoggerAdapter = cautionaryContactLoggerAdapter;
             _exceptionLogger = exceptionLogger;
         }
