@@ -21,5 +21,6 @@ namespace HackneyRepairs.Models
 
         public string UserLogin { get; set; }
         public string Username { get; set; }
+        public string AuthorisedBy { get; set; }
     }
 }
