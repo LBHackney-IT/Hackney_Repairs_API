@@ -21,12 +21,18 @@ namespace HackneyRepairs.Tests.Actions
                 "VA", "PV"
             };
 
+            string[] callerNotes =
+            {
+                "Don't come its not Healthy",
+                "Merged Contacts"
+            };
+
             var cautionaryContact = new CautionaryContactLevelModel()
             {
-                CallerNotes = "Don't come its not Healthy",
+                CallerNotes = callerNotes.ToList(),
                 AlertCodes = alertCodes.ToList()
             };
-           
+
             var fakeService = new Mock<IHackneyCautionaryContactService>();
             fakeService.Setup(service => service.GetCautionaryContactByRef("00000123"))
                .ReturnsAsync(cautionaryContact);
@@ -38,7 +44,7 @@ namespace HackneyRepairs.Tests.Actions
             var results = await cautionaryContactActions.GetCautionaryContactByRef("00000123");
             var outputCautionaryContact = new CautionaryContactLevelModel()
             {
-                CallerNotes = "Don't come its not Healthy",
+                CallerNotes = callerNotes.ToList(),
                 AlertCodes = alertCodes.ToList()
             };
             var json = new { results = outputCautionaryContact };

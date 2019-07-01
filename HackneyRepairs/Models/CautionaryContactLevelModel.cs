@@ -13,11 +13,6 @@ namespace HackneyRepairs.Models
         }
        
         public IList<string> AlertCodes { get; set; }
-        public string CallerNotes { get; set; }
+        public IList<string> CallerNotes { get; set; }
     }
-
-    //public class CallerContactNotes
-    //{
-    //    public string CallerNotes { get; set; }
-    //}
 }

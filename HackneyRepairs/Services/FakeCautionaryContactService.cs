@@ -15,10 +15,15 @@ namespace HackneyRepairs.Services
             {
                 "VA", "PV"
             };
+            string[] callerNotes =
+            {
+                "Don't come its not Healthy",
+                "Merged Contacts"
+            };
 
             var cautionaryContact = new CautionaryContactLevelModel()
             {
-                CallerNotes = "Don't come its not Healthy",
+                CallerNotes = callerNotes,
                 AlertCodes = alertCodes.ToList()
             };
            

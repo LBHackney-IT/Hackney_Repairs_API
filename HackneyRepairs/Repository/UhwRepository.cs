@@ -225,13 +225,17 @@ namespace HackneyRepairs.Repository
                             FROM [CCContactAlert]
                              WHERE enddate is null AND [CCContactAlert].contactNo = @cNUM
 	                    )derived group by alertcode
-                        select LTRIM(RTRIM([CCContact].CallerNotes)) from		
-	                     [CCContact] where ContactNo = @cNUM";
+                          select LTRIM(RTRIM(CallerNotes))
+                            FROM [uhwdev].[dbo].[CCContact]
+                            where contactno IN 
+                            ( SELECT contactno  FROM [uhtdev].[dbo].[properttyview]
+                            where prop_ref = @Reference)
+                            group by CallerNotes";
                     var CautionaryContact = new CautionaryContactLevelModel();
                     using (var multi = connection.QueryMultipleAsync(query, new { Reference = reference }).Result)
                     {
                         var alertCodes = multi.Read<string>().ToList();
-                        var callerNotes = multi.ReadSingleOrDefault<string>();
+                        var callerNotes = multi.Read<string>().ToList();
                         CautionaryContact.AlertCodes = alertCodes;
                         CautionaryContact.CallerNotes = callerNotes;
                     }
