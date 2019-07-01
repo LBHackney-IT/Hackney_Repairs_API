@@ -11,79 +11,26 @@ namespace HackneyRepairs.Services
     {
         public Task<CautionaryContactLevelModel> GetCautionaryContactByRef(string reference)
         {
-            var CautionaryContactList = new CautionaryContactLevelModel[2];
-            CautionaryContactLevelModel[] emptyCautionaryContactList;
-            var cautionaryContact1 = new CautionaryContactLevelModel()
+            string[] alertCodes =
             {
-                //PropertyReference = "00000123",
-                //ContactNo = 111111,
-                //Title = "MRS",
-                //Forenames = "BLIN",
-                //Surename = "",
-                //CallerNotes = "Don't come its not Healthy",
-                //alertCode = "CX"
+                "VA", "PV"
             };
-            var cautionaryContact2 = new CautionaryContactLevelModel()
-            {
-                //PropertyReference = "00000123",
-                //ContactNo = 111111,
-                //Title = "MRS",
-                //Forenames = "BLIN",
-                //Surename = "",
-                //CallerNotes = "Don't come its not Healthy",
-                //AlertCode = "CX"
-            };
-            CautionaryContactList[0] = cautionaryContact1;
-            CautionaryContactList[1] = cautionaryContact2;
-            switch (reference)
-            {
-                case "Acacia":
-                    return Task.Run(() => cautionaryContact1); // CautionaryContactList);
-                case "Elmbridge":
-                    emptyCautionaryContactList = null;
-                    return Task.Run(() => cautionaryContact1);
-                default:
-                    emptyCautionaryContactList = new CautionaryContactLevelModel[0];
-                    return Task.Run(() => cautionaryContact1);
-            }
-        }
 
-        public Task<CautionaryContactLevelModel[]> GetCautionaryContactByRefA(string reference)
-        {
-            var CautionaryContactList = new CautionaryContactLevelModel[2];
-            CautionaryContactLevelModel[] emptyCautionaryContactList;
-            var cautionaryContact1 = new CautionaryContactLevelModel()
+            var cautionaryContact = new CautionaryContactLevelModel()
             {
-                //PropertyReference = "00000123",
-                //ContactNo = 111111,
-                //Title = "MRS",
-                //Forenames = "BLIN",
-                //Surename = "",
-                //CallerNotes = "Don't come its not Healthy",
-                //alertCode = "CX"
+                CallerNotes = "Don't come its not Healthy",
+                AlertCodes = alertCodes.ToList()
             };
-            var cautionaryContact2 = new CautionaryContactLevelModel()
-            {
-            //    PropertyReference = "00000123",
-            //    ContactNo = 111111,
-            //    Title = "MRS",
-            //    Forenames = "BLIN",
-            //    Surename = "",
-            //    CallerNotes = "Don't come its not Healthy",
-            //    alertCode = "CX"
-            };
-            CautionaryContactList[0] = cautionaryContact1;
-            CautionaryContactList[1] = cautionaryContact2;
+           
             switch (reference)
             {
-                case "Acacia":
-                    return Task.Run(() => CautionaryContactList);
-                case "Elmbridge":
-                    emptyCautionaryContactList = null;
-                    return Task.Run(() => emptyCautionaryContactList);
+                case "00000123":
+                    return Task.Run(() => cautionaryContact); 
+                case "00000000":
+                    cautionaryContact = new CautionaryContactLevelModel();
+                    return Task.Run(() => cautionaryContact);
                 default:
-                    emptyCautionaryContactList = new CautionaryContactLevelModel[0];
-                    return Task.Run(() => emptyCautionaryContactList);
+                    return Task.Run(() => cautionaryContact);
             }
         }
     }
