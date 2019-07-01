@@ -317,8 +317,8 @@ namespace HackneyRepairs.Repository
                             LTRIM(RTRIM(t.job_code)) AS SORCode,
                             LTRIM(RTRIM(tr.trade_desc)) AS Trade,
                             LTRIM(RTRIM(wo.sup_ref)) AS SupplierRef,
-						    auser.user_login as UserLogin,
-        				    auser.username as Username,
+						    LTRIM(RTRIM(auser.user_login)) as UserLogin,
+        				    LTRIM(RTRIM(auser.username)) as Username,
                             rj.short_desc AS SORCodeDescription
                         FROM
                            rmworder wo
@@ -371,9 +371,9 @@ namespace HackneyRepairs.Repository
                             LTRIM(RTRIM(t.job_code)) AS SORCode,
                             LTRIM(RTRIM(tr.trade_desc)) AS Trade,
                             LTRIM(RTRIM(wo.sup_ref)) AS SupplierRef,
-						    auser.user_login as UserLogin,
-        				    auser.username as Username,
-                            authuser.username as 'AuthorisedBy'
+						    LTRIM(RTRIM(auser.user_login)) as UserLogin,
+        				    LTRIM(RTRIM(auser.username)) as Username,
+                            LTRIM(RTRIM(authuser.username)) as 'AuthorisedBy'
                         FROM
                            rmworder wo
                             INNER JOIN rmreqst r ON wo.rq_ref = r.rq_ref
