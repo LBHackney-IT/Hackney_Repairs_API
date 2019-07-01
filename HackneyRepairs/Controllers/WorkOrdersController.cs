@@ -335,7 +335,7 @@ namespace HackneyRepairs.Controllers
         /// Cancel work order 
         /// </summary>
         /// <param name="workOrderReference">The reference number of the work order</param>
-        /// <param name="lbhEmail"> JSON object with Email address of user making issue_order request</param>
+        /// <param name="request">JSON object with the Hackney Email address of user making the cancel request</param>
         /// <returns>A JSON object for a successfully cancelled work order</returns>
         /// <response code="200">A successfully cancelled order</response>
         [HttpPost("{workOrderReference}/cancel")]
