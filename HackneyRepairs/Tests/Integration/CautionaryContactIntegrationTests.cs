@@ -9,11 +9,11 @@ using Xunit;
 
 namespace HackneyRepairs.Tests.Integration
 {
-    public class CautionaryContactShould
+    public class CautionaryContactIntegrationTests
     {
         private readonly TestServer _server;
         private readonly HttpClient _client;
-        public CautionaryContactShould()
+        public CautionaryContactIntegrationTests()
         {
             Environment.SetEnvironmentVariable("UhwDb", "connectionString=Test");
             _server = new TestServer(new WebHostBuilder()
