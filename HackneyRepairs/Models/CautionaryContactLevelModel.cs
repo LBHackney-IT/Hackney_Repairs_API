@@ -7,12 +7,12 @@ namespace HackneyRepairs.Models
 {
     public class CautionaryContactLevelModel
     {
-        public string PropertyReference { get; set; }
-        public int ContactNo { get; set; }
-        public string Title { get; set; }
-        public string Forenames { get; set; }
-        public string Surename { get; set; }
-        public string CallerNotes { get; set; }
-        public string alertCode { get; set; }
+        public CautionaryContactLevelModel()
+        { 
+            AlertCodes = new List<string>();
+        }
+       
+        public IList<string> AlertCodes { get; set; }
+        public IList<string> CallerNotes { get; set; }
     }
 }

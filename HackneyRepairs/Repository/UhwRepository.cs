@@ -204,6 +204,52 @@ namespace HackneyRepairs.Repository
             }
          }
 
+        public async Task<CautionaryContactLevelModel> GetCautionaryContactByRef(string reference)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+                {
+                    string query = $@"DECLARE @cNUM int
+                            SELECT @cNUM = contactno  FROM [uht{environmentDbWord}].[dbo].[properttyview]
+                            where prop_ref = @Reference
+                        select alertcode from
+                        (
+                            select [alertCode]
+                            from [CCAddressAlert]
+	                        INNER JOIN [CCContactView] ON
+	                        CCContactView.UPRN =[ccAddressAlert].[addressNo]
+                            where enddate is null AND CCContactView.ContactNo = @cNUM
+                             UNION ALL
+                            select [alertCode]
+                            FROM [CCContactAlert]
+                             WHERE enddate is null AND [CCContactAlert].contactNo = @cNUM
+	                    )derived group by alertcode
+                          select LTRIM(RTRIM(CallerNotes))
+                            FROM [uhw{environmentDbWord}].[dbo].[CCContact]
+                            where contactno IN 
+                            ( SELECT contactno  FROM [uht{environmentDbWord}].[dbo].[properttyview]
+                            where prop_ref = @Reference)
+                            group by CallerNotes";
+                    var CautionaryContact = new CautionaryContactLevelModel();
+                    using (var multi = connection.QueryMultipleAsync(query, new { Reference = reference }).Result)
+                    {
+                        var alertCodes = multi.Read<string>().ToList();
+                        var callerNotes = multi.Read<string>().ToList();
+                        CautionaryContact.AlertCodes = alertCodes;
+                        CautionaryContact.CallerNotes = callerNotes;
+                    }
+
+                    return CautionaryContact;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                throw new UhwRepositoryException();
+            }
+        }
+
         public static string GetCutoffTime()
         {
             DateTime now = DateTime.Now;
@@ -220,7 +266,7 @@ namespace HackneyRepairs.Repository
             }
 
             return dtCutoff.ToString("yyyy-MM-dd HH:mm:ss");
-        }        
+        }
     }
 
     public class UhwRepositoryException : Exception { }
