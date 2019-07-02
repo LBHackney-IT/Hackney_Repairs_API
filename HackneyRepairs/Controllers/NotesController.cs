@@ -139,13 +139,13 @@ namespace HackneyRepairs.Controllers
                 if (ex is MissingWorkOrderException)
                 {
                     var userMessage = "Object reference has not been found. Note not created";
-                    return ResponseBuilder.Error(404, userMessage, ex.Message);
+                    return ResponseBuilder.Error(404, ex.Message, userMessage);
                 }
 
                 if (ex is UhwRepositoryException)
                 {
                     var userMessage = "We had issues with connecting to the data source.";
-                    return ResponseBuilder.Error(500, userMessage, ex.Message);
+                    return ResponseBuilder.Error(500, ex.Message, userMessage);
                 }
 
                 return ResponseBuilder.Error(500, "We had issues processing your request.", ex.StackTrace);

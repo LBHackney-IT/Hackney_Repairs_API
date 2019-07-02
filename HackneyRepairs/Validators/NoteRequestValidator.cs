@@ -38,12 +38,12 @@ namespace HackneyRepairs.Validators
                 if (string.IsNullOrWhiteSpace(request.Text))
                 {
                     validationResult.Valid = false;
-                    validationResult.ErrorMessages.Add("Please provide a text for the note");
+                    validationResult.ErrorMessages.Add("Field cannot be blank");
                 }
                 else if (request.Text.Length > 2000)
                 { 
                     validationResult.Valid = false;
-                    validationResult.ErrorMessages.Add("Note text cannot exeed 2000 characters");
+                    validationResult.ErrorMessages.Add("Note text cannot exceed 2000 characters");
                 }
             }
 
