@@ -226,9 +226,9 @@ namespace HackneyRepairs.Repository
                              WHERE enddate is null AND [CCContactAlert].contactNo = @cNUM
 	                    )derived group by alertcode
                           select LTRIM(RTRIM(CallerNotes))
-                            FROM [uhwdev].[dbo].[CCContact]
+                            FROM [uhw{environmentDbWord}].[dbo].[CCContact]
                             where contactno IN 
-                            ( SELECT contactno  FROM [uhtdev].[dbo].[properttyview]
+                            ( SELECT contactno  FROM [uht{environmentDbWord}].[dbo].[properttyview]
                             where prop_ref = @Reference)
                             group by CallerNotes";
                     var CautionaryContact = new CautionaryContactLevelModel();
