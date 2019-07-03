@@ -343,7 +343,7 @@ namespace HackneyRepairs.Controllers
         {
             //string email = this.Request.Headers["x-lhbEmail"].ToString();
             if (!EmailValidator.Validate(request.LBHEmail))
-                return ResponseBuilder.Error(500, "Please check your email address", "We had some problems processing your request");
+                return ResponseBuilder.Error(500, "Please check your email address", "Please check your email address");
             
             try
             {
@@ -354,7 +354,7 @@ namespace HackneyRepairs.Controllers
             catch (Exception ex)
             {
                 _exceptionLogger.CaptureException(ex);
-                return ResponseBuilder.Error(500, "We had some problems processing your request", ex.Message);
+                return ResponseBuilder.Error(500, ex.Message, ex.Message);
             }
         }
 
