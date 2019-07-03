@@ -8,7 +8,13 @@ namespace HackneyRepairs.Models
 {
 	public class RepairRequest : RepairRequestBase
     {
+        public RepairRequest() 
+        {
+            this.IsRecharge = false;
+        } 
+
 		public RepairRequestContact Contact { get; set; }
+        public bool IsRecharge { get; set; }
         public List<WorkOrder> WorkOrders { get; set; }
     }
 

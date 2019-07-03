@@ -62,11 +62,21 @@ namespace HackneyRepairs.Services
             };
         }
 
+        //Creates a list of tasks.
+        //Adds a RECHARGE task if a RepairRequest RECHARGE (IsRecharge) value is true
         public List<RepairTaskInfo> GetTaskList(RepairRequest request)
         {
             var taskList = new List<RepairTaskInfo>();
+
+            //Check if recharge code needs to be added
+            bool rechargeAdded = false;
+
             foreach (var workorder in request.WorkOrders)
             {
+                //Check workorders for a RECHARGE sorCode
+                if (workorder.SorCode.Equals("RECHARGE", StringComparison.OrdinalIgnoreCase))
+                    rechargeAdded = true;
+              
                 taskList.Add(new RepairTaskInfo
                 {
                     PropertyReference = request.PropertyReference,
@@ -74,6 +84,19 @@ namespace HackneyRepairs.Services
                     JobCode = workorder.SorCode,
                     SupplierReference = getContractorForSOR(workorder.SorCode),
                     EstimatedUnits = workorder.EstimatedUnits
+                });
+            }
+
+            //Add a RECHARGE task if the RepairRequest RECHARGE value is true
+            //and a RECHARGE task is not already present
+            if (!rechargeAdded && request.IsRecharge)
+            {
+                taskList.Add(new RepairTaskInfo
+                {
+                    PropertyReference = request.PropertyReference,
+                    PriorityCode = request.Priority.ToUpper(),
+                    JobCode = "RECHARGE",
+                    SupplierReference = "H01"
                 });
             }
 
