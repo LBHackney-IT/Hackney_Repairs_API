@@ -210,27 +210,31 @@ namespace HackneyRepairs.Repository
             {
                 using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
                 {
-                    string query = $@"DECLARE @cNUM int
-                            SELECT @cNUM = contactno  FROM [uht{environmentDbWord}].[dbo].[properttyview]
+                    string query = $@"WITH contactNums AS 
+							(
+                            SELECT DISTINCT contactno, uprn  
+							FROM [uht{environmentDbWord}].[dbo].[properttyview]
                             where prop_ref = @Reference
-                        select alertcode from
+							)
+						select [alertCode] from
                         (
-                            select [alertCode]
+							select [alertCode]
                             from [CCAddressAlert]
-	                        INNER JOIN [CCContactView] ON
-	                        CCContactView.UPRN =[ccAddressAlert].[addressNo]
-                            where enddate is null AND CCContactView.ContactNo = @cNUM
-                             UNION ALL
-                            select [alertCode]
+                            where enddate is null 
+							AND [CCAddressAlert].addressNo in (Select uprn FROM contactNums)
+							UNION ALL
+							 select [alertCode]
                             FROM [CCContactAlert]
-                             WHERE enddate is null AND [CCContactAlert].contactNo = @cNUM
-	                    )derived group by alertcode
-                          select LTRIM(RTRIM(CallerNotes))
+                             WHERE enddate is null 
+							 AND [CCContactAlert].contactNo IN (Select contactno FROM contactNums)
+						)derived group by alertcode
+                        select LTRIM(RTRIM(CallerNotes))
                             FROM [uhw{environmentDbWord}].[dbo].[CCContact]
                             where contactno IN 
                             ( SELECT contactno  FROM [uht{environmentDbWord}].[dbo].[properttyview]
                             where prop_ref = @Reference)
                             group by CallerNotes";
+
                     var CautionaryContact = new CautionaryContactLevelModel();
                     using (var multi = connection.QueryMultipleAsync(query, new { Reference = reference }).Result)
                     {
