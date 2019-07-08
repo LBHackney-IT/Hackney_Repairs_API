@@ -74,7 +74,8 @@ namespace HackneyRepairs.Tests.Services
                 {
                     new WorkOrder
                     {
-                        SorCode = "20110010"
+                        SorCode = "20110010",
+                        EstimatedUnits = "1"
                     }
                 }
             });
