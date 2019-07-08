@@ -163,6 +163,20 @@ namespace HackneyRepairs.Validators
                             }
                         }
 
+                        decimal eUnit = 0.00m;
+                        if (!decimal.TryParse(or.EstimatedUnits, out eUnit) || eUnit == 0.00m)
+                        {
+                            validationResult.Valid = false;
+                            validationResult.RepairApiError.Add(new JsonApiErrorMessage
+                            {
+                                Code = 400,
+                                DeveloperMessage = "Quantity unit must be a value greater than 0",
+                                UserMessage = "The quantity value provided is not valid",
+                                Source = $@"/workOrders/{_count}/sorCode"
+                            });
+
+                        }
+                        
                         //increment count in loop
                         _count++;
                     }

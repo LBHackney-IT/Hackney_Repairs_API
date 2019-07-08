@@ -73,7 +73,7 @@ namespace HackneyRepairs.Services
                     PriorityCode = request.Priority.ToUpper(),
                     JobCode = workorder.SorCode,
                     SupplierReference = getContractorForSOR(workorder.SorCode),
-                    EstimatedUnits = workorder.EstimatedUnits
+                    EstimatedUnits = decimal.Parse(workorder.EstimatedUnits)
                 });
             }
 

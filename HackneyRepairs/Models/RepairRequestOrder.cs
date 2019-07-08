@@ -12,6 +12,6 @@ namespace HackneyRepairs.Models
         public string WorkOrderReference { get; set; }
         public string SorCode { get; set; }
         public string SupplierRef { get; set; }
-        public decimal? EstimatedUnits { get; set; }
+        public string EstimatedUnits { get; set; }
     }
 }
