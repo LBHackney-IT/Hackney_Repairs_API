@@ -161,7 +161,8 @@ namespace HackneyRepairs.Tests.Integration
                 {
                     new WorkOrder
                     {
-                        SorCode = "20040020"
+                        SorCode = "20040020",
+                        EstimatedUnits = "1"
                     }
                 }
             };
