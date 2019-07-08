@@ -172,7 +172,7 @@ namespace HackneyRepairs.Validators
                                 Code = 400,
                                 DeveloperMessage = "Quantity unit must be a value greater than 0",
                                 UserMessage = "Quantity must be a number",
-                                Source = $@"/workOrders/{_count}/sorCode"
+                                Source = $@"/workOrders/{_count}/EstimatedUnits"
                             });
                         }
 
