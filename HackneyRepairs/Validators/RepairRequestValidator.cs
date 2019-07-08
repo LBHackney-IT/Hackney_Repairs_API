@@ -174,9 +174,8 @@ namespace HackneyRepairs.Validators
                                 UserMessage = "The quantity value provided is not valid",
                                 Source = $@"/workOrders/{_count}/sorCode"
                             });
-
                         }
-                        
+
                         //increment count in loop
                         _count++;
                     }
