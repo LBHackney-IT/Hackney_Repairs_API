@@ -277,7 +277,7 @@ namespace HackneyRepairs.Repository
 							LEFT OUTER JOIN auser AS auser ON auser.user_code = wo.user_code
                             LEFT OUTER JOIN auser AS authuser ON authuser.user_code = wo.auth_by
                         WHERE 
-                            wo.created < @CutoffTime AND wo.wo_ref = @WorkOrderReference";
+                            wo.created > @CutoffTime AND wo.wo_ref = @WorkOrderReference";
 
                     var queryParameters = new
                     {
