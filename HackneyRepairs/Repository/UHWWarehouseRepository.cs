@@ -867,24 +867,21 @@ namespace HackneyRepairs.Repository
                 using (var connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
                 {
                     string query = @"set dateformat ymd;
-                        SELECT
+                         SELECT
                            LTRIM(RTRIM(wo.wo_ref)) AS WorkOrderReference,
                            LTRIM(RTRIM(r.rq_ref)) AS RepairRequestReference,
                            r.rq_problem AS ProblemDescription,
-                           wo.created AS Created,
+                           t.created AS Created,
                            t.est_cost AS EstimatedCost,
                            t.est_units AS EstimatedUnits,
-                           t.unit_narr AS UnitType,
-                           wo.act_cost AS ActualCost,
-                           wo.completed AS CompletedOn,
-                           wo.date_due AS DateDue,
+                           LTRIM(RTRIM(t.unit_narr)) AS UnitType,
+                           t.completed AS CompletedOn,
+                           t.date_due AS DateDue,
                            LTRIM(RTRIM(t.task_status)) AS TaskStatus,
-                           LTRIM(RTRIM(wo.u_dlo_status)) AS DLOStatus,
-                           LTRIM(RTRIM(wo.u_servitor_ref)) AS ServitorReference,
-                           LTRIM(RTRIM(wo.prop_ref)) AS PropertyReference,
+                           LTRIM(RTRIM(t.prop_ref)) AS PropertyReference,
                            LTRIM(RTRIM(t.job_code)) AS SORCode,
                            LTRIM(RTRIM(tr.trade_desc)) AS Trade,
-                           LTRIM(RTRIM(wo.sup_ref)) AS SupplierRef,
+                           LTRIM(RTRIM(t.sup_ref)) AS SupplierRef,
 						   LTRIM(RTRIM(auser.user_login)) as UserLogin,
         				   LTRIM(RTRIM(auser.username)) as Username,
                            LTRIM(RTRIM(rj.short_desc)) AS SORCodeDescription
