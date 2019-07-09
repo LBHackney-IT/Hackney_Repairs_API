@@ -281,6 +281,7 @@ namespace HackneyRepairs.Repository
 
                     var queryParameters = new
                     {
+                        CutoffTime = GetCutoffTime(),
                         WorkOrderReference = workOrderReference
                     };
                     workOrders = await connection.QueryAsync<UHWorkOrder>(query, queryParameters);
@@ -291,7 +292,7 @@ namespace HackneyRepairs.Repository
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                throw new UHWWarehouseRepositoryException();
+                throw new UhtRepositoryException();
             }
         }
 
