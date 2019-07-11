@@ -328,7 +328,7 @@ namespace HackneyRepairs.Controllers
             {
                 _exceptionLogger.CaptureException(ex);
                 return ResponseBuilder.Error(500, "Order not authorised. The authorisation workflow is currently not supported " +
-                    "in Repairs Hub. Please cancel the order and re-raise in UH." + ex.Message, ex.Message);
+                    "in Repairs Hub. Please cancel the order and re-raise in UH.", ex.Message);
             }
             catch (Exception ex)
             {
