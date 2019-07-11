@@ -324,6 +324,12 @@ namespace HackneyRepairs.Controllers
                 var result = await repairActions.IssueOrderAsync(workOrderReference, request.LBHEmail);
                 return ResponseBuilder.Ok(result);
             }
+            catch (AppointmentServiceException ex)
+            {
+                _exceptionLogger.CaptureException(ex);
+                return ResponseBuilder.Error(500, "Order not authorised. The authorisation workflow is currently not supported " +
+                    "in Repairs Hub. Please cancel the order and re-raise in UH." + ex.Message, ex.Message);
+            }
             catch (Exception ex)
             {
                 _exceptionLogger.CaptureException(ex);

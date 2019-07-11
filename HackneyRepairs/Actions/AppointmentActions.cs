@@ -357,7 +357,16 @@ namespace HackneyRepairs.Actions
 
     public class MissingSlotsException : System.Exception { }
     public class MissingSlotsForDayException : System.Exception { }
-    public class AppointmentServiceException : System.Exception { }
+    public class AppointmentServiceException : Exception
+    {
+        public AppointmentServiceException()
+        {
+        }
+
+        public AppointmentServiceException(string message) : base(message)
+        {
+        }
+    }
 
     public class InvalidWorkOrderInUHException : System.Exception { }
     public class NoAvailableAppointmentsException : System.Exception { }
