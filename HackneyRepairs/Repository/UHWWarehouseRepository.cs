@@ -94,7 +94,8 @@ namespace HackneyRepairs.Repository
             {
                 using (var connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
                 {
-                    string query = $@"SELECT
+                    string query = $@"set dateformat ymd;
+                                    SELECT
                                         request.rq_ref,
                                         rq_problem,
                                         rq_priority,

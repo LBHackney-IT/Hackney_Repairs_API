@@ -10,6 +10,6 @@ namespace HackneyRepairs.Models
         public string LBHEmail { get; set; }
         public string UHUserLogin { get; set; }
         public string UHUsername { get; set; }
-        public string CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
 	}
 }
