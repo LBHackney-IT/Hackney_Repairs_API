@@ -198,7 +198,7 @@ namespace HackneyRepairs.Actions
             repair.ProblemDescription = firstResult.rq_problem;
             repair.UHUserLogin = firstResult.user_login;
             repair.UHUsername = firstResult.username;
-            repair.CreatedDate = firstResult.rq_date;
+            repair.CreatedDate = DateTime.Parse(firstResult.rq_date);
 
             repair.Contact = new RepairRequestContact
             {
