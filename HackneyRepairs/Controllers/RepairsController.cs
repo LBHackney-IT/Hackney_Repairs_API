@@ -79,7 +79,7 @@ namespace HackneyRepairs.Controllers
             catch (RepairsServiceException ex)
             {
                 _exceptionLogger.CaptureException(ex);
-                return ResponseBuilder.Error(500, "There was an error creating ther repair request: " + ex.Message, ex.Message);
+                return ResponseBuilder.Error(500, "There was an error creating the repair request: " + ex.Message, ex.Message);
             }
             catch (Exception ex)
             {

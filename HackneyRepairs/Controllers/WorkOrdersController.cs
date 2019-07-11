@@ -324,6 +324,11 @@ namespace HackneyRepairs.Controllers
                 var result = await repairActions.IssueOrderAsync(workOrderReference, request.LBHEmail);
                 return ResponseBuilder.Ok(result);
             }
+            catch (AppointmentServiceException ex)
+            {
+                _exceptionLogger.CaptureException(ex);
+                return ResponseBuilder.Error(500, "There was an error creating the repair: " + ex.Message, ex.Message);
+            }
             catch (Exception ex)
             {
                 _exceptionLogger.CaptureException(ex);

@@ -136,7 +136,7 @@ namespace HackneyRepairs.Actions
             if (!issueOrderResponse.Success)
             {
                 _logger.LogError(issueOrderResponse.ErrorMessage);
-                throw new AppointmentServiceException();
+                throw new AppointmentServiceException(issueOrderResponse.ErrorMessage);
             }
 
             return issueOrderResponse;
