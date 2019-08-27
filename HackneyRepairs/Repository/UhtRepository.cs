@@ -94,7 +94,7 @@ namespace HackneyRepairs.Repository
                     var queryParameters = new
                     {
                         CutoffTime = GetCutoffTime(),
-                        WorkOrderReferene = workOrderReference
+                        WorkOrderReference = workOrderReference
                     };
                     var drsOrderResult = connection.Query<DrsOrder>(query, queryParameters).FirstOrDefault();
 
