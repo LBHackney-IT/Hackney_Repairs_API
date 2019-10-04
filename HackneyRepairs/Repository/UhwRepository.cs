@@ -29,7 +29,7 @@ namespace HackneyRepairs.Repository
                     environmentDbWord = "live";
                     break;
                 case "Test":
-                    environmentDbWord = "live";
+                    environmentDbWord = "test";
                     break;
                 default:
                     environmentDbWord = "dev";
