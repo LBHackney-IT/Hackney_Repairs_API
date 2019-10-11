@@ -1054,7 +1054,7 @@ namespace HackneyRepairs.Repository
         private bool IsDevelopmentEnvironment()
         {
             string environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            if (environment.ToLower() != "development" && environment.ToLower() != "local")
+            if (environment.ToLower() != "development" && environment.ToLower() != "test" && environment.ToLower() != "local")
             {
                 return false;
             }
