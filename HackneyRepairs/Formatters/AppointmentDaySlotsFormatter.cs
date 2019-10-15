@@ -11,8 +11,8 @@ namespace HackneyRepairs.Formatters
         {
             return slots.Select(s => new 
             {
-              beginDate = DateTimeFormatter.FormatDateTimeToUtc(s.BeginDate),
-              endDate = DateTimeFormatter.FormatDateTimeToUtc(s.EndDate),
+              beginDate = DateTimeFormatter.FormatDateTimeToGMT(s.BeginDate),
+              endDate = DateTimeFormatter.FormatDateTimeToGMT(s.EndDate),
               bestSlot = s.BestSlot
             }).ToArray();
         }

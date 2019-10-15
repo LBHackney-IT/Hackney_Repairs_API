@@ -7,9 +7,11 @@ namespace HackneyRepairs.Formatters
 {
     public static class DateTimeFormatter
     {
-        public static string FormatDateTimeToUtc(DateTime date)
+        public static string FormatDateTimeToGMT(DateTime date)
         {
-            return date.ToString("s") + "Z";
+            TimeZoneInfo gmtZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
+            return TimeZoneInfo.ConvertTime(date, gmtZone).ToString("s") + "Z";
+            //return date.ToString("s") + "Z";
         }
     }
 }

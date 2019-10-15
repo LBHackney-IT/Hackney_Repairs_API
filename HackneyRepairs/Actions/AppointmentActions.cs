@@ -133,8 +133,8 @@ namespace HackneyRepairs.Actions
             // End Issue Order
             var json = new
             {
-                beginDate = DateTimeFormatter.FormatDateTimeToUtc(beginDate),
-                endDate = DateTimeFormatter.FormatDateTimeToUtc(endDate)
+                beginDate = DateTimeFormatter.FormatDateTimeToGMT(beginDate),
+                endDate = DateTimeFormatter.FormatDateTimeToGMT(endDate)
             };
             return json;
         }
@@ -208,8 +208,8 @@ namespace HackneyRepairs.Actions
 
             return new
             {
-                beginDate = DateTimeFormatter.FormatDateTimeToUtc(orderResponse.@return.theOrders[0].theBookings[0].assignedStart),
-                endDate = DateTimeFormatter.FormatDateTimeToUtc(orderResponse.@return.theOrders[0].theBookings[0].assignedEnd)
+                beginDate = DateTimeFormatter.FormatDateTimeToGMT(orderResponse.@return.theOrders[0].theBookings[0].assignedStart),
+                endDate = DateTimeFormatter.FormatDateTimeToGMT(orderResponse.@return.theOrders[0].theBookings[0].assignedEnd)
             };
         }
 
@@ -247,7 +247,7 @@ namespace HackneyRepairs.Actions
         private List<Slot> buildSlot(daySlotsInfo daySlot)
         {
             _logger.LogInformation($"Getting the Slots info from the daySlot {daySlot}");
-
+           
           var slots = new List<Slot>();
           try
             {
