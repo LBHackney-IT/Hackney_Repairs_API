@@ -9,9 +9,11 @@ namespace HackneyRepairs.Formatters
     {
         public static string FormatDateTimeToGMT(DateTime date)
         {
-            TimeZoneInfo gmtZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
-            return TimeZoneInfo.ConvertTime(date, gmtZone).ToString("s") + "Z";
-            //return date.ToString("s") + "Z";
+            TimeSpan ts = TimeZoneInfo.Local.GetUtcOffset(date);
+            TimeSpan bts = TimeZoneInfo.Local.BaseUtcOffset;
+
+            //compare the UTC offsets
+            return (ts > bts) ? date.ToString("s") + "Z" : date.Add(ts).ToString("s") + "Z";
         }
     }
 }
