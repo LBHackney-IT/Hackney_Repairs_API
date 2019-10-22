@@ -42,7 +42,7 @@ namespace HackneyRepairs.Repository
                             rent.tenure AS 'TenureCode',
 							tenure.ten_desc AS 'TenureDescription',
                             cat_type AS 'PropertyTypeCode',
-							pt_prop_desc AS 'PropertyTypeDescription',
+							LTRIM(RTRIM(pt_prop_desc)) AS 'PropertyTypeDescription',
 							LTRIM(RTRIM([NeighbourhoodDescription])) AS 'LettingAreaDescription'
 							FROM 
                             property 
