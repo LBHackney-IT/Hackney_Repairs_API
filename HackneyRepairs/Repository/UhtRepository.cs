@@ -41,6 +41,8 @@ namespace HackneyRepairs.Repository
                             lulevel.lu_desc AS 'Description',
                             rent.tenure AS 'TenureCode',
 							tenure.ten_desc AS 'TenureDescription',
+                            cat_type AS 'PropertyTypeCode',
+							pt_prop_desc AS 'PropertyTypeDescription',
 							LTRIM(RTRIM([NeighbourhoodDescription])) AS 'LettingAreaDescription'
 							FROM 
                             property 
@@ -48,6 +50,7 @@ namespace HackneyRepairs.Repository
 							LEFT join rent on property.prop_ref = rent.prop_ref
 							LEFT join tenure on rent.tenure = tenure.ten_type
 							left join [vw_pcPropertydesc] on property.prop_ref = [vw_pcPropertydesc].prop_ref
+                            LEFT join proptype on property.cat_type = proptype.pt_prop_code
                             WHERE property.prop_ref = @PropertyReference";
                     var property = connnection.Query<PropertyDetails>(query, new { PropertyReference = reference }).First();
                     return property;

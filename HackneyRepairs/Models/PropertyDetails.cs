@@ -9,5 +9,6 @@ namespace HackneyRepairs.Models
         public int LevelCode { get; set; }
         public string Description { get; set; }
         public string TenureCode { get; set; }
+        public string PropertyTypeCode { get; set; }
     }
 }
