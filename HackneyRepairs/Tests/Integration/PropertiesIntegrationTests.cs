@@ -288,7 +288,9 @@ namespace HackneyRepairs.Tests
             json.Append("\"maintainable\":true,");
             json.Append("\"tenureCode\":\"SEC\",");
             json.Append("\"tenure\":\"Secure\",");
-            json.Append("\"lettingArea\":\"Lordship South TMO (SN) H2556\"");
+            json.Append("\"lettingArea\":\"Lordship South TMO (SN) H2556\",");
+            json.Append("\"propertyTypeCode\":\"NBD\",");
+            json.Append("\"propertyTypeDescription\":\"New Build Dwellings\"");
             json.Append("}");
             Assert.Equal(json.ToString(), resultString);
         }
@@ -407,8 +409,9 @@ namespace HackneyRepairs.Tests
             json.Append("\"maintainable\":true,");
             json.Append("\"tenureCode\":\"\",");
             json.Append("\"tenure\":\"\",");
-            json.Append("\"lettingArea\":null");
-            
+            json.Append("\"lettingArea\":null,");
+            json.Append("\"propertyTypeCode\":null,");
+            json.Append("\"propertyTypeDescription\":null");
             json.Append("}");
             Assert.Equal(json.ToString(), resultString);
         }
@@ -559,7 +562,9 @@ namespace HackneyRepairs.Tests
             json.Append("\"maintainable\":true,");
             json.Append("\"tenureCode\":\"\",");
             json.Append("\"tenure\":\"\",");
-            json.Append("\"lettingArea\":null");
+            json.Append("\"lettingArea\":null,");
+            json.Append("\"propertyTypeCode\":null,");
+            json.Append("\"propertyTypeDescription\":null");
             json.Append("}");
             Assert.Equal(json.ToString(), resultString);
         }

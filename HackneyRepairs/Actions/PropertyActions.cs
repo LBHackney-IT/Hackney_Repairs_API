@@ -317,7 +317,9 @@ namespace HackneyRepairs.Actions
                     maintainable = property.Maintainable,
                     tenureCode = property.TenureCode,
                     tenure = property.TenureDescription,
-                    lettingArea = property.LettingAreaDescription
+                    lettingArea = property.LettingAreaDescription,
+                    propertyTypeCode = property.PropertyTypeCode,
+                    propertyTypeDescription = property.PropertyTypeDescription 
                 };
             }
 
@@ -331,7 +333,9 @@ namespace HackneyRepairs.Actions
                 description = property.Description.Trim(),
                 tenureCode = (property.TenureCode ?? "").Trim(),
                 tenure = (property.TenureDescription ?? "").Trim(),
-                lettingArea = property.LettingAreaDescription
+                lettingArea = property.LettingAreaDescription,
+                 propertyTypeCode = property.PropertyTypeCode,
+                propertyTypeDescription = property.PropertyTypeDescription
             };
         }
 
