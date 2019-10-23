@@ -642,7 +642,7 @@ namespace HackneyRepairs.Repository
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                throw new UhtRepositoryException();
+                throw new UhtRepositoryException(ex.Message);
             }
 
             return appointments;
@@ -857,5 +857,11 @@ namespace HackneyRepairs.Repository
 		}
     }
 
-	public class UhtRepositoryException : Exception { }
+	public class UhtRepositoryException : Exception
+    {
+        public UhtRepositoryException() { }
+
+        public UhtRepositoryException(string message) : base(message)
+        { }
+    }
 }
