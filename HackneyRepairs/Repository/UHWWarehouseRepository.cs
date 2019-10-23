@@ -483,6 +483,7 @@ namespace HackneyRepairs.Repository
                            wo.act_cost AS ActualCost,
                            wo.completed AS CompletedOn,
                            wo.date_due AS DateDue,
+                           wo.auth_date AS AuthDate,
                            LTRIM(RTRIM(wo.wo_status)) AS WorkOrderStatus,
                            LTRIM(RTRIM(wo.u_dlo_status)) AS DLOStatus,
                            LTRIM(RTRIM(wo.u_servitor_ref)) AS ServitorReference,
@@ -490,8 +491,8 @@ namespace HackneyRepairs.Repository
                            LTRIM(RTRIM(t.job_code)) AS SORCode,
                            LTRIM(RTRIM(tr.trade_desc)) AS Trade,
                            LTRIM(RTRIM(wo.sup_ref)) AS SupplierRef,
-						   LTRIM(RTRIM(auser.user_login)),
-        				   LTRIM(RTRIM(auser.username)),
+						   LTRIM(RTRIM(auser.user_login)) as UserLogin,
+        				       LTRIM(RTRIM(auser.username)) as Username,
                            LTRIM(RTRIM(authuser.username)) as 'AuthorisedBy'
                         FROM
                            rmworder wo
