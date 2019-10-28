@@ -83,7 +83,7 @@ namespace HackneyRepairs.Repository
 			catch (Exception ex)
 			{
 				_logger.LogError(ex.Message);
-				throw new DrsRepositoryException();
+				throw new DrsRepositoryException(ex.Message);
 			}
 		}
 
@@ -100,10 +100,15 @@ namespace HackneyRepairs.Repository
             catch (Exception ex) 
             {
                 _logger.LogError(ex.Message);
-                throw new DrsRepositoryException(); 
+                throw new DrsRepositoryException(ex.Message); 
 			}
 		}
 	}
 
-    public class DrsRepositoryException : Exception { }  
+    public class DrsRepositoryException : Exception
+    {
+        public DrsRepositoryException() { }
+        public DrsRepositoryException(string message) : base(message)
+        { }
+    }  
 }

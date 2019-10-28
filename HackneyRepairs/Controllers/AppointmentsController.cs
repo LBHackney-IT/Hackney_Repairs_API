@@ -123,7 +123,28 @@ namespace HackneyRepairs.Controllers
                     return ResponseBuilder.ErrorFromList(400, errors);
 				}
 			}
-			catch (Exception ex)
+            catch (AppointmentServiceException ex)
+            {
+                _exceptionLogger.CaptureException(ex);
+                return ResponseBuilder.Error(500, "There was an error when posting new appointment details to DRS. Please " +
+                    "contact the application support team by raising a ticket at https://support.hackney.gov.uk and quote " +
+                    "this error message", ex.Message);
+            }
+            catch (UHWWarehouseRepositoryException ex)
+            {
+                _exceptionLogger.CaptureException(ex);
+                return ResponseBuilder.Error(500, "We got an error from Universal Housing (UHW) when we tried to get the " +
+                    "workorder details. Please contact the application support team by raising a ticket " +
+                    "at https://support.hackney.gov.uk and quote this error message", ex.Message);
+            }
+            catch (UhtRepositoryException ex)
+            {
+                _exceptionLogger.CaptureException(ex);
+                return ResponseBuilder.Error(500, "We got an error from Universal Housing (UHT) when we tried to get the workorder " +
+                    "details. Please contact the application support team by raising a ticket at https://support.hackney.gov.uk and " +
+                    "quote this error message", ex.Message);
+            }
+            catch (Exception ex)
 			{
 				_exceptionLogger.CaptureException(ex);
                 return ResponseBuilder.Error(500, "We had some problems processing your request", ex.Message);
@@ -165,7 +186,16 @@ namespace HackneyRepairs.Controllers
             catch (UhtRepositoryException ex)
             {
 	            _exceptionLogger.CaptureException(ex);
-                return ResponseBuilder.Error(500, "We had issues with connecting to the data source.", ex.Message);
+                return ResponseBuilder.Error(500, "We could not contact Universal Housing (UHT) to get appointment details. " +
+                    "Please contact the application support team by raising a ticket at https://support.hackney.gov.uk and quote " +
+                    "this error message", ex.Message);
+            }
+            catch (DrsRepositoryException ex)
+            {
+                _exceptionLogger.CaptureException(ex);
+                return ResponseBuilder.Error(500, "We could not contact DRS to get appointment details. " +
+                    "Please contact the application support team by raising a ticket at https://support.hackney.gov.uk and quote " +
+                    "this error message", ex.Message);
             }
             catch (Exception ex)
             {
@@ -208,8 +238,17 @@ namespace HackneyRepairs.Controllers
             }
             catch (UhtRepositoryException ex)
             {
-	            _exceptionLogger.CaptureException(ex);
-                return ResponseBuilder.Error(500, "We had issues with connecting to the data source.", ex.Message);
+                _exceptionLogger.CaptureException(ex);
+                return ResponseBuilder.Error(500, "We could not contact Universal Housing (UHT) to get appointment details. " +
+                    "Please contact the application support team by raising a ticket at https://support.hackney.gov.uk and quote " +
+                    "this error message", ex.Message);
+            }
+            catch (DrsRepositoryException ex)
+            {
+                _exceptionLogger.CaptureException(ex);
+                return ResponseBuilder.Error(500, "We could not contact DRS to get appointment details. " +
+                    "Please contact the application support team by raising a ticket at https://support.hackney.gov.uk and quote " +
+                    "this error message", ex.Message);
             }
             catch (Exception ex)
             {
