@@ -210,25 +210,40 @@ namespace HackneyRepairs.Repository
             {
                 using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
                 {
-                    string query = $@"WITH contactNums AS 
+                    string query = $@"WITH PVcontactNums AS 
 							(
                             SELECT DISTINCT contactno, uprn  
 							FROM [uht{environmentDbWord}].[dbo].[properttyview]
                             where prop_ref = @Reference
+							),
+							CVcontactNums AS
+							(
+								SELECT DISTINCT ccv.contactNo, ccv.UPRN
+								FROM CCContactView as ccv
+								INNER JOIN PVcontactNums as pvcn
+								ON pvcn.contactNo = ccv.contactNo
+							),
+							contactNums AS 
+							(
+								select * from PVcontactNums
+								UNION ALL
+								select * from CVcontactNums
 							)
-						select [alertCode] from
-                        (
-							select [alertCode]
-                            from [CCAddressAlert]
-                            where enddate is null 
-							AND [CCAddressAlert].addressNo in (Select uprn FROM contactNums)
-							UNION ALL
-							 select [alertCode]
-                            FROM [CCContactAlert]
-                             WHERE enddate is null 
-							 AND [CCContactAlert].contactNo IN (Select contactno FROM contactNums)
-						)derived group by alertcode
-                        select LTRIM(RTRIM(CallerNotes))
+							select [alertCode] from
+							(
+								select [alertCode]
+								from [CCAddressAlert] as cca 
+								inner join contactNums  as cn
+								on cca.addressNo = cn.uprn
+								where enddate is null 
+								UNION ALL
+								 select [alertCode]
+								FROM [CCContactAlert] as ccc
+								inner join contactNums  as cn
+								on ccc.contactNo = cn.contactNo
+								 WHERE enddate is null 
+							)derived group by alertcode
+                            select LTRIM(RTRIM(CallerNotes))
                             FROM [uhw{environmentDbWord}].[dbo].[CCContact]
                             where contactno IN 
                             ( SELECT contactno  FROM [uht{environmentDbWord}].[dbo].[properttyview]
