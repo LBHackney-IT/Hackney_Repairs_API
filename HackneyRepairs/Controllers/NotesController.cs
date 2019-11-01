@@ -90,7 +90,9 @@ namespace HackneyRepairs.Controllers
 
                 if (ex is UHWWarehouseRepositoryException || ex is UhwRepositoryException)
                 {
-                    var userMessage = "We had issues with connecting to the data source.";
+                    var userMessage = "We could not contact Universal Housing(UHW) to retrieve notes for this " +
+                        "workorder.Please raise a ticket at https://support.hackney.gov.uk including the details of " +
+                        "this error, the repair or property and a screenshot.";
                     return ResponseBuilder.Error(500, userMessage, ex.Message);
                 }
 
@@ -133,19 +135,31 @@ namespace HackneyRepairs.Controllers
                 await notesActions.AddNote(request);
                 return NoContent();
             }
+            catch (UhtRepositoryException ex)
+            {
+                return ResponseBuilder.Error(500, "We could not contact Universal Housing (UHT) to add notes for this " +
+                    "workorder. Please raise a ticket at https://support.hackney.gov.uk including the details of " +
+                    "this error, the repair or property and a screenshot. ", "We had some problems processing your request");
+            }
+            catch (MissingUHUsernameException ex)
+            {
+                return ResponseBuilder.Error(500, ex.Message, "We had some problems processing your request");
+            }
             catch (Exception ex)
             {
                 _exceptionLogger.CaptureException(ex);
                 if (ex is MissingWorkOrderException)
                 {
                     var userMessage = "Object reference has not been found. Note not created";
-                    return ResponseBuilder.Error(404, ex.Message, userMessage);
+                    return ResponseBuilder.Error(404, userMessage, ex.Message);
                 }
 
                 if (ex is UhwRepositoryException)
                 {
-                    var userMessage = "We had issues with connecting to the data source.";
-                    return ResponseBuilder.Error(500, ex.Message, userMessage);
+                    var userMessage = "We could not contact Universal Housing (UHW) to add notes for this workorder. " +
+                        "Please raise a ticket at https://support.hackney.gov.uk including the details of this error, " +
+                        "the repair or property and a screenshot.";
+                    return ResponseBuilder.Error(500, userMessage, ex.Message);
                 }
 
                 return ResponseBuilder.Error(500, "We had issues processing your request.", ex.StackTrace);
