@@ -47,7 +47,8 @@ namespace HackneyRepairs.Controllers
             catch (Exception ex)
             {
                 _exceptionLogger.CaptureException(ex);
-                return ResponseBuilder.Error(500, "We had some problems processing your request", ex.Message);
+                return ResponseBuilder.Error(500, "We were unable to start the Keyfax Service. Please raise a ticket at " +
+                    "https://support.hackney.gov.uk including the details of this error, the repair or property and a screenshot. ", ex.Message);
             }
         }
 
