@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using HackneyRepairs.Models;
-using HackneyRepairs.Interfaces;
+﻿using HackneyRepairs.Actions;
+using HackneyRepairs.Builders;
 using HackneyRepairs.Factories;
-using HackneyRepairs.Actions;
 using HackneyRepairs.Formatters;
+using HackneyRepairs.Interfaces;
+using HackneyRepairs.Repository;
 using HackneyRepairs.Services;
 using HackneyRepairs.Validators;
-using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections;
+using System.Configuration;
 using System.Globalization;
-using HackneyRepairs.Builders;
+using System.Threading.Tasks;
 
 namespace HackneyRepairs.Controllers
 {
@@ -67,6 +65,13 @@ namespace HackneyRepairs.Controllers
                 _exceptionLogger.CaptureException(ex);
                 return ResponseBuilder.Error(404, "Property not found", ex.Message);
             }
+            catch (UHWWarehouseRepositoryException e)
+            {
+                _exceptionLogger.CaptureException(e);
+                return ResponseBuilder.Error(500, "We could not contact Universal Housing (UHW) to retrieve property details for " +
+                    "this reference. Please raise a ticket at https://support.hackney.gov.uk including the details of this error, " +
+                    "the repair or property and a screenshot.", e.Message);
+            }
             catch (Exception ex)
             {
                 _exceptionLogger.CaptureException(ex);
@@ -104,6 +109,13 @@ namespace HackneyRepairs.Controllers
                 var result = await actions.FindProperty(_propertyServiceRequestBuilder.BuildListByPostCodeRequest(postcode), max_level, min_level);
                 return ResponseBuilder.Ok(result);
             }
+            catch (UHWWarehouseRepositoryException e)
+            {
+                _exceptionLogger.CaptureException(e);
+                return ResponseBuilder.Error(500, "We could not contact Universal Housing (UHW) to retrieve properties matching your query. " +
+                    "Please raise a ticket at https://support.hackney.gov.uk including the details of this error, the repair or property " +
+                    "and a screenshot.", e.Message);
+            }
             catch (Exception ex)
             {
                 _exceptionLogger.CaptureException(ex);
@@ -129,11 +141,19 @@ namespace HackneyRepairs.Controllers
                 PropertyActions actions = new PropertyActions(_propertyService, _propertyServiceRequestBuilder, _workordersService, _propertyLoggerAdapter);
                 var result = await actions.FindPropertyByFirstLineOfAddress(address, limit);
                 return ResponseBuilder.Ok(result);
-            }
+            }//Doesn't get thrown
             catch (MissingPropertyException ex)
             {
                 _exceptionLogger.CaptureException(ex);
-                return ResponseBuilder.Error(404, "Resource identification error", ex.Message);
+                return ResponseBuilder.Error(404, "Property not found", ex.Message);
+            }
+            catch (UHWWarehouseRepositoryException ex)
+            {
+                _exceptionLogger.CaptureException(ex);
+                return ResponseBuilder.Error(500, "We could not contact Universal Housing (UHW) to " +
+                    "retrieve properties matching your query. Please raise a ticket at " +
+                    "https://support.hackney.gov.uk including the details of this error, the repair " +
+                    "or property and a screenshot.", ex.Message);
             }
             catch (Exception ex)
             {
@@ -163,7 +183,15 @@ namespace HackneyRepairs.Controllers
             catch (MissingPropertyException ex)
             {
                 _exceptionLogger.CaptureException(ex);
-                return ResponseBuilder.Error(404, "Resource identification error", ex.Message);
+                return ResponseBuilder.Error(404, "Property not found or incorrect reference number", ex.Message);
+            }
+            catch (UHWWarehouseRepositoryException ex)
+            {
+                _exceptionLogger.CaptureException(ex);
+                return ResponseBuilder.Error(500, "We could not contact Universal Housing (UHW) to " +
+                    "retrieve the property matching your query. Please raise a ticket at " +
+                    "https://support.hackney.gov.uk including the details of this error, the repair " +
+                    "or property and a screenshot.", ex.Message);
             }
             catch (Exception ex)
             {
@@ -195,6 +223,14 @@ namespace HackneyRepairs.Controllers
                 _exceptionLogger.CaptureException(ex);
                 return ResponseBuilder.Error(404, "One or more property references could not be found", ex.Message);
             }
+            catch (UHWWarehouseRepositoryException ex)
+            {
+                _exceptionLogger.CaptureException(ex);
+                return ResponseBuilder.Error(500, "We could not contact Universal Housing (UHW) to " +
+                    "retrieve properties matching your query. Please raise a ticket at " +
+                    "https://support.hackney.gov.uk including the details of this error, the " +
+                    "repair or property and a screenshot.", ex.Message);
+            }
             catch (Exception ex)
             {
                 _exceptionLogger.CaptureException(ex);
@@ -224,6 +260,14 @@ namespace HackneyRepairs.Controllers
             {
                 _exceptionLogger.CaptureException(ex);
                 return ResponseBuilder.Error(404, "Resource identification error", ex.Message);
+            }
+            catch (UHWWarehouseRepositoryException ex)
+            {
+                _exceptionLogger.CaptureException(ex);
+                return ResponseBuilder.Error(500, "We could not contact Universal Housing (UHW) to " +
+                    "retrieve the block matching your query. Please raise a ticket at " +
+                    "https://support.hackney.gov.uk including the details of this error, the repair " +
+                    "or property and a screenshot.", ex.Message);
             }
             catch (Exception ex)
             {
@@ -277,12 +321,27 @@ namespace HackneyRepairs.Controllers
             catch (MissingPropertyException ex)
             {
                 _exceptionLogger.CaptureException(ex);
-                return ResponseBuilder.Error(404, "Cannot find property.", ex.Message);
+                return ResponseBuilder.Error(404, "Block not found or incorrect reference number.", ex.Message);
+            }
+            catch (UHWWarehouseRepositoryException ex)
+            {
+                _exceptionLogger.CaptureException(ex);
+                return ResponseBuilder.Error(500, "We could not contact Universal Housing (UHW) to retrieve the block matching your query. " +
+                    "Please raise a ticket at https://support.hackney.gov.uk including the details of this error, the repair or property " +
+                    "and a screenshot. ", ex.Message);
+            }
+            catch (UhtRepositoryException ex)
+            {
+                _exceptionLogger.CaptureException(ex);
+                return ResponseBuilder.Error(500, "We could not contact Universal Housing (UHT) to retrieve the block matching your query. " +
+                    "Please raise a ticket at https://support.hackney.gov.uk including the details of this error, the repair or property " +
+                    "and a screenshot. ", ex.Message);
             }
             catch (InvalidParameterException ex)
             {
                 _exceptionLogger.CaptureException(ex);
-                return ResponseBuilder.Error(403, "Forbidden - Invalid parameter provided.", ex.Message);
+                return ResponseBuilder.Error(403, "Reference is not for a block. Please enter a block " +
+                    "reference number", ex.Message);
             }
             catch (Exception ex)
             {
@@ -317,7 +376,15 @@ namespace HackneyRepairs.Controllers
             catch (MissingPropertyException ex)
             {
                 _exceptionLogger.CaptureException(ex);
-                return ResponseBuilder.Error(404, "Resource identification error", ex.Message);
+                return ResponseBuilder.Error(404, "Estate not found or incorrect reference number", ex.Message);
+            }
+            catch (UHWWarehouseRepositoryException ex)
+            {
+                _exceptionLogger.CaptureException(ex);
+                return ResponseBuilder.Error(500, "We could not contact Universal Housing (UHW) to " +
+                    "retrieve the estate matching your query. Please raise a ticket at " +
+                    "https://support.hackney.gov.uk including the details of this error, the repair " +
+                    "or property and a screenshot.", ex.Message);
             }
             catch (Exception ex)
             {
@@ -352,7 +419,16 @@ namespace HackneyRepairs.Controllers
             catch (MissingPropertyException ex)
             {
                 _exceptionLogger.CaptureException(ex);
-                return ResponseBuilder.Error(404, "Resource identification error", ex.Message);
+                return ResponseBuilder.Error(404, "Facilities not found or incorrect reference " +
+                    "number", ex.Message);
+            }
+            catch (UHWWarehouseRepositoryException ex)
+            {
+                _exceptionLogger.CaptureException(ex);
+                return ResponseBuilder.Error(500, "We could not contact Universal Housing (UHW) to " +
+                    "retrieve the facilities matching your query. Please raise a ticket at " +
+                    "https://support.hackney.gov.uk including the details of this error, the repair " +
+                    "or property and a screenshot.", ex.Message);
             }
             catch (Exception ex)
             {
