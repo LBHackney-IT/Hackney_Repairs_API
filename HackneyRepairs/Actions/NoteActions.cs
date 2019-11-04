@@ -47,7 +47,9 @@ namespace HackneyRepairs.Actions
             string uHUsername = _repairsService.GetUHUsername(note.LBHEmail);
             if (string.IsNullOrEmpty(uHUsername))
             {
-                throw new MissingUHUsernameException(string.Format("Could not find UH username for email address '{0}'. The email address needs to be assiged to the UH username.", note.LBHEmail));
+                throw new MissingUHUsernameException("We could not add notes for this workorder as there is no " +
+                    "Universal Housing username associated. Please raise a ticket at https://support.hackney.gov.uk " +
+                    "including the details of this error, the repair or property and a screenshot.");
             }
 
             note.UHUsername = uHUsername;
