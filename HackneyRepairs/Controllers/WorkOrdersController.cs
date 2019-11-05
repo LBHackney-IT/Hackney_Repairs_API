@@ -79,11 +79,25 @@ namespace HackneyRepairs.Controllers
                 var workOrders = (await workOrdersActions.GetWorkOrders(reference, includeMobileReports)).ToList();
                 return ResponseBuilder.Ok(workOrders);
             }
+            catch (UHWWarehouseRepositoryException e)
+            {
+                _exceptionLogger.CaptureException(e);
+                return ResponseBuilder.Error(500, "We could not contact Universal Housing (UHW) to retrieve property details for " +
+                    "this reference. Please raise a ticket at https://support.hackney.gov.uk including the details of this error, " +
+                    "the repair or property and a screenshot.", e.Message);
+            }
+            catch (UhtRepositoryException e)
+            {
+                _exceptionLogger.CaptureException(e);
+                return ResponseBuilder.Error(500, "We could not contact Universal Housing (UHT) to retrieve property details for " +
+                    "this reference. Please raise a ticket at https://support.hackney.gov.uk including the details of this error, " +
+                    "the repair or property and a screenshot.", e.Message);
+            }
             catch (Exception ex)
             {
                 _exceptionLogger.CaptureException(ex);
 
-                if (ex is UHWWarehouseRepositoryException || ex is UhtRepositoryException || ex is MobileReportsConnectionException)
+                if (ex is MobileReportsConnectionException)
                 {
                     return ResponseBuilder.Error(500, "We had issues with connecting to the data source", ex.Message);
                 }
@@ -133,11 +147,25 @@ namespace HackneyRepairs.Controllers
                     return ResponseBuilder.Error(400, $"Unknown parameter value: {include}", $"Unknown parameter value: {include}");
                 }
 			}
+            catch (UHWWarehouseRepositoryException e)
+            {
+                _exceptionLogger.CaptureException(e);
+                return ResponseBuilder.Error(500, "We could not contact Universal Housing (UHW) to retrieve property details for " +
+                    "this reference. Please raise a ticket at https://support.hackney.gov.uk including the details of this error, " +
+                    "the repair or property and a screenshot.", e.Message);
+            }
+            catch (UhtRepositoryException e)
+            {
+                _exceptionLogger.CaptureException(e);
+                return ResponseBuilder.Error(500, "We could not contact Universal Housing (UHT) to retrieve property details for " +
+                    "this reference. Please raise a ticket at https://support.hackney.gov.uk including the details of this error, " +
+                    "the repair or property and a screenshot.", e.Message);
+            }
             catch (Exception ex)
             {
                 _exceptionLogger.CaptureException(ex);
                 
-                if (ex is UHWWarehouseRepositoryException || ex is UhtRepositoryException || ex is MobileReportsConnectionException)
+                if (ex is MobileReportsConnectionException)
                 {
                     return ResponseBuilder.Error(500, "We had issues with connecting to the data source", ex.Message);
                 }
@@ -202,18 +230,24 @@ namespace HackneyRepairs.Controllers
                 result = (await workOrdersActions.GetWorkOrdersByPropertyReferences(propertyReference, validSince, validUntil)).ToList();
                 return ResponseBuilder.Ok(result);
             }
+            catch (UHWWarehouseRepositoryException e)
+            {
+                _exceptionLogger.CaptureException(e);
+                return ResponseBuilder.Error(500, "We could not contact Universal Housing (UHW) to retrieve property details for " +
+                    "this reference. Please raise a ticket at https://support.hackney.gov.uk including the details of this error, " +
+                    "the repair or property and a screenshot.", e.Message);
+            }
+            catch (UhtRepositoryException e)
+            {
+                _exceptionLogger.CaptureException(e);
+                return ResponseBuilder.Error(500, "We could not contact Universal Housing (UHT) to retrieve property details for " +
+                    "this reference. Please raise a ticket at https://support.hackney.gov.uk including the details of this error, " +
+                    "the repair or property and a screenshot.", e.Message);
+            }
             catch (Exception ex)
             {
                 _exceptionLogger.CaptureException(ex);
-                
-                if (ex is UHWWarehouseRepositoryException || ex is UhtRepositoryException)
-                {
-                    return ResponseBuilder.Error(500, "We had issues with connecting to the data source", ex.Message);
-                }
-                else
-                {
-                    return ResponseBuilder.Error(500, "We had issues processing your request", ex.Message);
-                }
+                return ResponseBuilder.Error(500, "We had issues processing your request", ex.Message);
             }
         }
 
@@ -248,7 +282,9 @@ namespace HackneyRepairs.Controllers
             catch (UhtRepositoryException ex)
             {
                 _exceptionLogger.CaptureException(ex);
-                return ResponseBuilder.Error(500, "We had issues with connecting to the data source", ex.Message);
+                return ResponseBuilder.Error(500, "We could not contact Universal Housing (UHT) to retrieve" +
+                    "work order notes. Please raise a ticket at https://support.hackney.gov.uk including the details of this error, " +
+                    "the repair or property and a screenshot. ", ex.Message);
             }
             catch (Exception ex)
             {
@@ -284,14 +320,27 @@ namespace HackneyRepairs.Controllers
                 var result = await workOrdersActions.GetWorkOrdersFeed(startId, resultSize);
                 return ResponseBuilder.Ok(result);
             }
+            catch (UHWWarehouseRepositoryException e)
+            {
+                _exceptionLogger.CaptureException(e);
+                return ResponseBuilder.Error(500, "We could not contact Universal Housing (UHW) to retrieve property details for " +
+                    "this reference. Please raise a ticket at https://support.hackney.gov.uk including the details of this error, " +
+                    "the repair or property and a screenshot.", e.Message);
+            }
+            catch (UhtRepositoryException e)
+            {
+                _exceptionLogger.CaptureException(e);
+                return ResponseBuilder.Error(500, "We could not contact Universal Housing (UHT) to retrieve property details for " +
+                    "this reference. Please raise a ticket at https://support.hackney.gov.uk including the details of this error, " +
+                    "the repair or property and a screenshot.", e.Message);
+            }
             catch (Exception ex)
             {
                 _exceptionLogger.CaptureException(ex);
-                if (ex is UhtRepositoryException || ex is UHWWarehouseRepositoryException)
-                {
-                    return ResponseBuilder.Error(500, "we had issues with connecting to the data source.", ex.Message);
-                }
-
+                //if (ex is UhtRepositoryException || ex is UHWWarehouseRepositoryException)
+                //{
+                //    return ResponseBuilder.Error(500, "we had issues with connecting to the data source.", ex.Message);
+                //}
                 return ResponseBuilder.Error(500, "We had issues processing your request.", ex.Message);
             }
         }
@@ -357,6 +406,12 @@ namespace HackneyRepairs.Controllers
                 var result = await repairActions.CancelOrderAsync(workOrderReference, request.LBHEmail);
                 return ResponseBuilder.Ok(result);
             }
+            catch (RepairsServiceException e)
+            {
+                _exceptionLogger.CaptureException(e);
+                return ResponseBuilder.Error(500, "We cannot process this cancellation due to the following errors " +
+                    e.Message, e.Message);
+            }
             catch (Exception ex)
             {
                 _exceptionLogger.CaptureException(ex);
@@ -395,7 +450,9 @@ namespace HackneyRepairs.Controllers
             catch (UhtRepositoryException ex)
             {
                 _exceptionLogger.CaptureException(ex);
-                return ResponseBuilder.Error(500, "We had issues with connecting to the data source", ex.Message);
+                return ResponseBuilder.Error(500, "We could not contact Universal Housing (UHT) to retrieve work order task details. " +
+                    "Please raise a ticket at https://support.hackney.gov.uk including the details of this error, " +
+                    "the repair or property and a screenshot. ", ex.Message);
             }
             catch (Exception ex)
             {
