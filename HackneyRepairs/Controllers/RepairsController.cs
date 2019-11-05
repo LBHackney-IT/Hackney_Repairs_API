@@ -120,7 +120,7 @@ namespace HackneyRepairs.Controllers
                     new ApiErrorMessage
                     {
                         DeveloperMessage = ex.Message,
-                        UserMessage = "We could not contact Universal Housing (UHW) to retrive repair details." +
+                        UserMessage = "We could not contact Universal Housing (UHW) to retrieve repair details." +
                         " Please raise a ticket at https://support.hackney.gov.uk including the details of this error, " +
                         "the repair or property and a screenshot."
                     }
@@ -137,7 +137,7 @@ namespace HackneyRepairs.Controllers
                     new ApiErrorMessage
                     {
                         DeveloperMessage = ex.Message,
-                        UserMessage = "We could not contact Universal Housing (UHW) to retrive repair details. " +
+                        UserMessage = "We could not contact Universal Housing (UHW) to retrieve repair details. " +
                         "Please raise a ticket at https://support.hackney.gov.uk including the details of this error, " +
                         "the repair or property and a screenshot."
                     }
@@ -184,7 +184,7 @@ namespace HackneyRepairs.Controllers
             catch (UhtRepositoryException ex)
             {
                 _exceptionLogger.CaptureException(ex);
-                return ResponseBuilder.Error(500, "We could not contact Universal Housing (UHT) to retrive repair details." +
+                return ResponseBuilder.Error(500, "We could not contact Universal Housing (UHT) to retrieve repair details." +
                     "Please raise a ticket at https://support.hackney.gov.uk including the details of this error, " +
                     "the repair or property and a screenshot.", ex.Message);
             }
