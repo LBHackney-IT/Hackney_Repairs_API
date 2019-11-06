@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Configuration;
-using System.Linq;
-using System.Threading.Tasks;
-using HackneyRepairs.Actions;
+﻿using HackneyRepairs.Actions;
 using HackneyRepairs.Builders;
 using HackneyRepairs.Factories;
 using HackneyRepairs.Interfaces;
+using HackneyRepairs.Repository;
 using HackneyRepairs.Services;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections;
+using System.Configuration;
+using System.Threading.Tasks;
 
 namespace HackneyRepairs.Controllers
 {
@@ -50,15 +48,12 @@ namespace HackneyRepairs.Controllers
                 var result = await actions.GetCautionaryContactByRef(reference);
                 return ResponseBuilder.Ok(result);
             }
-            catch (MissingCautionaryContactException ex)
+            catch (UhwRepositoryException ex)
             {
                 _exceptionLogger.CaptureException(ex);
-                return ResponseBuilder.Error(404, "Resource identification error", ex.Message);
-            }
-            catch (Exception ex)
-            {
-                _exceptionLogger.CaptureException(ex);
-                return ResponseBuilder.Error(500, "We had some problems processing your request", ex.Message);
+                return ResponseBuilder.Error(500, "We could not contact Universal Housing (UHW) to get cautionary contact details. " +
+                    "Please raise a ticket at https://support.hackney.gov.uk including the details of this error, the repair or " +
+                    "property and a screenshot. ", ex.Message);
             }
         }
     }

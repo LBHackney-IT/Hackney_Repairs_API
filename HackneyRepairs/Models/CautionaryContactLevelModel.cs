@@ -8,11 +8,22 @@ namespace HackneyRepairs.Models
     public class CautionaryContactLevelModel
     {
         public CautionaryContactLevelModel()
-        { 
-            AlertCodes = new List<string>();
-        }
-       
-        public IList<string> AlertCodes { get; set; }
+        { }
+
+        public IList<AddressAlert> AddressAlerts { get; set; }
+        public IList<ContactAlert> ContactAlerts { get; set; }
         public IList<string> CallerNotes { get; set; }
+    }
+
+    public class AddressAlert
+    {
+        public string AlertCode { get; set; }
+        public string AlertDescription { get; set; }
+    }
+
+    public class ContactAlert
+    {
+        public string AlertCode { get; set; }
+        public string AlertDescription { get; set; }
     }
 }

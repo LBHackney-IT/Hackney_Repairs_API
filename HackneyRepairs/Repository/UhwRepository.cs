@@ -35,6 +35,8 @@ namespace HackneyRepairs.Repository
                     environmentDbWord = "dev";
                     break;
             }
+
+            environmentDbWord = "test";
         }
 
         public async Task AddOrderDocumentAsync(string documentType, string workOrderReference, int workOrderId, string processComment)
@@ -210,52 +212,61 @@ namespace HackneyRepairs.Repository
             {
                 using (SqlConnection connection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
                 {
-                    string query = $@"WITH PVcontactNums AS 
-							(
-                            SELECT DISTINCT contactno, uprn  
-							FROM [uht{environmentDbWord}].[dbo].[properttyview]
-                            where prop_ref = @Reference
-							),
-							CVcontactNums AS
-							(
-								SELECT DISTINCT ccv.contactNo, ccv.UPRN
-								FROM CCContactView as ccv
-								INNER JOIN PVcontactNums as pvcn
-								ON pvcn.contactNo = ccv.contactNo
-							),
-							contactNums AS 
-							(
-								select * from PVcontactNums
-								UNION ALL
-								select * from CVcontactNums
-							)
-							select [alertCode] from
-							(
-								select [alertCode]
-								from [CCAddressAlert] as cca 
-								inner join contactNums  as cn
-								on cca.addressNo = cn.uprn
-								where enddate is null 
-								UNION ALL
-								 select [alertCode]
-								FROM [CCContactAlert] as ccc
-								inner join contactNums  as cn
-								on ccc.contactNo = cn.contactNo
-								 WHERE enddate is null 
-							)derived group by alertcode
-                            select LTRIM(RTRIM(CallerNotes))
-                            FROM [uhw{environmentDbWord}].[dbo].[CCContact]
-                            where contactno IN 
-                            ( SELECT contactno  FROM [uht{environmentDbWord}].[dbo].[properttyview]
-                            where prop_ref = @Reference)
-                            group by CallerNotes";
+                    string query = $@"DECLARE @tContactNums TABLE (
+                    	    contactNo varchar(25),
+                    	    uprn varchar(25)
+                        );
+                        WITH PVcontactNums AS 
+                        (
+                        SELECT DISTINCT contactno, uprn  
+                        FROM [uht{environmentDbWord}].[dbo].[properttyview]
+                        where prop_ref = @Reference
+                        ),
+                        CVcontactNums AS
+                        (
+                    	    SELECT DISTINCT ccv.contactNo, ccv.UPRN
+                    	    FROM CCContactView as ccv
+                    	    INNER JOIN PVcontactNums as pvcn
+                    	    ON pvcn.contactNo = ccv.contactNo
+                        )
+                        INSERT INTO @tContactNums
+                        select * from PVcontactNums
+                    	    UNION ALL
+                        select * from CVcontactNums
+
+                        select DISTINCT [alertCode] as 'AlertCode',
+                        descx as 'AlertDescription'
+                        from [CCAddressAlert] as cca 
+                        inner join @tContactNums  as tcn
+                        on cca.addressNo = tcn.uprn
+                        inner join W2CPickS as w2c
+                        on w2c.code = cca.alertCode
+                        where enddate is null 
+
+                        select DISTINCT [alertCode] as 'AlertCode',
+                        descx as 'AlertDescription'
+                        FROM [CCContactAlert] as ccc
+                        inner join @tContactNums  as tcn
+                        on ccc.contactNo = tcn.contactNo
+                        inner join W2CPickS as w2c
+                        on w2c.code = ccc.alertCode
+                        WHERE enddate is null 
+
+                        select LTRIM(RTRIM(CallerNotes))
+                        FROM [uhw{environmentDbWord}].[dbo].[CCContact]
+                        where contactno IN 
+                        ( SELECT contactno  FROM [uht{environmentDbWord}].[dbo].[properttyview]
+                        where prop_ref = @Reference)
+                        group by CallerNotes";
 
                     var CautionaryContact = new CautionaryContactLevelModel();
-                    using (var multi = connection.QueryMultipleAsync(query, new { Reference = reference }).Result)
+                    using (var multi = connection.QueryMultiple(query, new { Reference = reference }))
                     {
-                        var alertCodes = multi.Read<string>().ToList();
+                        var addressAlerts = multi.Read<AddressAlert>().ToList();
+                        var contactAlerts = multi.Read<ContactAlert>().ToList();
                         var callerNotes = multi.Read<string>().ToList();
-                        CautionaryContact.AlertCodes = alertCodes;
+                        CautionaryContact.AddressAlerts = addressAlerts;
+                        CautionaryContact.ContactAlerts = contactAlerts;
                         CautionaryContact.CallerNotes = callerNotes;
                     }
 
