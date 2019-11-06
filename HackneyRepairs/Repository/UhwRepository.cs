@@ -250,11 +250,12 @@ namespace HackneyRepairs.Repository
                         on w2c.code = ccc.alertCode
                         WHERE enddate is null 
 
-                        select LTRIM(RTRIM(CallerNotes))
+                        select LTRIM(RTRIM(CallerNotes)) AS CallerNotes
                         FROM [uhw{environmentDbWord}].[dbo].[CCContact]
                         where contactno IN 
                         ( SELECT contactno  FROM [uht{environmentDbWord}].[dbo].[properttyview]
                         where prop_ref = @Reference)
+                        AND LTRIM(RTRIM(CallerNotes)) IS NOT NULL
                         group by CallerNotes";
 
                     var CautionaryContact = new CautionaryContactLevelModel();
