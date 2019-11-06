@@ -1,6 +1,5 @@
 ﻿using HackneyRepairs.Interfaces;
 using HackneyRepairs.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,22 +10,28 @@ namespace HackneyRepairs.Services
     {
         public Task<CautionaryContactLevelModel> GetCautionaryContactByRef(string reference)
         {
-            string[] alertCodes =
-            {
-                "VA", "PV"
-            };
             string[] callerNotes =
             {
                 "Don't come its not Healthy",
                 "Merged Contacts"
             };
+            IList<AddressAlert> addressAlerts = new List<AddressAlert>
+            {
+                new AddressAlert { AlertCode = "VA", AlertDescription = "This is a description" },
+                new AddressAlert { AlertCode = "DIS", AlertDescription = "This is a description" }
+            };
+            IList<ContactAlert> contactAlerts = new List<ContactAlert>
+            {
+                new ContactAlert { AlertCode = "VA", AlertDescription = "This is a description" }
+            };
 
             var cautionaryContact = new CautionaryContactLevelModel()
             {
-                CallerNotes = callerNotes,
-                AlertCodes = alertCodes.ToList()
+                CallerNotes = callerNotes.ToList(),
+                AddressAlerts = addressAlerts,
+                ContactAlerts = contactAlerts
             };
-           
+
             switch (reference)
             {
                 case "00000123":

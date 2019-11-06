@@ -20,19 +20,23 @@ namespace HackneyRepairs.Actions
         public async Task<object> GetCautionaryContactByRef(string reference)
         {
             _logger.LogInformation($"ActionLevel: Getting cautionary contact by first line of address: {reference}");
-            try
-            {
-                var response = await _cautionaryContactService.GetCautionaryContactByRef(reference);
-                return new { results = response };
-            }
-            catch (Exception e)
-            {
-                _logger.LogError($"Finding property by address: {reference} returned an error: {e.Message}");
-                throw new CautionaryContactServiceException();
-            }
+            var response = await _cautionaryContactService.GetCautionaryContactByRef(reference);
+            return response;
+            //return new { results = response };
+        //    try
+        //    {
+               
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        _logger.LogError($"Finding property by address: {reference} returned an error: {e.Message}");
+        //        throw new CautionaryContactServiceException();
+        //    }
+        //All exceptions handled in controller
         }
     }
 
     public class CautionaryContactServiceException : Exception { }
-    public class MissingCautionaryContactException : Exception { }
+    //Missing cautionary contact not an axception? Never thrown
+    //public class MissingCautionaryContactException : Exception { }
 }
