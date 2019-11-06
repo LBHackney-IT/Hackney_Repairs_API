@@ -337,10 +337,6 @@ namespace HackneyRepairs.Controllers
             catch (Exception ex)
             {
                 _exceptionLogger.CaptureException(ex);
-                //if (ex is UhtRepositoryException || ex is UHWWarehouseRepositoryException)
-                //{
-                //    return ResponseBuilder.Error(500, "we had issues with connecting to the data source.", ex.Message);
-                //}
                 return ResponseBuilder.Error(500, "We had issues processing your request.", ex.Message);
             }
         }
