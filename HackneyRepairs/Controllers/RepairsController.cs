@@ -79,7 +79,8 @@ namespace HackneyRepairs.Controllers
             catch (RepairsServiceException ex)
             {
                 _exceptionLogger.CaptureException(ex);
-                return ResponseBuilder.Error(500, "There was an error creating the repair request: " + ex.Message, ex.Message);
+                return ResponseBuilder.Error(500, "We could not raise the repair. We got the following error back from Universal " +
+                    "Housing " + ex.Message, ex.Message);
             }
             catch (Exception ex)
             {
@@ -119,7 +120,9 @@ namespace HackneyRepairs.Controllers
                     new ApiErrorMessage
                     {
                         DeveloperMessage = ex.Message,
-                        UserMessage = "We had some problems connecting to the data source"
+                        UserMessage = "We could not contact Universal Housing (UHW) to retrieve repair details." +
+                        " Please raise a ticket at https://support.hackney.gov.uk including the details of this error, " +
+                        "the repair or property and a screenshot."
                     }
                 };
                 var json = Json(errors);
@@ -134,7 +137,9 @@ namespace HackneyRepairs.Controllers
                     new ApiErrorMessage
                     {
                         DeveloperMessage = ex.Message,
-                        UserMessage = "We had some issues connecting to the data source"
+                        UserMessage = "We could not contact Universal Housing (UHW) to retrieve repair details. " +
+                        "Please raise a ticket at https://support.hackney.gov.uk including the details of this error, " +
+                        "the repair or property and a screenshot."
                     }
                 };
                 var json = Json(errors);
@@ -175,6 +180,20 @@ namespace HackneyRepairs.Controllers
             {
                 _exceptionLogger.CaptureException(ex);
                 return ResponseBuilder.Error(404, "Cannot find property", ex.Message);
+            }
+            catch (UhtRepositoryException ex)
+            {
+                _exceptionLogger.CaptureException(ex);
+                return ResponseBuilder.Error(500, "We could not contact Universal Housing (UHT) to retrieve repair details." +
+                    "Please raise a ticket at https://support.hackney.gov.uk including the details of this error, " +
+                    "the repair or property and a screenshot.", ex.Message);
+            }
+            catch (UhwRepositoryException ex)
+            {
+                _exceptionLogger.CaptureException(ex);
+                return ResponseBuilder.Error(500, "We could not contact Universal Housing (UHW) to retrive repair details. " +
+                    "Please raise a ticket at https://support.hackney.gov.uk including the details of this error, " +
+                    "the repair or property and a screenshot.", ex.Message);
             }
             catch (Exception ex)
             {
