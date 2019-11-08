@@ -19,20 +19,9 @@ namespace HackneyRepairs.Actions
 
         public async Task<object> GetCautionaryContactByRef(string reference)
         {
-            _logger.LogInformation($"ActionLevel: Getting cautionary contact by first line of address: {reference}");
+            _logger.LogInformation($"ActionLevel: Getting cautionary contact by property reference: {reference}");
             var response = await _cautionaryContactService.GetCautionaryContactByRef(reference);
             return response;
-            //return new { results = response };
-        //    try
-        //    {
-               
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        _logger.LogError($"Finding property by address: {reference} returned an error: {e.Message}");
-        //        throw new CautionaryContactServiceException();
-        //    }
-        //All exceptions handled in controller
         }
     }
 

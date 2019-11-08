@@ -250,20 +250,23 @@ namespace HackneyRepairs.Repository
                         on w2c.code = ccc.alertCode
                         WHERE enddate is null 
 
-                        select LTRIM(RTRIM(CallerNotes)) AS CallerNotes
-                        FROM [uhw{environmentDbWord}].[dbo].[CCContact]
+                        select LTRIM(RTRIM(CallerNotes)) as 'NoteText', DateCreated, 
+						ccc.ModUser as 'UHUserName', [User_Name] as 'UHUserFullName'
+                        FROM [uhw{environmentDbWord}].[dbo].[CCContact] as ccc
+						inner join W2User on
+						[USER_ID] = ccc.ModUser
                         where contactno IN 
-                        ( SELECT contactno  FROM [uht{environmentDbWord}].[dbo].[properttyview]
+                        (SELECT contactno  FROM [uht{environmentDbWord}].[dbo].[properttyview]
                         where prop_ref = @Reference)
-                        AND LTRIM(RTRIM(CallerNotes)) IS NOT NULL
-                        group by CallerNotes";
+						AND LTRIM(RTRIM(CallerNotes)) IS NOT NULL
+                        order by DateCreated desc";
 
                     var CautionaryContact = new CautionaryContactLevelModel();
                     using (var multi = connection.QueryMultiple(query, new { Reference = reference }))
                     {
                         var addressAlerts = multi.Read<AddressAlert>().ToList();
                         var contactAlerts = multi.Read<ContactAlert>().ToList();
-                        var callerNotes = multi.Read<string>().ToList();
+                        var callerNotes = multi.Read<CallerNote>().ToList();
                         CautionaryContact.AddressAlerts = addressAlerts;
                         CautionaryContact.ContactAlerts = contactAlerts;
                         CautionaryContact.CallerNotes = callerNotes;
