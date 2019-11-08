@@ -10,10 +10,15 @@ namespace HackneyRepairs.Services
     {
         public Task<CautionaryContactLevelModel> GetCautionaryContactByRef(string reference)
         {
-            string[] callerNotes =
+            IList<CallerNote> callerNotes = new List<CallerNote>
             {
-                "Don't come its not Healthy",
-                "Merged Contacts"
+                new CallerNote
+                {
+                    DateCreated = new System.DateTime(637088021420000000),
+                    UHUserFullName = "Cyril Vica",
+                    UHUserName = "CVICA",
+                    NoteText = "This is a note"
+                }
             };
             IList<AddressAlert> addressAlerts = new List<AddressAlert>
             {
@@ -27,7 +32,7 @@ namespace HackneyRepairs.Services
 
             var cautionaryContact = new CautionaryContactLevelModel()
             {
-                CallerNotes = callerNotes.ToList(),
+                CallerNotes = callerNotes,
                 AddressAlerts = addressAlerts,
                 ContactAlerts = contactAlerts
             };

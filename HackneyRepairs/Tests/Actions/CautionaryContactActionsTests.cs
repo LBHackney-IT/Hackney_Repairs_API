@@ -18,11 +18,17 @@ namespace HackneyRepairs.Tests.Actions
         {
             var mockLogger = new Mock<ILoggerAdapter<CautionaryContactActions>>();
 
-            string[] callerNotes =
+            IList<CallerNote> callerNotes = new List<CallerNote>
             {
-                "Don't come its not Healthy",
-                "Merged Contacts"
+                new CallerNote
+                {
+                    DateCreated = new System.DateTime(637088021420000000),
+                    UHUserFullName = "Cyril Vica",
+                    UHUserName = "CVICA",
+                    NoteText = "This is a note"
+                }
             };
+
             IList<AddressAlert> addressAlerts = new List<AddressAlert>
             {
                 new AddressAlert { AlertCode = "VA", AlertDescription = "This is a description" },
@@ -35,7 +41,7 @@ namespace HackneyRepairs.Tests.Actions
 
             var cautionaryContact = new CautionaryContactLevelModel()
             {
-                CallerNotes = callerNotes.ToList(),
+                CallerNotes = callerNotes,
                 AddressAlerts = addressAlerts,
                 ContactAlerts = contactAlerts
             };
@@ -51,7 +57,7 @@ namespace HackneyRepairs.Tests.Actions
             var result = await cautionaryContactActions.GetCautionaryContactByRef("00000123");
             var outputCautionaryContact = new CautionaryContactLevelModel()
             {
-                CallerNotes = callerNotes.ToList(),
+                CallerNotes = callerNotes,
                 AddressAlerts = addressAlerts,
                 ContactAlerts = contactAlerts
             };
