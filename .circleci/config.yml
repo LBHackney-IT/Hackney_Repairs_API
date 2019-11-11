@@ -80,7 +80,7 @@ workflows:
           tag: "${CIRCLE_SHA1}"
           filters:
             branches:
-              only: master
+              only: central
 
       - deploy-to-staging:
           requires:
@@ -88,7 +88,7 @@ workflows:
             - build_and_push_image
           filters:
             branches:
-              only: master
+              only: central
 
       - permit-production-release:
           type: approval
@@ -96,11 +96,11 @@ workflows:
             - deploy-to-staging
           filters:
             branches:
-              only: master
+              only: central
 
       - deploy-to-production:
           requires:
             - permit-production-release
           filters:
             branches:
-              only: master
+              only: central
