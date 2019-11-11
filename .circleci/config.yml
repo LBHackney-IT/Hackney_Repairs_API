@@ -1,103 +1,106 @@
-version: 2
+version: 2.1
+
+orbs:
+  aws-ecr: circleci/aws-ecr@3.0.0
+  aws-cli: circleci/aws-cli@0.1.9
+
+commands:
+  deploy-env:
+    description: "Sets up aws cli and ecs-deploy to update a service with a target docker image"
+    parameters:
+      cluster-name:
+        type: string
+      service-name:
+        type: string
+      image-tag:
+        type: string
+    steps:
+      - run:
+          name: Install ecs deploy
+          command: |
+            sudo pip install ecs-deploy
+      - run:
+          name: Premote target image
+          command: |
+            ecs deploy \
+            --no-deregister \
+            --access-key-id $AWS_ACCESS_KEY_ID \
+            --secret-access-key $AWS_SECRET_ACCESS_KEY \
+            --timeout 1800 \
+            --region $AWS_REGION \
+            << parameters.cluster-name >> \
+            << parameters.service-name >> \
+            -t << parameters.image-tag >>
+          no_output_timeout: 30m    
 jobs:
   check:
-    machine: true
+    docker:
+      - image: circleci/python:3.7
     steps:
       - checkout
+      - setup_remote_docker
       - run:
-          name: Build projects
+          name: build
           command: docker build --build-arg VERSION_SUFFIX=$CIRCLE_BUILD_NUM --file ./HackneyRepairs/Tests/Dockerfile-test -t repairs-api-test .
       - run:
           name: Run tests
           command: docker run -it --rm repairs-api-test dotnet test
-  staging_release:
-    machine: true
+  
+  deploy-to-staging:
+    docker:
+      - image: circleci/python:3.7
     steps:
-      - checkout
-      - run:
-          name: Install AWS CLI
-          command: |
-            pip install awscli --upgrade --user
-      - run:
-          name: Install jq
-          command: |
-           sudo apt-get update
-           sudo apt-get install jq
-      - run:
-          name: Install ecs-deploy
-          command: |
-            curl https://raw.githubusercontent.com/silinternational/ecs-deploy/master/ecs-deploy | sudo tee /usr/bin/ecs-deploy
-            sudo chmod +x /usr/bin/ecs-deploy
-      - run:
-          name: Login to ECR
-          command: aws ecr get-login --region $AWS_REGION --no-include-email | sh
-      - run:
-          name: Build new application Docker image
-          command: docker build --file Dockerfile --tag hackney/apps/repairs-api --build-arg VERSION_SUFFIX=$CIRCLE_BUILD_NUM .
-      - run:
-          name: Tag new image for staging release
-          command: |
-            docker tag hackney/apps/repairs-api:latest $ECR_IMAGE_URL:$CIRCLE_SHA1
-            docker tag hackney/apps/repairs-api:latest $ECR_IMAGE_URL:latest
-            docker tag hackney/apps/repairs-api:latest $ECR_IMAGE_URL:staging
-      - run:
-          name: Release new image to ECR
-          command: |
-            docker push $ECR_IMAGE_URL:$CIRCLE_SHA1
-            docker push $ECR_IMAGE_URL:latest
-            docker push $ECR_IMAGE_URL:staging
-      - run:
-          name: Force new deployment
-          command: ecs-deploy --region $AWS_REGION --cluster $ECS_STAGING_CLUSTER --service-name $ECS_STAGING_APP_NAME --image $ECR_IMAGE_URL:staging --timeout $ECS_DEPLOY_TIMEOUT
+      - deploy-env:
+          cluster-name: 'ecs-hackney-apps'
+          service-name: 'repairs-api-staging'
+          image-tag: "$CIRCLE_SHA1"
 
-  production_release:
-    machine: true
+  deploy-to-production:
+    docker:
+      - image: circleci/python:3.7
     steps:
-      - checkout
-      - run:
-          name: Install AWS CLI
-          command: pip install awscli --upgrade --user
-      - run:
-          name: Install jq
-          command: |
-            sudo apt-get update
-            sudo apt-get install jq
-      - run:
-          name: Install ecs-deploy
-          command: |
-            curl https://raw.githubusercontent.com/silinternational/ecs-deploy/master/ecs-deploy | sudo tee /usr/bin/ecs-deploy
-            sudo chmod +x /usr/bin/ecs-deploy
-      - run:
-          name: Login to ECR
-          command: aws ecr get-login --region $AWS_REGION --no-include-email | sh
-      - run:
-          name: Build new application Docker image
-          command: docker build --file Dockerfile --tag hackney/apps/repairs-api --build-arg VERSION_SUFFIX=$CIRCLE_BUILD_NUM .
-      - run:
-          name: Tag new image for production release
-          command: docker tag hackney/apps/repairs-api:latest $ECR_IMAGE_URL:production
-      - run:
-          name: Release new image to ECR
-          command: docker push $ECR_IMAGE_URL:production
-      - run:
-          name: Force new deployment
-          command: ecs-deploy --region $AWS_REGION --cluster $ECS_PRODUCTION_CLUSTER --service-name $ECS_PRODUCTION_APP_NAME --image $ECR_IMAGE_URL:production --timeout $ECS_DEPLOY_TIMEOUT
+      - deploy-env:
+          cluster-name: 'ecs-hackney-apps'
+          service-name: 'repairs-api-production'
+          image-tag: "$CIRCLE_SHA1"
 
 workflows:
-  version: 2
-  continuous_delivery:
-    jobs:
+  build-and-deploy:
+      jobs:
       - check
-      - staging_release:
-          requires:
-            - check
+      - aws-ecr/build_and_push_image:
+          name: build_and_push_image
+          dockerfile: ./Dockerfile
+          path: ./HackneyRepairs
+          account-url: AWS_ECR_HOST
+          repo: $AWS_ECR_PATH
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          region: AWS_REGION
+          tag: "${CIRCLE_SHA1}"
           filters:
             branches:
-              only: central
-      - permit_production_release:
+              only: master
+
+      - deploy-to-staging:
+          requires:
+            - check
+            - build_and_push_image
+          filters:
+            branches:
+              only: master
+
+      - permit-production-release:
           type: approval
           requires:
-            - staging_release
-      - production_release:
+            - deploy-to-staging
+          filters:
+            branches:
+              only: master
+
+      - deploy-to-production:
           requires:
-            - permit_production_release
+            - permit-production-release
+          filters:
+            branches:
+              only: master
