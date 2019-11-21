@@ -35,6 +35,8 @@ namespace HackneyRepairs.Repository
                     environmentDbWord = "dev";
                     break;
             }
+
+            environmentDbWord = "test";
         }
 
         public async Task AddOrderDocumentAsync(string documentType, string workOrderReference, int workOrderId, string processComment)
@@ -250,7 +252,7 @@ namespace HackneyRepairs.Repository
                         on w2c.code = ccc.alertCode
                         WHERE enddate is null 
 
-                        select LTRIM(RTRIM(CallerNotes)) as 'NoteText', DateCreated, 
+                        select LTRIM(RTRIM(CallerNotes)) as 'NoteText', ccc.ModDate as 'DateCreated', 
 						ccc.ModUser as 'UHUserName', [User_Name] as 'UHUserFullName'
                         FROM [uhw{environmentDbWord}].[dbo].[CCContact] as ccc
 						inner join W2User on
