@@ -35,8 +35,6 @@ namespace HackneyRepairs.Repository
                     environmentDbWord = "dev";
                     break;
             }
-
-            environmentDbWord = "test";
         }
 
         public async Task AddOrderDocumentAsync(string documentType, string workOrderReference, int workOrderId, string processComment)
