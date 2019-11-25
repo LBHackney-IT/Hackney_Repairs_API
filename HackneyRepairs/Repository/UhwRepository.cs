@@ -250,7 +250,7 @@ namespace HackneyRepairs.Repository
                         on w2c.code = ccc.alertCode
                         WHERE enddate is null 
 
-                        select LTRIM(RTRIM(CallerNotes)) as 'NoteText', DateCreated, 
+                        select LTRIM(RTRIM(CallerNotes)) as 'NoteText', ccc.ModDate as 'DateCreated', 
 						ccc.ModUser as 'UHUserName', [User_Name] as 'UHUserFullName'
                         FROM [uhw{environmentDbWord}].[dbo].[CCContact] as ccc
 						inner join W2User on
