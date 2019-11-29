@@ -40,7 +40,7 @@ namespace HackneyRepairs.Actions
             if (workOrder == null)
             {
                 _logger.LogError($"could not find the work order in UH with reference {workOrderReference}");
-                throw new InvalidWorkOrderInUHException();
+                throw new InvalidWorkOrderInUHException($"could not find the work order in UH with reference {workOrderReference}");
             }
 
             // Trim work order properties - to be moved to a separate method
@@ -51,7 +51,7 @@ namespace HackneyRepairs.Actions
             if (drsCreateResponse.@return.status != responseStatus.success)
             {
               _logger.LogError(drsCreateResponse.@return.errorMsg);
-              throw new AppointmentServiceException();
+              throw new AppointmentServiceException(drsCreateResponse.@return.errorMsg);
             }
 
             _logger.LogInformation($"Successfully created order in DRS with order reference {workOrderReference}");
@@ -75,7 +75,7 @@ namespace HackneyRepairs.Actions
             }
             else
             {
-                throw new NoAvailableAppointmentsException();
+                throw new NoAvailableAppointmentsException($"There are no available appointments for order reference {workOrderReference}");
             }
         }
 
@@ -89,7 +89,7 @@ namespace HackneyRepairs.Actions
             if (string.IsNullOrEmpty(workOrder.wo_ref))
             {
                 _logger.LogError($"could not find the work order in UH with reference {workOrderReference}");
-                throw new InvalidWorkOrderInUHException();
+                throw new InvalidWorkOrderInUHException($"could not find the work order in UH with reference {workOrderReference}");
             }
 
             var request = _appointmentsServiceRequestBuilder.BuildXmbScheduleBookingRequest(workOrderReference, sessionId, beginDate, endDate, workOrder);
@@ -105,7 +105,7 @@ namespace HackneyRepairs.Actions
             if (response.@return.status != responseStatus.success)
             {
                 _logger.LogError(returnResponse.errorMsg);
-                throw new AppointmentServiceException();
+                throw new AppointmentServiceException(returnResponse.errorMsg);
             }
 
             // update UHT with the order and populate the u_sentToAppointmentSys table
@@ -126,7 +126,7 @@ namespace HackneyRepairs.Actions
             if (!issueOrderResponse.Success)
             {
                 _logger.LogError(issueOrderResponse.ErrorMessage);
-                throw new AppointmentServiceException();
+                throw new AppointmentServiceException(issueOrderResponse.ErrorMessage);
             }
 
             _logger.LogInformation($"Successfully issued workorder {workOrderReference}");
@@ -146,13 +146,13 @@ namespace HackneyRepairs.Actions
             if (!result.Any())
             {
                 _logger.LogError($"No appointments returned due workOrderReference not being found: {workOrderReference}");
-                throw new InvalidWorkOrderInUHException();
+                throw new InvalidWorkOrderInUHException($"No appointments returned due workOrderReference not being found: {workOrderReference}");
             }
 
             if (result.FirstOrDefault().BeginDate == null)
             {
                 _logger.LogError($"No appointments found for : {workOrderReference}");
-                throw new MissingAppointmentsException();
+                throw new MissingAppointmentsException($"No appointments found for : {workOrderReference}");
             }
 
             _logger.LogInformation($"Appointments returned for workOrderReference: {workOrderReference}");
@@ -167,13 +167,13 @@ namespace HackneyRepairs.Actions
             if (result == null)
             {
                 _logger.LogError($"No appointment returned due workOrderReference not being found: {workOrderReference}");
-                throw new InvalidWorkOrderInUHException();
+                throw new InvalidWorkOrderInUHException($"No appointment returned due workOrderReference not being found: {workOrderReference}");
             }
 
             if (result.BeginDate == null)
             {
                 _logger.LogError($"No appointment found for : {workOrderReference}");
-                throw new MissingAppointmentException();
+                throw new MissingAppointmentException($"No appointment found for : {workOrderReference}");
             }
 
             _logger.LogInformation($"Appointment returned for workOrderReference: {workOrderReference}");
@@ -192,7 +192,7 @@ namespace HackneyRepairs.Actions
             if (string.IsNullOrEmpty(workOrder.wo_ref))
             {
                 _logger.LogError($"could not find the work order in UH with reference {workOrderReference}");
-                throw new InvalidWorkOrderInUHException();
+                throw new InvalidWorkOrderInUHException($"could not find the work order in UH with reference {workOrderReference}");
             }
 
             // Get booking id & order id for the primary order reference
@@ -203,7 +203,7 @@ namespace HackneyRepairs.Actions
             if (orderResponse.@return.status != responseStatus.success)
             {
                 _logger.LogError(returnResponse.errorMsg);
-                throw new AppointmentServiceException();
+                throw new AppointmentServiceException(returnResponse.errorMsg);
             }
 
             return new
@@ -222,7 +222,7 @@ namespace HackneyRepairs.Actions
             if (sessionResponseReturn.status != responseStatus.success)
             {
                 _logger.LogError(sessionResponseReturn.errorMsg);
-                throw new AppointmentServiceException();
+                throw new AppointmentServiceException(sessionResponseReturn.errorMsg);
             }
 
             _logger.LogInformation($"Succesfully opened the session {sessionResponseReturn.sessionId}");
@@ -296,7 +296,7 @@ namespace HackneyRepairs.Actions
             if (returnResponse.status != responseStatus.success)
             {
                 _logger.LogError(returnResponse.errorMsg);
-                throw new AppointmentServiceException();
+                throw new AppointmentServiceException(returnResponse.errorMsg);
             }
 
             _logger.LogInformation($"Succesful getting the order details from Drs for {workOrderReference}");
@@ -313,14 +313,14 @@ namespace HackneyRepairs.Actions
             if (responseString.status != responseStatus.success)
             {
                 _logger.LogError(responseString.errorMsg);
-                throw new AppointmentServiceException();
+                throw new AppointmentServiceException(responseString.errorMsg);
             }
 
             var slots = responseString.theSlots;
             if (slots == null)
             {
                 _logger.LogError($"Missing the slots from the response string {responseString}");
-                throw new MissingSlotsException();
+                throw new MissingSlotsException($"Missing the slots from the response string {responseString}");
             }
 
             var slotList = new List<Slot>();
@@ -355,7 +355,17 @@ namespace HackneyRepairs.Actions
         }
     }
 
-    public class MissingSlotsException : System.Exception { }
+    public class MissingSlotsException : System.Exception
+    {
+        public MissingSlotsException()
+        {
+        }
+
+        public MissingSlotsException(string message) : base(message)
+        {
+        }
+    }
+
     public class MissingSlotsForDayException : System.Exception { }
     public class AppointmentServiceException : Exception
     {
@@ -368,8 +378,47 @@ namespace HackneyRepairs.Actions
         }
     }
 
-    public class InvalidWorkOrderInUHException : System.Exception { }
-    public class NoAvailableAppointmentsException : System.Exception { }
-    public class MissingAppointmentsException : Exception { }
-    public class MissingAppointmentException : Exception { }
+    public class InvalidWorkOrderInUHException : System.Exception
+    {
+        public InvalidWorkOrderInUHException()
+        {
+        }
+
+        public InvalidWorkOrderInUHException(string message) : base(message)
+        {
+        }
+    }
+
+    public class NoAvailableAppointmentsException : System.Exception
+    {
+        public NoAvailableAppointmentsException()
+        {
+        }
+
+        public NoAvailableAppointmentsException(string message) : base(message)
+        {
+        }
+    }
+
+    public class MissingAppointmentsException : Exception
+    {
+        public MissingAppointmentsException()
+        {
+        }
+
+        public MissingAppointmentsException(string message) : base(message)
+        {
+        }
+    }
+
+    public class MissingAppointmentException : Exception
+    {
+        public MissingAppointmentException()
+        {
+        }
+
+        public MissingAppointmentException(string message) : base(message)
+        {
+        }
+    }
 }
