@@ -68,7 +68,8 @@ namespace HackneyRepairs.Services
                         TenureDescription = "Secure",
                         LettingAreaDescription = "Lordship South TMO (SN) H2556",
                         PropertyTypeCode = "NBD",
-                        PropertyTypeDescription = "New Build Dwellings"
+                        PropertyTypeDescription = "New Build Dwellings",
+                        TenancyAgreementReference = "0100000/01"
                     });
                 case "5252":
                     throw new PropertyServiceException();

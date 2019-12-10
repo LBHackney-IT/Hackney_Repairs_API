@@ -274,7 +274,8 @@ namespace HackneyRepairs.Tests.Actions
                 TenureDescription = "Secure",
                 LettingAreaDescription = "Lordship South TMO (SN) H2556",
                 PropertyTypeCode = "NBD",
-                PropertyTypeDescription = "New Build Dwellings"
+                PropertyTypeDescription = "New Build Dwellings",
+                TenancyAgreementReference = @"0100000/01"
             };
             var fakeService = new Mock<IHackneyPropertyService>();
             fakeService.Setup(service => service.GetPropertyByRef("52525252")).ReturnsAsync(response);
@@ -292,7 +293,8 @@ namespace HackneyRepairs.Tests.Actions
                 tenure = "Secure",
                 lettingArea = "Lordship South TMO (SN) H2556",
                 propertyTypeCode = "NBD",
-                propertyTypeDescription = "New Build Dwellings" 
+                propertyTypeDescription = "New Build Dwellings",
+                tenancyAgreementReference = @"0100000/01"
             };
             Assert.Equal(property, results);
         }
@@ -391,7 +393,8 @@ namespace HackneyRepairs.Tests.Actions
                 TenureDescription = "",
                 LettingAreaDescription = "",
                 PropertyTypeCode = "",
-                PropertyTypeDescription = ""
+                PropertyTypeDescription = "",
+                TenancyAgreementReference = ""
             };
             var fakeService = new Mock<IHackneyPropertyService>();
             fakeService.Setup(service => service.GetPropertyBlockByRef("43453543"))
@@ -410,7 +413,8 @@ namespace HackneyRepairs.Tests.Actions
                 tenure = "",
                 lettingArea = "",
                 propertyTypeCode = "",
-                propertyTypeDescription = ""
+                propertyTypeDescription = "",
+                tenancyAgreementReference = ""
             };
             Assert.Equal(property, results);
         }
@@ -445,7 +449,8 @@ namespace HackneyRepairs.Tests.Actions
                 TenureDescription = "",
                 LettingAreaDescription = "",
                 PropertyTypeCode = "",
-                PropertyTypeDescription = ""
+                PropertyTypeDescription = "",
+                TenancyAgreementReference = ""
             };
             var fakeService = new Mock<IHackneyPropertyService>();
             fakeService.Setup(service => service.GetPropertyEstateByRef("43453543"))
@@ -464,7 +469,8 @@ namespace HackneyRepairs.Tests.Actions
                 tenure = "",
                 lettingArea = "",
                 propertyTypeCode = "",
-                propertyTypeDescription = ""
+                propertyTypeDescription = "",
+                tenancyAgreementReference = ""
             };
             Assert.Equal(property, results);
         }
@@ -483,7 +489,8 @@ namespace HackneyRepairs.Tests.Actions
                 TenureDescription = "",
                 LettingAreaDescription = "",
                 PropertyTypeCode = "",
-                PropertyTypeDescription = ""
+                PropertyTypeDescription = "",
+                TenancyAgreementReference = ""
             };
             var fakeService = new Mock<IHackneyPropertyService>();
             fakeService.Setup(service => service.GetPropertyEstateByRef("52525252534"))
@@ -499,7 +506,8 @@ namespace HackneyRepairs.Tests.Actions
                 tenure = "",
                 lettingArea = "",
                 propertyTypeCode = "",
-                propertyTypeDescription = ""
+                propertyTypeDescription = "",
+                tenancyAgreementReference = ""
             };
             var workOrdersService = new Mock<IHackneyWorkOrdersService>();
             PropertyActions propertyActions = new PropertyActions(fakeService.Object, fakeRequestBuilder.Object, workOrdersService.Object, mockLogger.Object);

@@ -32,7 +32,7 @@ namespace HackneyRepairs.Repository
             {
                 using (SqlConnection connnection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
                 {
-                    string query = @"SELECT 
+                    string query = $@"SELECT 
                             address1 AS 'ShortAddress',
                             post_code AS 'PostCodeValue',
                             ~no_maint AS 'Maintainable', 
@@ -43,7 +43,8 @@ namespace HackneyRepairs.Repository
 							tenure.ten_desc AS 'TenureDescription',
                             cat_type AS 'PropertyTypeCode',
 							LTRIM(RTRIM(pt_prop_desc)) AS 'PropertyTypeDescription',
-							LTRIM(RTRIM([NeighbourhoodDescription])) AS 'LettingAreaDescription'
+							LTRIM(RTRIM([NeighbourhoodDescription])) AS 'LettingAreaDescription',
+                            LTRIM(RTRIM(property.house_ref)) + '/01' AS 'TenancyAgreementReference'
 							FROM 
                             property 
                             LEFT JOIN lulevel ON property.level_code = lulevel.lu_ref
