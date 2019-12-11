@@ -77,6 +77,40 @@ namespace HackneyRepairs.Services
             }
         }
 
+        public Task<NewBuildWarrantyData> GetNewBuildPropertyWarrantByRefAsync(string reference)
+        {
+            switch (reference)
+            {
+                case "00088888":
+                    return Task.Run(() => new NewBuildWarrantyData()
+                    {
+                        ComponentName = "Roof Covering Warranty",
+                        CompletionDate = DateTime.Parse("2037-06-30 00:00:00"),
+                        Status = "Warranty Period",
+                        ContactDetails = "0330 123 1234",
+                        Manufacturer = "LBH Manufacture"
+                    });
+                case "5252":
+                    return Task.Run(() => new NewBuildWarrantyData()
+                    {
+                        ComponentName = "XXXXXXXXXX",
+                        CompletionDate = DateTime.Now,
+                        Status = null,
+                        ContactDetails = null,
+                        Manufacturer = null
+                    });
+                default:
+                    return Task.Run(() => new NewBuildWarrantyData()
+                    {
+                        ComponentName = "XXXXXXXXXX",
+                        CompletionDate = DateTime.Now,
+                        Status = null,
+                        ContactDetails = null,
+                        Manufacturer = null
+                    });
+            }
+        }
+
         public Task<PropertyDetails[]> GetPropertiesByReferences(string[] references)
         {
             var fakeProperty = new PropertyDetails

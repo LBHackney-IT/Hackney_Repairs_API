@@ -176,6 +176,34 @@ namespace HackneyRepairs.Actions
             }
         }
 
+
+        public async Task<object> FindNewBuildPropertyWarrantByRefAsync(string reference)
+        {
+            _logger.LogInformation($"Getting new build property warranty by reference: {reference}");
+            try
+            {
+                var response = await _propertyService.GetPropertyByRef(reference);
+                if (response == null)
+                {
+                    throw new MissingPropertyException();
+                }
+                else
+                {
+                    return BuildPropertyDetails(response);
+                }
+            }
+            catch (MissingPropertyException e)
+            {
+                _logger.LogError($"Finding a property with the property reference: {reference} returned an error: {e.Message}");
+                throw e;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Finding a property with the property reference: {reference} returned an error: {e.Message}");
+                throw new PropertyServiceException();
+            }
+        }
+
         public async Task<object[]> FindPropertiesDetailsByReferences(string[] references)
         {
             try

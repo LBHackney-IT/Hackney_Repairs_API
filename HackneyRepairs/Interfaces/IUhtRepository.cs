@@ -9,6 +9,7 @@ namespace HackneyRepairs.Interfaces
     public interface IUhtRepository
     {
         Task<PropertyDetails> GetPropertyDetailsByReference(string reference);
+        Task<NewBuildWarrantyData> GetNewBuildWarrantDetailsAsync(string reference)
         Task<DrsOrder> GetWorkOrderDetails(string workOrderReference);
         Task<bool> UpdateRequestStatus(string repairRequestReference);
         Task<int?> UpdateVisitAndBlockTrigger(string workOrderReference, DateTime startDate, DateTime endDate, int orderId, int bookingId, string slotDetail);

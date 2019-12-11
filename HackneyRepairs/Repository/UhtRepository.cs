@@ -63,7 +63,6 @@ namespace HackneyRepairs.Repository
             }
         }
 
-
         public async Task<NewBuildWarrantyData> GetNewBuildWarrantDetailsAsync(string reference)
         {
             _logger.LogInformation($"Getting warranty details for new build property {reference}");
@@ -75,7 +74,7 @@ namespace HackneyRepairs.Repository
                                     comp_date AS 'CompletionDate', comp_manu AS 'Manufacturer', 
                                     comp_contact AS 'ContactDetails' FROM 
                                     udf_dfwar_list(@PropertyReference)";
-                    var warrantyData = connnection.Query<NewBuildWarrantyData>(query, new { PropertyReference = reference }).First();
+                    var warrantyData = await connnection.QueryAsync<NewBuildWarrantyData>(query, new { PropertyReference = reference }).First();
                     return warrantyData;
                 }
             }
