@@ -215,7 +215,7 @@ namespace HackneyRepairs.Controllers
             try
             {
                 PropertyActions actions = new PropertyActions(_propertyService, _propertyServiceRequestBuilder, _workordersService, _propertyLoggerAdapter);
-                var response = await actions.FindPropertyDetailsByRef(reference);
+                var response = await actions.FindNewBuildPropertyWarrantByRefAsync(reference);
                 return ResponseBuilder.Ok(response);
             }
             catch (MissingPropertyException ex)

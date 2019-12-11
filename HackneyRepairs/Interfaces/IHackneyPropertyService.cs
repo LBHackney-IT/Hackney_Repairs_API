@@ -13,7 +13,7 @@ namespace HackneyRepairs.Interfaces
         Task<PropertyLevelModel[]> GetPropertyListByFirstLineOfAddress(string firstlineofaddress, int limit);
         Task<PropertyLevelModel[]> GetFacilitiesByPropertyRef(string reference);
         Task<PropertyDetails> GetPropertyByRef(string reference);
-        Task<NewBuildWarrantyData> GetNewBuildPropertyWarrantByRefAsync(string reference);
+        Task<IEnumerable<NewBuildWarrantyData>> GetNewBuildPropertyWarrantByRefAsync(string reference);
         Task<PropertyDetails[]> GetPropertiesByReferences(string[] references);
         Task<PropertyDetails> GetPropertyBlockByRef(string reference);
         Task<PropertyDetails> GetPropertyEstateByRef(string reference);

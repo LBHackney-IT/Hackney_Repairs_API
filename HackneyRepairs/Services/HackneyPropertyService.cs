@@ -48,7 +48,7 @@ namespace HackneyRepairs.Services
             return response;
         }
 
-        public Task<NewBuildWarrantyData> GetNewBuildPropertyWarrantByRefAsync(string reference)
+        public Task<IEnumerable<NewBuildWarrantyData>> GetNewBuildPropertyWarrantByRefAsync(string reference)
         {
             _logger.LogInformation($"HackneyPropertyService/GetNewBuildPropertyWarrantByRefAsync: Sent request to upstream PropertyServiceClient (Property reference: {reference})");
             var response = _uhtRepository.GetNewBuildWarrantDetailsAsync(reference);
