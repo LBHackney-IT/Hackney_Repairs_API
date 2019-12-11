@@ -52,9 +52,9 @@ namespace HackneyRepairs.Repository
 							LEFT join tenure on rent.tenure = tenure.ten_type
 							left join [vw_pcPropertydesc] on property.prop_ref = [vw_pcPropertydesc].prop_ref
                             LEFT join proptype on property.cat_type = proptype.pt_prop_code
-							LEFT JOIN tenancyview on tenancyview.prop_ref = property.prop_ref
+							LEFT JOIN tenagree on tenagree.prop_ref = property.prop_ref
                             WHERE property.prop_ref = @PropertyReference
-                            AND tenancyview.terminated = 0";
+                            AND tenagree.terminated = 0";
                     var property = connnection.Query<PropertyDetails>(query, new { PropertyReference = reference }).First();
                     return property;
                 }
