@@ -63,6 +63,27 @@ namespace HackneyRepairs.Repository
             }
         }
 
+
+        public async Task<NewBuildWarrantyData> GetNewBuildWarrantDetailsAsync(string reference)
+        {
+            _logger.LogInformation($"Getting details for property {reference}");
+            try
+            {
+                using (SqlConnection connnection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+                {
+                    string query = @"SELECT * FROM 
+                                    udf_dfwar_list(@PropertyReference)";
+                    var warrantyData = connnection.Query<NewBuildWarrantyData>(query, new { PropertyReference = reference }).First();
+                    return warrantyData;
+                }
+            }
+           catch (Exception ex)
+			{
+				_logger.LogError(ex.Message);
+                throw new UhtRepositoryException();
+			}
+        }
+
         public async Task<DrsOrder> GetWorkOrderDetails(string workOrderReference)
 		{
 			_logger.LogInformation($"Getting the work order details from UHT for {workOrderReference}");
