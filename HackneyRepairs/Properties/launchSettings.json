@@ -19,7 +19,8 @@
         "KFReturnUrl": "http://www.hackney.gov.uk",
         "ASPNETCORE_ENVIRONMENT": "Development",
         "KFCompany": "Hackney_Test"
-      }
+      },
+      "applicationUrl": "http://0.0.0.0:5000"
     },
     "HackneyRepairs": {
       "commandName": "Project",
