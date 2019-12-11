@@ -48,10 +48,10 @@ namespace HackneyRepairs.Services
             return response;
         }
 
-        public Task<IEnumerable<NewBuildWarrantyData>> GetNewBuildPropertyWarrantByRefAsync(string reference)
+        public async Task<List<NewBuildWarrantyData>> GetNewBuildPropertyWarrantByRefAsync(string reference)
         {
             _logger.LogInformation($"HackneyPropertyService/GetNewBuildPropertyWarrantByRefAsync: Sent request to upstream PropertyServiceClient (Property reference: {reference})");
-            var response = _uhtRepository.GetNewBuildWarrantDetailsAsync(reference);
+            var response = await _uhtRepository.GetNewBuildWarrantDetailsAsync(reference);
             _logger.LogInformation($"HackneyPropertyService/GetNewBuildPropertyWarrantByRefAsync: Received response from upstream PropertyServiceClient (Property reference: {reference})");
             return response;
         }

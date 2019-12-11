@@ -63,7 +63,7 @@ namespace HackneyRepairs.Repository
             }
         }
 
-        public async Task<IEnumerable<NewBuildWarrantyData>> GetNewBuildWarrantDetailsAsync(string reference)
+        public async Task<List<NewBuildWarrantyData>> GetNewBuildWarrantDetailsAsync(string reference)
         {
             _logger.LogInformation($"Getting warranty details for new build property {reference}");
             try
@@ -75,7 +75,7 @@ namespace HackneyRepairs.Repository
                                     comp_contact AS 'ContactDetails' FROM 
                                     udf_dfwar_list(@PropertyReference)";
                     var warrantyData = await connnection.QueryAsync<NewBuildWarrantyData>(query, new { PropertyReference = reference });
-                    return warrantyData;
+                    return warrantyData.ToList();
                 }
             }
            catch (Exception ex)

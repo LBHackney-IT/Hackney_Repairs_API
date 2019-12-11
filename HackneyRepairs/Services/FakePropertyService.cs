@@ -6,6 +6,7 @@ using HackneyRepairs.Models;
 using HackneyRepairs.Actions;
 using System.Collections.Generic;
 using System.Linq;
+using System.Collections;
 
 namespace HackneyRepairs.Services
 {
@@ -77,39 +78,49 @@ namespace HackneyRepairs.Services
             }
         }
 
-        public Task<IEnumerable<NewBuildWarrantyData>> GetNewBuildPropertyWarrantByRefAsync(string reference)
+        public Task<List<NewBuildWarrantyData>> GetNewBuildPropertyWarrantByRefAsync(string reference)
         {
-            return Task.Run(() => Enumerable.Empty<NewBuildWarrantyData>());
-            //switch (reference)
-            //{
-            //    case "00088888":
-            //        return Task.Run(() => new NewBuildWarrantyData()
-            //        {
-            //            ComponentName = "Roof Covering Warranty",
-            //            CompletionDate = DateTime.Parse("2037-06-30 00:00:00"),
-            //            Status = "Warranty Period",
-            //            ContactDetails = "0330 123 1234",
-            //            Manufacturer = "LBH Manufacture"
-            //        });
-            //    case "5252":
-            //        return Task.Run(() => new NewBuildWarrantyData()
-            //        {
-            //            ComponentName = "XXXXXXXXXX",
-            //            CompletionDate = DateTime.Now,
-            //            Status = null,
-            //            ContactDetails = null,
-            //            Manufacturer = null
-            //        });
-            //    default:
-            //        return Task.Run(() => new NewBuildWarrantyData()
-            //        {
-            //            ComponentName = "XXXXXXXXXX",
-            //            CompletionDate = DateTime.Now,
-            //            Status = null,
-            //            ContactDetails = null,
-            //            Manufacturer = null
-            //        });
-            //}
+            var datas = new NewBuildWarrantyData[]
+            {
+                new NewBuildWarrantyData
+                {
+                     ComponentName = "Roof Covering Warranty",
+                     CompletionDate = DateTime.Parse("2037-06-30 00:00:00"),
+                     Status = "Warranty Period",
+                     ContactDetails = "0330 123 1234",
+                     Manufacturer = "LBH Manufacture"
+                },
+                new NewBuildWarrantyData
+                {
+                     ComponentName = "Lift Warranty",
+                     CompletionDate = DateTime.Parse("2037-06-30T00:00:00"),
+                     Status = "Warranty Period",
+                     ContactDetails = "0330 123 1234",
+                     Manufacturer = "LBH Manufacture"
+                }
+            };
+
+            var emptydata = new NewBuildWarrantyData()
+            {
+                ComponentName = "XXXXXXXXXX",
+                CompletionDate = DateTime.Parse("0001-01-01T00:00:00"),
+                Status = null,
+                ContactDetails = null,
+                Manufacturer = null
+            };
+
+            List<NewBuildWarrantyData> emptylist = new List<NewBuildWarrantyData>();
+            emptylist.Add(emptydata);
+
+            switch (reference)
+            {
+                case "00088888":
+                    return Task.Run(() => datas.ToList());
+                case "5252":
+                    return Task.Run(() => emptylist);
+                default:
+                    return Task.Run(() => emptylist);
+            }
         }
 
         public Task<PropertyDetails[]> GetPropertiesByReferences(string[] references)
