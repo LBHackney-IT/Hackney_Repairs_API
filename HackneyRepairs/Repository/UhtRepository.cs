@@ -44,7 +44,7 @@ namespace HackneyRepairs.Repository
                             cat_type AS 'PropertyTypeCode',
 							LTRIM(RTRIM(pt_prop_desc)) AS 'PropertyTypeDescription',
 							LTRIM(RTRIM([NeighbourhoodDescription])) AS 'LettingAreaDescription',
-                            tenancyview.tag_ref AS 'TenancyAgreementReference'
+                            tenagree.tag_ref AS 'TenancyAgreementReference'
 							FROM 
                             property 
                             LEFT JOIN lulevel ON property.level_code = lulevel.lu_ref
