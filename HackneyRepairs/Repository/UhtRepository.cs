@@ -32,7 +32,7 @@ namespace HackneyRepairs.Repository
             {
                 using (SqlConnection connnection = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
                 {
-                    string query = @"SELECT 
+                    string query = $@"SELECT 
                             address1 AS 'ShortAddress',
                             post_code AS 'PostCodeValue',
                             ~no_maint AS 'Maintainable', 
@@ -43,7 +43,8 @@ namespace HackneyRepairs.Repository
 							tenure.ten_desc AS 'TenureDescription',
                             cat_type AS 'PropertyTypeCode',
 							LTRIM(RTRIM(pt_prop_desc)) AS 'PropertyTypeDescription',
-							LTRIM(RTRIM([NeighbourhoodDescription])) AS 'LettingAreaDescription'
+							LTRIM(RTRIM([NeighbourhoodDescription])) AS 'LettingAreaDescription',
+                            tenancyview.tag_ref AS 'TenancyAgreementReference'
 							FROM 
                             property 
                             LEFT JOIN lulevel ON property.level_code = lulevel.lu_ref
@@ -51,7 +52,9 @@ namespace HackneyRepairs.Repository
 							LEFT join tenure on rent.tenure = tenure.ten_type
 							left join [vw_pcPropertydesc] on property.prop_ref = [vw_pcPropertydesc].prop_ref
                             LEFT join proptype on property.cat_type = proptype.pt_prop_code
-                            WHERE property.prop_ref = @PropertyReference";
+							LEFT JOIN tenagree on tenagree.prop_ref = property.prop_ref
+                            WHERE property.prop_ref = @PropertyReference
+                            AND tenagree.terminated = 0";
                     var property = connnection.Query<PropertyDetails>(query, new { PropertyReference = reference }).First();
                     return property;
                 }

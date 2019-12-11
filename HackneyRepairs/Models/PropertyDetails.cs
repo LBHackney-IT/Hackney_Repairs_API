@@ -10,5 +10,6 @@ namespace HackneyRepairs.Models
         public string Description { get; set; }
         public string TenureCode { get; set; }
         public string PropertyTypeCode { get; set; }
+        public string TenancyAgreementReference { get; set; }
     }
 }
