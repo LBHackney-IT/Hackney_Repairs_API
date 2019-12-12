@@ -206,8 +206,7 @@ namespace HackneyRepairs.Controllers
         /// </summary>
         /// <param name="reference">The reference number of the new build property</param>
         /// <returns>Details of the requested property</returns>
-        /// <response code="200">Returns the new build warranty</response>
-        /// <response code="404">If the warranty is not found</response>   
+        /// <response code="200">Returns the new build warranty</response> 
         /// <response code="500">If any errors are encountered</response> 
         [HttpGet("{reference}/new_build/warranty")]
         public async Task<JsonResult> GetNewBuildWarrantyAsync(string reference)
@@ -218,23 +217,13 @@ namespace HackneyRepairs.Controllers
                 var response = await actions.FindNewBuildPropertyWarrantByRefAsync(reference);
                 return ResponseBuilder.Ok(response);
             }
-            catch (MissingPropertyException ex)
+            catch (UhtRepositoryException ex)
             {
                 _exceptionLogger.CaptureException(ex);
-                return ResponseBuilder.Error(404, "Property not found or incorrect reference number", ex.Message);
-            }
-            catch (UHWWarehouseRepositoryException ex)
-            {
-                _exceptionLogger.CaptureException(ex);
-                return ResponseBuilder.Error(500, "We could not contact Universal Housing (UHW) to " +
+                return ResponseBuilder.Error(500, "We could not contact Universal Housing (UHT) to " +
                     "retrieve the property matching your query. Please raise a ticket at " +
                     "https://support.hackney.gov.uk including the details of this error, the repair " +
                     "or property and a screenshot.", ex.Message);
-            }
-            catch (Exception ex)
-            {
-                _exceptionLogger.CaptureException(ex);
-                return ResponseBuilder.Error(500, "We had some problems processing your request", ex.Message);
             }
         }
 

@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using HackneyRepairs.Formatters;
+﻿using HackneyRepairs.Formatters;
 using HackneyRepairs.Interfaces;
 using HackneyRepairs.Models;
 using HackneyRepairs.PropertyService;
-using Microsoft.EntityFrameworkCore.Query;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace HackneyRepairs.Actions
 {
@@ -179,30 +177,8 @@ namespace HackneyRepairs.Actions
         public async Task<List<NewBuildWarrantyData>> FindNewBuildPropertyWarrantByRefAsync(string reference)
         {
             _logger.LogInformation($"Getting new build property warranty by reference: {reference}");
-            try
-            {
-                var response = await _propertyService.GetNewBuildPropertyWarrantByRefAsync(reference);
-                return response;
-                //if (response == null)
-                //{
-                //    throw new MissingPropertyException();
-                //}
-                //else
-                //{
-                //    return BuildPropertyDetails(response);
-                //}
-            }
-            catch (Exception e)
-            {
-                _logger.LogError($"Finding a property with the property reference: {reference} returned an error: {e.Message}");
-                throw new PropertyServiceException();
-            }
-
-            //catch (MissingPropertyException e)
-            //{
-            //    _logger.LogError($"Finding a property with the property reference: {reference} returned an error: {e.Message}");
-            //    throw e;
-            //}
+            var response = await _propertyService.GetNewBuildPropertyWarrantByRefAsync(reference);
+            return response;
         }
 
         public async Task<object[]> FindPropertiesDetailsByReferences(string[] references)
