@@ -176,7 +176,7 @@ namespace HackneyRepairs.Actions
             }
         }
 
-        public async Task<IEnumerable<object>> FindNewBuildPropertyWarrantByRefAsync(string reference)
+        public async Task<List<NewBuildWarrantyData>> FindNewBuildPropertyWarrantByRefAsync(string reference)
         {
             _logger.LogInformation($"Getting new build property warranty by reference: {reference}");
             try

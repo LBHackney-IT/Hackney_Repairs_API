@@ -96,6 +96,71 @@ namespace HackneyRepairs.Tests.Actions
             await Assert.ThrowsAsync<PropertyServiceException>(async () => await propertyActions.FindProperty("E8 2LN", null, null));
         }
         #endregion
+        #region property warranty data
+        [Fact]
+        public async Task find_warranty_data_for_a_new_build_property_returns_a_list_of_warranty_data()
+        {
+            var mockLogger = new Mock<ILoggerAdapter<PropertyActions>>();
+            var datas = new NewBuildWarrantyData[]
+            {
+                new NewBuildWarrantyData
+                {
+                     ComponentName = "Roof Covering Warranty",
+                     CompletionDate = DateTime.Parse("2037-06-30T00:00:00"),
+                     Status = "Warranty Period",
+                     ContactDetails = "0330 123 1234",
+                     Manufacturer = "LBH Manufacture"
+                },
+                new NewBuildWarrantyData
+                {
+                     ComponentName = "Lift Warranty",
+                     CompletionDate = DateTime.Parse("2037-06-30T00:00:00"),
+                     Status = "Warranty Period",
+                     ContactDetails = "0330 123 1234",
+                     Manufacturer = "LBH Manufacture"
+                }
+            };
+
+            //var emptydata = new NewBuildWarrantyData()
+            //{
+            //    ComponentName = "XXXXXXXXXX",
+            //    CompletionDate = DateTime.Parse("0001-01-01T00:00:00"),
+            //    Status = null,
+            //    ContactDetails = null,
+            //    Manufacturer = null
+            //};
+
+            //var PropertyList = new PropertyLevelModel[2];
+            //PropertyList[0] = property1;
+            //PropertyList[1] = property2;
+            var fakeService = new Mock<IHackneyPropertyService>();
+            fakeService.Setup(service => service.GetNewBuildPropertyWarrantByRefAsync("00088888"))
+               .ReturnsAsync(datas.ToList());
+
+            var fakeRequestBuilder = new Mock<IHackneyPropertyServiceRequestBuilder>();
+            var workOrdersService = new Mock<IHackneyWorkOrdersService>();
+            PropertyActions propertyActions = new PropertyActions(fakeService.Object, fakeRequestBuilder.Object, workOrdersService.Object, mockLogger.Object);
+
+            var results = await propertyActions.FindNewBuildPropertyWarrantByRefAsync("00088888");
+            //var outputproperty1 = new PropertyLevelModel
+            //{
+            //    Address = "2 Acacia House  Lordship Road",
+            //    Postcode = "N16 0PX",
+            //    PropertyReference = "1/43453543"
+            //};
+            //var outputproperty2 = new PropertyLevelModel
+            //{
+            //    Address = "4 Acacia House  Lordship Road",
+            //    Postcode = "N16 0PX",
+            //    PropertyReference = "2/32453245"
+            //};
+            //var properties = new PropertyLevelModel[2];
+            //properties[0] = outputproperty1;
+            //properties[1] = outputproperty2;
+            //var json = new { results = properties };
+            Assert.Equal(JsonConvert.SerializeObject(datas.ToList()), JsonConvert.SerializeObject(results));
+        }
+        #endregion
 
         #region property by first line of address
         [Fact]
