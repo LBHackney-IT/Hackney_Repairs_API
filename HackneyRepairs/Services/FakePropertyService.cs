@@ -109,17 +109,17 @@ namespace HackneyRepairs.Services
                 Manufacturer = null
             };
 
-            List<NewBuildWarrantyData> emptylist = new List<NewBuildWarrantyData>();
-            emptylist.Add(emptydata);
+            List<NewBuildWarrantyData> emptywarrantylist = new List<NewBuildWarrantyData>();
+            emptywarrantylist.Add(emptydata);
 
             switch (reference)
             {
                 case "00088888":
                     return Task.Run(() => datas.ToList());
                 case "5252":
-                    return Task.Run(() => emptylist);
+                    return Task.Run(() => emptywarrantylist);
                 default:
-                    return Task.Run(() => emptylist);
+                    return Task.Run(() => emptywarrantylist);
             }
         }
 
