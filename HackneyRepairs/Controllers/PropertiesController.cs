@@ -200,6 +200,33 @@ namespace HackneyRepairs.Controllers
             }
         }
 
+        // GET property details by reference
+        /// <summary>
+        /// Gets the warranty details of a new build property by a given property reference number
+        /// </summary>
+        /// <param name="reference">The reference number of the new build property</param>
+        /// <returns>Details of the requested property</returns>
+        /// <response code="200">Returns the new build warranty</response> 
+        /// <response code="500">If any errors are encountered</response> 
+        [HttpGet("{reference}/new_build/warranty")]
+        public async Task<JsonResult> GetNewBuildWarrantyAsync(string reference)
+        {
+            try
+            {
+                PropertyActions actions = new PropertyActions(_propertyService, _propertyServiceRequestBuilder, _workordersService, _propertyLoggerAdapter);
+                var response = await actions.FindNewBuildPropertyWarrantByRefAsync(reference);
+                return ResponseBuilder.Ok(response);
+            }
+            catch (UhtRepositoryException ex)
+            {
+                _exceptionLogger.CaptureException(ex);
+                return ResponseBuilder.Error(500, "We could not contact Universal Housing (UHT) to " +
+                    "retrieve the property matching your query. Please raise a ticket at " +
+                    "https://support.hackney.gov.uk including the details of this error, the repair " +
+                    "or property and a screenshot.", ex.Message);
+            }
+        }
+
         // GET properties details by references
         /// <summary>
         /// Gets the details for properties by given references

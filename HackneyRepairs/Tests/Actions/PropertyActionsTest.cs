@@ -96,6 +96,73 @@ namespace HackneyRepairs.Tests.Actions
             await Assert.ThrowsAsync<PropertyServiceException>(async () => await propertyActions.FindProperty("E8 2LN", null, null));
         }
         #endregion
+        #region property warranty data
+        [Fact]
+        public async Task find_warranty_data_for_a_new_build_property_returns_a_list_of_warranty_data()
+        {
+            var mockLogger = new Mock<ILoggerAdapter<PropertyActions>>();
+            var datas = new NewBuildWarrantyData[]
+            {
+                new NewBuildWarrantyData
+                {
+                     ComponentName = "Roof Covering Warranty",
+                     CompletionDate = DateTime.Parse("2037-06-30T00:00:00"),
+                     Status = "Warranty Period",
+                     ContactDetails = "0330 123 1234",
+                     Manufacturer = "LBH Manufacture"
+                },
+                new NewBuildWarrantyData
+                {
+                     ComponentName = "Lift Warranty",
+                     CompletionDate = DateTime.Parse("2037-06-30T00:00:00"),
+                     Status = "Warranty Period",
+                     ContactDetails = "0330 123 1234",
+                     Manufacturer = "LBH Manufacture"
+                }
+            };
+
+            var fakeService = new Mock<IHackneyPropertyService>();
+            fakeService.Setup(service => service.GetNewBuildPropertyWarrantByRefAsync("00088888"))
+               .ReturnsAsync(datas.ToList());
+
+            var fakeRequestBuilder = new Mock<IHackneyPropertyServiceRequestBuilder>();
+            var workOrdersService = new Mock<IHackneyWorkOrdersService>();
+            PropertyActions propertyActions = new PropertyActions(fakeService.Object, fakeRequestBuilder.Object, workOrdersService.Object, mockLogger.Object);
+
+            var results = await propertyActions.FindNewBuildPropertyWarrantByRefAsync("00088888");
+
+            Assert.Equal(JsonConvert.SerializeObject(datas.ToList()), JsonConvert.SerializeObject(results));
+        }
+
+        [Fact]
+        public async Task find_warranty_data_for_a_property_returns_empty_warranty_data()
+        {
+            var mockLogger = new Mock<ILoggerAdapter<PropertyActions>>();
+            var datas = new NewBuildWarrantyData[]
+            {
+                 new NewBuildWarrantyData()
+                 {
+                    ComponentName = "XXXXXXXXXX",
+                    CompletionDate = DateTime.Parse("0001-01-01T00:00:00"),
+                    Status = null,
+                    ContactDetails = null,
+                    Manufacturer = null
+                 }
+            };
+
+            var fakeService = new Mock<IHackneyPropertyService>();
+            fakeService.Setup(service => service.GetNewBuildPropertyWarrantByRefAsync("5252"))
+               .ReturnsAsync(datas.ToList());
+
+            var fakeRequestBuilder = new Mock<IHackneyPropertyServiceRequestBuilder>();
+            var workOrdersService = new Mock<IHackneyWorkOrdersService>();
+            PropertyActions propertyActions = new PropertyActions(fakeService.Object, fakeRequestBuilder.Object, workOrdersService.Object, mockLogger.Object);
+
+            var results = await propertyActions.FindNewBuildPropertyWarrantByRefAsync("5252");
+
+            Assert.Equal(JsonConvert.SerializeObject(datas.ToList()), JsonConvert.SerializeObject(results));
+        }
+        #endregion
 
         #region property by first line of address
         [Fact]
