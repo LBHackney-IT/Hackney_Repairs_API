@@ -49,7 +49,7 @@ namespace HackneyRepairs.Repository
 
         public async Task<IEnumerable<RepairRequestBase>> GetRepairRequestsByPropertyReference(string propertyReference)
         {
-            if (IsDevelopmentEnvironment())
+            if (!IsProduction())
             {
                 return new List<RepairRequestBase>();
             }
@@ -85,7 +85,7 @@ namespace HackneyRepairs.Repository
 
         public async Task<IEnumerable<RepairWithWorkOrderDto>> GetRepairRequest(string repairReference)
         {
-            if (IsDevelopmentEnvironment())
+            if (!IsProduction())
             {
                 return new List<RepairWithWorkOrderDto>();
             }
@@ -464,7 +464,7 @@ namespace HackneyRepairs.Repository
 
         public async Task<UHWorkOrder> GetWorkOrderByWorkOrderReference(string reference)
         {
-            if (IsDevelopmentEnvironment())
+            if (!IsProduction())
             {
                 return null;
             }
@@ -522,7 +522,7 @@ namespace HackneyRepairs.Repository
 
         public async Task<IEnumerable<UHWorkOrder>> GetWorkOrdersByWorkOrderReferences(string[] references)
         {
-            if (IsDevelopmentEnvironment())
+            if (!IsProduction())
             {
                 return new List<UHWorkOrder>();
             }
@@ -575,7 +575,7 @@ namespace HackneyRepairs.Repository
 
         public async Task<DrsOrder> GetWorkOrderDetails(string workOrderReference)
         {
-            if (IsDevelopmentEnvironment())
+            if (!IsProduction())
             {
                 return null;
             }
@@ -644,7 +644,7 @@ namespace HackneyRepairs.Repository
 
         public async Task<IEnumerable<UHWorkOrder>> GetWorkOrderByPropertyReference(string propertyReference)
         {
-            if (IsDevelopmentEnvironment())
+            if (!IsProduction())
             {
                 return new List<UHWorkOrder>();
             }
@@ -697,7 +697,7 @@ namespace HackneyRepairs.Repository
 
         public async Task<IEnumerable<UHWorkOrder>> GetWorkOrdersByPropertyReferences(string[] propertyReferences, DateTime since, DateTime until)
         {
-            if (IsDevelopmentEnvironment())
+            if (!IsProduction())
             {
                 return new List<UHWorkOrder>();
             }
@@ -755,7 +755,7 @@ namespace HackneyRepairs.Repository
 
         public async Task<IEnumerable<UHWorkOrder>> GetWorkOrderByBlockReference(string[] blockReferences, string trade, DateTime since, DateTime until)
         {
-            if (IsDevelopmentEnvironment())
+            if (!IsProduction())
             {
                 return new List<UHWorkOrder>();
             }
@@ -816,7 +816,7 @@ namespace HackneyRepairs.Repository
 
         public async Task<IEnumerable<Note>> GetNotesByWorkOrderReference(string workOrderReference)
         {
-            if (IsDevelopmentEnvironment())
+            if (!IsProduction())
             {
                 return new List<Note>();
             }
@@ -858,7 +858,7 @@ namespace HackneyRepairs.Repository
 
         public async Task<IEnumerable<UHWorkOrder>> GetTasksForWorkOrder(string workOrderReference)
         {
-            if (IsDevelopmentEnvironment())
+            if (!IsProduction())
             {
                 return new List<UHWorkOrder>();
             }
@@ -916,7 +916,7 @@ namespace HackneyRepairs.Repository
 
         public async Task<IEnumerable<UHWorkOrderFeed>> GetWorkOrderFeed(string startId, int size)
         {
-            if (IsDevelopmentEnvironment())
+            if (!IsProduction())
             {
                 return new List<UHWorkOrderFeed>();
             }
@@ -958,7 +958,7 @@ namespace HackneyRepairs.Repository
 
         public async Task<IEnumerable<Note>> GetNoteFeed(int noteId, string noteTarget, int size)
         {
-            if (IsDevelopmentEnvironment())
+            if (!IsProduction())
             {
                 return new List<Note>();
             }
@@ -1052,15 +1052,15 @@ namespace HackneyRepairs.Repository
             return levelConditionString;
         }
 
-        private bool IsDevelopmentEnvironment()
+        private bool IsProduction()
         {
             string environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            if (environment.ToLower() != "development" && environment.ToLower() != "test" && environment.ToLower() != "local")
+            if (environment.ToLower() == "production")
             {
-                return false;
+                return true;
             }
 
-            return true;
+            return false;
         }
     }
 
