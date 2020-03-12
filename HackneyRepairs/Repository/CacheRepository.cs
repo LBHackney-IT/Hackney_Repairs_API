@@ -5,13 +5,14 @@ using System.Threading.Tasks;
 using HackneyRepairs.Interfaces;
 using HackneyRepairs.Models;
 using HackneyRepairs.Infrastructure;
+using Newtonsoft.Json;
 
 namespace HackneyRepairs.Repository
 {
     public class CacheRepository : ICacheRepository
     {
         private CacheManager _cacheManager;
-        private ILoggerAdapter<CacheRepository> _logger;
+        private ILoggerAdapter<CacheRepository> _logger;        
 
         public CacheRepository(CacheManager cacheManager, ILoggerAdapter<CacheRepository> logger)
         {
@@ -19,24 +20,54 @@ namespace HackneyRepairs.Repository
             _logger = logger;
         }
 
-        public Task<bool> DeleteAppointmentCache(string workOrderReference)
+        public bool DeleteAppointmentCache(string workOrderReference)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<DetailedAppointment>> GetAppointmentsByWorkOrderReference(string workOrderReference)
+        public IEnumerable<DetailedAppointment> GetCachedAppointmentsByWorkOrderReference(string workOrderReference)
         {
             throw new NotImplementedException();
         }
 
-        public Task<DetailedAppointment> GetLatestAppointmentByWorkOrderReference(string workOrderReference)
+        public DetailedAppointment GetCachedLatestAppointmentByWorkOrderReference(string workOrderReference)
         {
-            throw new NotImplementedException();
+            DetailedAppointment detailedAppointment = new DetailedAppointment();
+            string cacheKey = "appointment:workorder:";
+            try
+            {
+                _logger.LogInformation($"Getting current appointment details from cache for {workOrderReference}");
+                var cache = CacheManager.Cache;
+                var appointment = cache.StringGet(cacheKey + workOrderReference);
+                if (appointment.IsNull)
+                {
+                    _logger.LogInformation($"Cache miss for {workOrderReference}");
+                    return detailedAppointment;
+                }
+                else
+                {
+                    _logger.LogInformation($"Cache hit for {workOrderReference}");
+                    return JsonConvert.DeserializeObject<DetailedAppointment>(appointment);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                throw new CacheRepositoryException(ex.Message);
+            }
+            
         }
 
-        public Task<bool> SetAppointmentCache(DetailedAppointment appointment)
+        public bool SetAppointmentCache(DetailedAppointment appointment)
         {
             throw new NotImplementedException();
         }
+    }
+
+    public class CacheRepositoryException : Exception
+    {
+        public CacheRepositoryException() { }
+        public CacheRepositoryException(string message) : base(message)
+        { }
     }
 }
