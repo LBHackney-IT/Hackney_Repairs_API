@@ -113,7 +113,7 @@ namespace HackneyRepairs.Services
 			{
                 if (cacheNewRecord)
                 {
-                    _cacheRepository.SetCache(drsResponse.ToList(), string.Format(CacheKeyAppointments, drsResponse.ToList()[0].Id));
+                    _cacheRepository.PutCachedItem(drsResponse.ToList(), string.Format(CacheKeyAppointments, drsResponse.ToList()[0].Id));
                 }
 
                 return drsResponse;
@@ -151,7 +151,7 @@ namespace HackneyRepairs.Services
 			{
                 if (cacheNewRecord)
                 {                
-                    _cacheRepository.SetCache(drsAppointment, cachekey);
+                    _cacheRepository.PutCachedItem(drsAppointment, cachekey);
                 }
 
 				return drsAppointment;
@@ -162,7 +162,7 @@ namespace HackneyRepairs.Services
 			var uhAppointment = await _uhtRepository.GetLatestAppointmentByWorkOrderReference(workOrderReference);
             if (cacheNewRecord && uhAppointment != null)
             {
-                _cacheRepository.SetCache(uhAppointment, cachekey);
+                _cacheRepository.PutCachedItem(uhAppointment, cachekey);
             }
 
             return uhAppointment;

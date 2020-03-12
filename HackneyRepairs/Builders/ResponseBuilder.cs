@@ -54,5 +54,25 @@ namespace HackneyRepairs.Builders
 
             return jsonResponse;
         }
+
+        public static JsonResult OkEmpty(object responseContent)
+        {
+            var jsonResponse = new JsonResult(responseContent)
+            {
+                StatusCode = 204
+            };
+
+            return jsonResponse;
+        }
+
+        public static JsonResult NoItem(object responseContent)
+        {
+            var jsonResponse = new JsonResult(responseContent)
+            {
+                StatusCode = 404
+            };
+
+            return jsonResponse;
+        }
     }
 }

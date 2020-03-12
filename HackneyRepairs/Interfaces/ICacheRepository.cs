@@ -9,7 +9,7 @@ namespace HackneyRepairs.Interfaces
     {
         T GetCachedItemByKey<T>(string key)
             where T : class;
-        void SetCache<T>(T objectToBeCached, string key);
+        bool PutCachedItem<T>(T objectToBeCached, string key);
         bool DeleteCachedItem(string key);
     }
 }

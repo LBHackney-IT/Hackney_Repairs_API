@@ -22,6 +22,12 @@ namespace HackneyRepairs.Services
             return response;
         }
 
+        public async Task<bool> PutCachedItem<T>(T objectToBeCached, string key)
+        {
+            _logger.LogInformation($"CacheService/PutCachedItem(): Sent PUT request for cache item {key}");
+            return _cacheRepository.PutCachedItem<T>(objectToBeCached, key);
+        }
+
         public async Task<bool> DeleteCacheItem(string key)
         {
             _logger.LogInformation($"CacheService/DeleteCacheItem(): Sent delete request for cache item {key}");

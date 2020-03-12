@@ -31,6 +31,22 @@ namespace HackneyRepairs.Controllers
             _exceptionLogger = exceptionLogger;
         }
 
+        [HttpPut]
+        public async Task<JsonResult> PutCacheItem([FromBody]string bodyToCache, string key)
+        {
+            try
+            {
+                CacheActions actions = new CacheActions(_cacheService, _loggerAdapter);
+                var result = await actions.PutCachedItem(bodyToCache, key);
+                return ResponseBuilder.Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _exceptionLogger.CaptureException(ex);
+                return ResponseBuilder.Error(500, string.Format("We were unable to put the cache item at {0}", key), ex.Message);
+            }
+        }
+
         [HttpGet]
         [Route("v1/cache/cacheitem/{key}")]
         public async Task<JsonResult> GetCacheItem(string key)
@@ -44,7 +60,7 @@ namespace HackneyRepairs.Controllers
             catch (Exception ex)
             {
                 _exceptionLogger.CaptureException(ex);
-                return ResponseBuilder.Error(500, string.Format("We were unable to delete the cache item at {0}", key), ex.Message);
+                return ResponseBuilder.Error(500, string.Format("We were unable to retrieve the cache item at {0}", key), ex.Message);
             }
         }
 
@@ -56,7 +72,14 @@ namespace HackneyRepairs.Controllers
             {
                 CacheActions actions = new CacheActions(_cacheService, _loggerAdapter);
                 var result = await actions.DeleteCacheItem(key);
-                return ResponseBuilder.Ok(result);
+                if (result)
+                {
+                    return ResponseBuilder.OkEmpty(result);
+                }
+                else
+                {
+                    return ResponseBuilder.NoItem(result);
+                }
             }
             catch (Exception ex)
             {

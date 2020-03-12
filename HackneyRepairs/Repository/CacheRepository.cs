@@ -45,7 +45,7 @@ namespace HackneyRepairs.Repository
             }
         }             
 
-        public void SetCache<T>(T objectToBeCached, string key)
+        public bool PutCachedItem<T>(T objectToBeCached, string key)
         {
             try
             {
@@ -53,7 +53,7 @@ namespace HackneyRepairs.Repository
                 var cache = CacheManager.Cache;
                 var objectType = objectToBeCached.GetType();
                 _logger.LogInformation($"Setting {key} for {objectType.Name} in cache");
-                cache.StringSet(key, jAppointment);
+                return cache.StringSet(key, jAppointment);
             }
             catch (Exception ex)
             {

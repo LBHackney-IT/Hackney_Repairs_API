@@ -17,6 +17,11 @@ namespace HackneyRepairs.Services
             throw new System.NotImplementedException();
         }
 
+        public Task<bool> PutCachedItem<T>(T objectToBeCached, string key)
+        {
+            throw new System.NotImplementedException();
+        }
+
         //public Task<T> GetCacheItem<T>(string key) where T : class
         //{            
         //    throw new Exce
