@@ -20,6 +20,13 @@ namespace HackneyRepairs.Actions
             _logger = logger;
         }
 
+        public Task<object> GetCacheItem(string key)
+        {
+            _logger.LogInformation($"Retrieving cache item at {key}");
+            var response = _cacheService.GetCacheItem<object>(key);
+            return response;
+        }
+
         public async Task<object> DeleteCacheItem(string key)
         {
             _logger.LogInformation($"Deleting cache item at {key}");

@@ -16,6 +16,12 @@ namespace HackneyRepairs.Services
             _logger = logger;
         }
 
+        public async Task<T> GetCacheItem<T>(string key) where T : class
+        {
+            var response = _cacheRepository.GetCachedItemByKey<T>(key);
+            return response;
+        }
+
         public async Task<bool> DeleteCacheItem(string key)
         {
             _logger.LogInformation($"CacheService/DeleteCacheItem(): Sent delete request for cache item {key}");

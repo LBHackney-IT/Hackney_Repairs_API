@@ -31,6 +31,23 @@ namespace HackneyRepairs.Controllers
             _exceptionLogger = exceptionLogger;
         }
 
+        [HttpGet]
+        [Route("v1/cache/cacheitem/{key}")]
+        public async Task<JsonResult> GetCacheItem(string key)
+        {
+            try
+            {
+                CacheActions actions = new CacheActions(_cacheService, _loggerAdapter);
+                var result = await actions.GetCacheItem(key);
+                return ResponseBuilder.Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _exceptionLogger.CaptureException(ex);
+                return ResponseBuilder.Error(500, string.Format("We were unable to delete the cache item at {0}", key), ex.Message);
+            }
+        }
+
         [HttpDelete]
         [Route("v1/cache/cacheitem/{key}")]
         public async Task<JsonResult> DeleteCacheItem(string key)
