@@ -10,9 +10,9 @@ namespace HackneyRepairs.Infrastructure
     {
         private static ConfigurationOptions _configurationOptions;
         
-        public CacheManager(string cacheEndpoint)
+        public CacheManager(ConfigurationOptions configurationOptions)
         {
-            _configurationOptions = new ConfigurationOptions { EndPoints = { cacheEndpoint } };
+            _configurationOptions = configurationOptions;
         }
 
         private static readonly Lazy<ConnectionMultiplexer> LazyConnection = new Lazy<ConnectionMultiplexer>(() => ConnectionMultiplexer.Connect(_configurationOptions));

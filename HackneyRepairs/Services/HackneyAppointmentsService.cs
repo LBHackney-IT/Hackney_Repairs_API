@@ -11,16 +11,20 @@ namespace HackneyRepairs.Services
 {
     public class HackneyAppointmentsService : IHackneyAppointmentsService
     {
+        private const string CacheKeyAppointment = "appointment:workorder:{0}";
+        private const string CacheKeyAppointments = "appointments:workorder:{0}"; 
         private readonly SOAPClient _client;
         private IUhtRepository _uhtRepository;
         private ILoggerAdapter<AppointmentActions> _logger;
         private IDRSRepository _drsRepository;
+        private ICacheRepository _cacheRepository;        
 
-        public HackneyAppointmentsService(ILoggerAdapter<AppointmentActions> logger, IUhtRepository uhtRepository, IDRSRepository dRSRepository)
+        public HackneyAppointmentsService(ILoggerAdapter<AppointmentActions> logger, IUhtRepository uhtRepository, IDRSRepository dRSRepository, ICacheRepository cacheRepository)
         {
             _client = new SOAPClient();
             _uhtRepository = uhtRepository;
             _drsRepository = dRSRepository;
+            _cacheRepository = cacheRepository;
             _logger = logger;
         }
 
@@ -82,13 +86,37 @@ namespace HackneyRepairs.Services
 
 		public async Task<IEnumerable<DetailedAppointment>> GetAppointmentsByWorkOrderReference(string workOrderReference)
         {
+            string cachekey = string.Format(CacheKeyAppointments, workOrderReference);
+            bool cacheNewRecord = false;
+            _logger.LogInformation($@"HackneyAppointmentsService/GetCurrentAppointmentByWorkOrderReference(): 
+                                    Check if there are appointments in the cache for Work Order ref: {workOrderReference}");
+            var cachedAppointments = _cacheRepository.GetCachedItemByKey<List<DetailedAppointment>>(cachekey);
+            if (cachedAppointments != null)
+            {
+                cachedAppointments = cachedAppointments.Select(x =>
+                {
+                    x.SourceSystem = "CACHE";
+                    return x;
+                }).ToList();
+                return cachedAppointments;
+            }
+            else
+            {
+                cacheNewRecord = true;
+            }
+
             _logger.LogInformation($@"HackneyAppointmentsService/GetAppointmentsByWorkOrderReference(): 
                     Sent request to get appointments for workOrderReference from DRS: {workOrderReference})");
             var drsResponse = await _drsRepository.GetAppointmentsByWorkOrderReference(workOrderReference);
 
 			if (drsResponse.Any())
 			{
-				return drsResponse;
+                if (cacheNewRecord)
+                {
+                    _cacheRepository.SetCache(drsResponse.ToList(), string.Format(CacheKeyAppointments, drsResponse.ToList()[0].Id));
+                }
+
+                return drsResponse;
 			}
 
 			_logger.LogInformation($@"HackneyAppointmentsService/GetAppointmentsByWorkOrderReference(): 
@@ -99,18 +127,45 @@ namespace HackneyRepairs.Services
 
 		public async Task<DetailedAppointment> GetLatestAppointmentByWorkOrderReference(string workOrderReference)
         {
-			_logger.LogInformation($@"HackneyAppointmentsService/GetCurrentAppointmentByWorkOrderReference(): 
+            string cachekey = string.Format(CacheKeyAppointment, workOrderReference);
+            bool cacheNewRecord = false;
+            _logger.LogInformation($@"HackneyAppointmentsService/GetCurrentAppointmentByWorkOrderReference(): 
+                                    Check if there is an appointment in the cache for Work Order ref: {workOrderReference}");
+
+            var cachedAppointment = _cacheRepository.GetCachedItemByKey<DetailedAppointment>(cachekey);
+
+            if (cachedAppointment != null)
+            {
+                cachedAppointment.SourceSystem = "CACHE";
+                return cachedAppointment;
+            }
+            else
+            {
+                cacheNewRecord = true;
+            }
+
+            _logger.LogInformation($@"HackneyAppointmentsService/GetCurrentAppointmentByWorkOrderReference(): 
                                     Check if there is an appointment in DRS for Work Order ref: {workOrderReference}");
 			var drsAppointment = await _drsRepository.GetLatestAppointmentByWorkOrderReference(workOrderReference);
 			if (drsAppointment != null)
 			{
+                if (cacheNewRecord)
+                {                
+                    _cacheRepository.SetCache(drsAppointment, cachekey);
+                }
+
 				return drsAppointment;
 			}
 
             _logger.LogInformation($@"HackneyAppointmentsService/GetCurrentAppointmentByWorkOrderReference(): 
                                     Check if there is an appointment in UHT for Work Order ref: {workOrderReference}");
 			var uhAppointment = await _uhtRepository.GetLatestAppointmentByWorkOrderReference(workOrderReference);
-			return uhAppointment;
+            if (cacheNewRecord && uhAppointment != null)
+            {
+                _cacheRepository.SetCache(uhAppointment, cachekey);
+            }
+
+            return uhAppointment;
         }
     }
 }

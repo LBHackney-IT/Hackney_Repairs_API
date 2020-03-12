@@ -55,7 +55,8 @@ namespace HackneyRepairs
                                                          options.UseSqlServer(Configuration.GetSection("UhWebDb").Value));
             services.AddDbContext<DRSDbContext>(options =>
                                                 options.UseMySql(Configuration.GetSection("DRSDb").Value));
-            services.AddSingleton(cacheManager => new CacheManager(Configuration.GetSection("").Value));   
+            //services.AddSingleton(cacheManager => new CacheManager(Configuration.GetSection("RepairsCacheEndpoint").Value));   
+            services.AddSingleton(CacheManager => new CacheManager(new ConfigurationOptions { EndPoints = { Configuration.GetSection("RepairsCacheEndpoint").Value }, Password = Configuration.GetSection("RepairsCachePassword").Value }));
 
             services.AddMvc();
             services.AddSwaggerGen(c =>

@@ -20,93 +20,39 @@ namespace HackneyRepairs.Repository
             _logger = logger;
         }
 
-        public bool DeleteAppointmentCache(string workOrderReference)
+        public bool DeleteCachedItem(string key)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<DetailedAppointment> GetCachedAppointmentsByWorkOrderReference(string workOrderReference)
+        public T GetCachedItemByKey<T>(string key)
+            where T : class
         {
-            List<DetailedAppointment> detailedAppointments = new List<DetailedAppointment>();
-            string cacheKey = "appointments:workorder:";
-            try
+            var objectType = typeof(T);
+            _logger.LogInformation($"Getting item type {objectType.Name} from cache for {key}");
+            var cache = CacheManager.Cache;
+            var cachedItem = cache.StringGet(key);
+            if (cachedItem.IsNull)
             {
-                _logger.LogInformation($"Getting current appointments details from cache for {workOrderReference}");
-                var cache = CacheManager.Cache;
-                var appointments = cache.StringGet(cacheKey + workOrderReference);
-                if (appointments.IsNull)
-                {
-                    _logger.LogInformation($"Cache miss for {workOrderReference}");
-                    return detailedAppointments;
-                }
-                else
-                {
-                    _logger.LogInformation($"Cache hit for {workOrderReference}");
-                    return JsonConvert.DeserializeObject<List<DetailedAppointment>>(appointments);
-                }
+                _logger.LogInformation($"Cache miss for {key}");
+                return null;
             }
-            catch (Exception ex)
+            else
             {
-                _logger.LogError(ex.Message);
-                throw new CacheRepositoryException(ex.Message);
+                _logger.LogInformation($"Cache hit for {key}");
+                return JsonConvert.DeserializeObject<T>(cachedItem);
             }
-        }
+        }             
 
-        public DetailedAppointment GetCachedLatestAppointmentByWorkOrderReference(string workOrderReference)
+        public void SetCache<T>(T objectToBeCached, string key)
         {
-            DetailedAppointment detailedAppointment = new DetailedAppointment();
-            string cacheKey = "appointment:workorder:";
             try
             {
-                _logger.LogInformation($"Getting current appointment details from cache for {workOrderReference}");
+                var jAppointment = JsonConvert.SerializeObject(objectToBeCached);                
                 var cache = CacheManager.Cache;
-                var appointment = cache.StringGet(cacheKey + workOrderReference);
-                if (appointment.IsNull)
-                {
-                    _logger.LogInformation($"Cache miss for {workOrderReference}");
-                    return detailedAppointment;
-                }
-                else
-                {
-                    _logger.LogInformation($"Cache hit for {workOrderReference}");
-                    return JsonConvert.DeserializeObject<DetailedAppointment>(appointment);
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                throw new CacheRepositoryException(ex.Message);
-            }
-        }
-
-        public void SetAppointmentCache(DetailedAppointment appointment)
-        {
-            var workOrderReference = appointment.Id.ToString();            
-            try
-            {
-                var jAppointment = JsonConvert.SerializeObject(appointment);
-                string cacheKey = string.Format("appointment:workorder:{0}", workOrderReference);
-                var cache = CacheManager.Cache;
-                _logger.LogInformation($"Setting current appointment details from cache for {workOrderReference}");
-                cache.StringSet(cacheKey, jAppointment);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                throw new CacheRepositoryException(ex.Message);
-            }
-        }
-
-        public void SetAppointmentsCache(List<DetailedAppointment> appointments)
-        {
-            var workOrderReference = appointments[0].Id.ToString();
-            try
-            {
-                var jAppointment = JsonConvert.SerializeObject(appointments);
-                string cacheKey = string.Format("appointments:workorder:{0}", workOrderReference);
-                var cache = CacheManager.Cache;
-                _logger.LogInformation($"Setting current appointments details from cache for {workOrderReference}");
-                cache.StringSet(cacheKey, jAppointment);
+                var objectType = objectToBeCached.GetType();
+                _logger.LogInformation($"Setting {key} for {objectType.Name} in cache");
+                cache.StringSet(key, jAppointment);
             }
             catch (Exception ex)
             {

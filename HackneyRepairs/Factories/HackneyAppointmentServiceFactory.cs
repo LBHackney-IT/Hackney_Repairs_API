@@ -10,11 +10,11 @@ namespace HackneyRepairs.Factories
 {
     public class HackneyAppointmentServiceFactory
     {
-		public IHackneyAppointmentsService build(ILoggerAdapter<AppointmentActions> logger, IUhtRepository uhtRepository, IDRSRepository dRSRepository)
+		public IHackneyAppointmentsService build(ILoggerAdapter<AppointmentActions> logger, IUhtRepository uhtRepository, IDRSRepository dRSRepository, ICacheRepository cacheRepository)
         {
             if (TestStatus.IsRunningInTests == false)
             {
-				return new Services.HackneyAppointmentsService(logger, uhtRepository, dRSRepository);
+				return new Services.HackneyAppointmentsService(logger, uhtRepository, dRSRepository, cacheRepository);
             }
             else
             {

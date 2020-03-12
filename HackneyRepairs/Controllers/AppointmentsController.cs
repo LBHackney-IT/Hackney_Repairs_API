@@ -31,11 +31,11 @@ namespace HackneyRepairs.Controllers
 
 		public AppointmentsController(ILoggerAdapter<AppointmentActions> loggerAdapter, IUhtRepository uhtRepository, IUhwRepository uhwRepository,
 			ILoggerAdapter<HackneyAppointmentsServiceRequestBuilder> requestBuildLoggerAdapter, ILoggerAdapter<RepairsActions> repairsLoggerAdapter,
-                                      IDRSRepository drsRepository, IUHWWarehouseRepository uHWWarehouseRepository, IUhWebRepository uHWebRepository, IExceptionLogger exceptionLogger)
+                                      IDRSRepository drsRepository, IUHWWarehouseRepository uHWWarehouseRepository, IUhWebRepository uHWebRepository, IExceptionLogger exceptionLogger, ICacheRepository cacheRepository)
 		{
 			var serviceFactory = new HackneyAppointmentServiceFactory();
 			_configBuilder = new HackneyConfigurationBuilder((Hashtable)Environment.GetEnvironmentVariables(), ConfigurationManager.AppSettings);
-            _appointmentsService = serviceFactory.build(loggerAdapter, uhtRepository, drsRepository);
+            _appointmentsService = serviceFactory.build(loggerAdapter, uhtRepository, drsRepository, cacheRepository);
 			var factory = new HackneyRepairsServiceFactory();
             _repairsService = factory.build(uhtRepository, uhwRepository, uHWWarehouseRepository, uHWebRepository, repairsLoggerAdapter);
 			_loggerAdapter = loggerAdapter;

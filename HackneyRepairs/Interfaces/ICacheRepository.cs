@@ -7,9 +7,9 @@ namespace HackneyRepairs.Interfaces
 {
     public interface ICacheRepository
     {
-		DetailedAppointment GetCachedLatestAppointmentByWorkOrderReference(string workOrderReference);
-		IEnumerable<DetailedAppointment> GetCachedAppointmentsByWorkOrderReference(string workOrderReference);
-        void SetAppointmentCache(DetailedAppointment appointment);
-        bool DeleteAppointmentCache(string workOrderReference);
+        T GetCachedItemByKey<T>(string key)
+            where T : class;
+        void SetCache<T>(T objectToBeCached, string key);
+        bool DeleteCachedItem(string key);
     }
 }
