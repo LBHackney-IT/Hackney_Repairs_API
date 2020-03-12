@@ -22,7 +22,8 @@ namespace HackneyRepairs.Repository
 
         public bool DeleteCachedItem(string key)
         {
-            throw new NotImplementedException();
+            var cache = CacheManager.Cache;
+            return cache.KeyDelete(key);
         }
 
         public T GetCachedItemByKey<T>(string key)
