@@ -9,7 +9,7 @@ namespace HackneyRepairs.Interfaces
     {
 		DetailedAppointment GetCachedLatestAppointmentByWorkOrderReference(string workOrderReference);
 		IEnumerable<DetailedAppointment> GetCachedAppointmentsByWorkOrderReference(string workOrderReference);
-        bool SetAppointmentCache(DetailedAppointment appointment);
+        void SetAppointmentCache(DetailedAppointment appointment);
         bool DeleteAppointmentCache(string workOrderReference);
     }
 }

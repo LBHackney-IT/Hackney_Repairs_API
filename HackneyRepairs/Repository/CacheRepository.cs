@@ -27,7 +27,29 @@ namespace HackneyRepairs.Repository
 
         public IEnumerable<DetailedAppointment> GetCachedAppointmentsByWorkOrderReference(string workOrderReference)
         {
-            throw new NotImplementedException();
+            List<DetailedAppointment> detailedAppointments = new List<DetailedAppointment>();
+            string cacheKey = "appointments:workorder:";
+            try
+            {
+                _logger.LogInformation($"Getting current appointments details from cache for {workOrderReference}");
+                var cache = CacheManager.Cache;
+                var appointments = cache.StringGet(cacheKey + workOrderReference);
+                if (appointments.IsNull)
+                {
+                    _logger.LogInformation($"Cache miss for {workOrderReference}");
+                    return detailedAppointments;
+                }
+                else
+                {
+                    _logger.LogInformation($"Cache hit for {workOrderReference}");
+                    return JsonConvert.DeserializeObject<List<DetailedAppointment>>(appointments);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                throw new CacheRepositoryException(ex.Message);
+            }
         }
 
         public DetailedAppointment GetCachedLatestAppointmentByWorkOrderReference(string workOrderReference)
@@ -55,12 +77,42 @@ namespace HackneyRepairs.Repository
                 _logger.LogError(ex.Message);
                 throw new CacheRepositoryException(ex.Message);
             }
-            
         }
 
-        public bool SetAppointmentCache(DetailedAppointment appointment)
+        public void SetAppointmentCache(DetailedAppointment appointment)
         {
-            throw new NotImplementedException();
+            var workOrderReference = appointment.Id.ToString();            
+            try
+            {
+                var jAppointment = JsonConvert.SerializeObject(appointment);
+                string cacheKey = string.Format("appointment:workorder:{0}", workOrderReference);
+                var cache = CacheManager.Cache;
+                _logger.LogInformation($"Setting current appointment details from cache for {workOrderReference}");
+                cache.StringSet(cacheKey, jAppointment);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                throw new CacheRepositoryException(ex.Message);
+            }
+        }
+
+        public void SetAppointmentsCache(List<DetailedAppointment> appointments)
+        {
+            var workOrderReference = appointments[0].Id.ToString();
+            try
+            {
+                var jAppointment = JsonConvert.SerializeObject(appointments);
+                string cacheKey = string.Format("appointments:workorder:{0}", workOrderReference);
+                var cache = CacheManager.Cache;
+                _logger.LogInformation($"Setting current appointments details from cache for {workOrderReference}");
+                cache.StringSet(cacheKey, jAppointment);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                throw new CacheRepositoryException(ex.Message);
+            }
         }
     }
 
