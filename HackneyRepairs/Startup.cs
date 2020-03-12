@@ -1,4 +1,5 @@
 ﻿using HackneyRepairs.DbContext;
+using HackneyRepairs.Infrastructure;
 using HackneyRepairs.Extension;
 using HackneyRepairs.Interfaces;
 using HackneyRepairs.Logging;
@@ -18,6 +19,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using StackExchange.Redis;
 
 namespace HackneyRepairs
 {
@@ -53,7 +55,8 @@ namespace HackneyRepairs
                                                          options.UseSqlServer(Configuration.GetSection("UhWebDb").Value));
             services.AddDbContext<DRSDbContext>(options =>
                                                 options.UseMySql(Configuration.GetSection("DRSDb").Value));
-            
+            services.AddSingleton(cacheManager => new CacheManager(Configuration.GetSection("").Value));   
+
             services.AddMvc();
             services.AddSwaggerGen(c =>
             {
