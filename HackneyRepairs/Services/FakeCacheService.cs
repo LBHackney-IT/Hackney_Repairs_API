@@ -1,39 +1,51 @@
 ﻿using HackneyRepairs.Interfaces;
 using System.Threading.Tasks;
 using KeyFaxService;
+using System;
 
 namespace HackneyRepairs.Services
 {
     public class FakeCacheService : ICacheService
     {
-        public async Task<bool> DeleteCacheItem(string key)
+        public bool DeleteCacheItem(string key)
         {
-            var response = true;
-            return response;
+            switch (key)
+            {
+                case "success":
+                    return true;
+                case "failure":
+                    return false;
+                default:
+                    return false;
+            }
         }
 
-        public Task<T> GetCacheItem<T>(string key) where T : class
+        public T GetCacheItem<T>(string key) where T : class
         {
-            throw new System.NotImplementedException();
+            switch (key)
+            {
+                case "null":
+                    return null;
+                case "string":
+                    return (T)Convert.ChangeType("This is the cached value for 54321", typeof(T));
+                case "int":
+                    return (T)Convert.ChangeType(1234, typeof(T));
+                default:
+                    return (T)Convert.ChangeType("This is the cached value", typeof(T)); 
+            }
         }
 
-        public Task<bool> PutCachedItem<T>(T objectToBeCached, string key)
+        public bool PutCachedItem<T>(T objectToBeCached, string key)
         {
-            throw new System.NotImplementedException();
+            switch (key)
+            {
+                case "success":
+                    return true;
+                case "failure":
+                    return false;
+                default:
+                    return false;
+            }
         }
-
-        //public Task<T> GetCacheItem<T>(string key) where T : class
-        //{            
-        //    throw new Exce
-        //    //switch (key)
-        //    //{
-        //    //    case "1234":
-        //    //        return null;
-        //    //    case "54321":
-        //    //        return Task.Run(() => "This is the cached value");
-        //    //    default:
-        //    //        return Task.Run(() => "This is the cached value");
-        //    //}
-        //}
     }
 }

@@ -20,19 +20,19 @@ namespace HackneyRepairs.Actions
             _logger = logger;
         }
 
-        public Task<bool> PutCachedItem<T>(T objectToBeCached, string key)
+        public bool PutCachedItem<T>(T objectToBeCached, string key)
         {
             _logger.LogInformation($"Adding cache item at {key}");
             return _cacheService.PutCachedItem(objectToBeCached, key);
         }
 
-        public Task<object> GetCacheItem(string key)
+        public object GetCacheItem(string key)
         {
             _logger.LogInformation($"Retrieving cache item at {key}");
             return _cacheService.GetCacheItem<object>(key);
         }
 
-        public Task<bool> DeleteCacheItem(string key)
+        public bool DeleteCacheItem(string key)
         {
             _logger.LogInformation($"Deleting cache item at {key}");
             return _cacheService.DeleteCacheItem(key);

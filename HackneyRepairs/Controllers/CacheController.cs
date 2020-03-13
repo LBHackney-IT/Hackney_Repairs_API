@@ -37,7 +37,7 @@ namespace HackneyRepairs.Controllers
             try
             {
                 CacheActions actions = new CacheActions(_cacheService, _loggerAdapter);
-                var result = await actions.PutCachedItem(bodyToCache, key);
+                var result = actions.PutCachedItem(bodyToCache, key);
                 return ResponseBuilder.Ok(result);
             }
             catch (Exception ex)
@@ -54,7 +54,7 @@ namespace HackneyRepairs.Controllers
             try
             {
                 CacheActions actions = new CacheActions(_cacheService, _loggerAdapter);
-                var result = await actions.GetCacheItem(key);
+                var result = actions.GetCacheItem(key);
                 return ResponseBuilder.Ok(result);
             }
             catch (Exception ex)
@@ -71,7 +71,7 @@ namespace HackneyRepairs.Controllers
             try
             {
                 CacheActions actions = new CacheActions(_cacheService, _loggerAdapter);
-                var result = await actions.DeleteCacheItem(key);
+                var result = actions.DeleteCacheItem(key);
                 if (result)
                 {
                     return ResponseBuilder.OkEmpty(result);

@@ -16,19 +16,19 @@ namespace HackneyRepairs.Services
             _logger = logger;
         }
 
-        public async Task<T> GetCacheItem<T>(string key) where T : class
+        public T GetCacheItem<T>(string key) where T : class
         {
-            var response = _cacheRepository.GetCachedItemByKey<T>(key);
-            return response;
+            _logger.LogInformation($"CacheService/GetCacheItem(): Retrieving cache item for {key}");
+            return _cacheRepository.GetCachedItemByKey<T>(key);
         }
 
-        public async Task<bool> PutCachedItem<T>(T objectToBeCached, string key)
+        public bool PutCachedItem<T>(T objectToBeCached, string key)
         {
             _logger.LogInformation($"CacheService/PutCachedItem(): Sent PUT request for cache item {key}");
             return _cacheRepository.PutCachedItem<T>(objectToBeCached, key);
         }
 
-        public async Task<bool> DeleteCacheItem(string key)
+        public bool DeleteCacheItem(string key)
         {
             _logger.LogInformation($"CacheService/DeleteCacheItem(): Sent delete request for cache item {key}");
             var response = _cacheRepository.DeleteCachedItem(key);

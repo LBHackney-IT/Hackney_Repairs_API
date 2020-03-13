@@ -5,9 +5,9 @@ namespace HackneyRepairs.Interfaces
 {
     public interface ICacheService
     {
-        Task<bool> PutCachedItem<T>(T objectToBeCached, string key);
-        Task<T> GetCacheItem<T>(string key)
+        bool PutCachedItem<T>(T objectToBeCached, string key);
+        T GetCacheItem<T>(string key)
             where T : class;
-        Task<bool> DeleteCacheItem(string key);
+        bool DeleteCacheItem(string key);
     }
 }
