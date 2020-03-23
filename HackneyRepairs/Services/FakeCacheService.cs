@@ -35,7 +35,7 @@ namespace HackneyRepairs.Services
             }
         }
 
-        public bool PutCachedItem<T>(T objectToBeCached, string key)
+        public bool PutCachedItem<T>(T objectToBeCached, string key, TimeSpan ttl)
         {
             switch (key)
             {

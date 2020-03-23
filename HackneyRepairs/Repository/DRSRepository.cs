@@ -74,7 +74,7 @@ namespace HackneyRepairs.Repository
                                     WHERE
                                         p_job.NAME = @WorkOrderReference)) AS jobs
                                         
-                                INNER JOIN s_worker ON jobs.AssignedWorker = s_worker.name";
+                                left JOIN s_worker ON jobs.AssignedWorker = s_worker.name";
                     appointments = connection.Query<DetailedAppointment>(query, new { WorkOrderReference = workOrderReference }).ToList();
 				}
 

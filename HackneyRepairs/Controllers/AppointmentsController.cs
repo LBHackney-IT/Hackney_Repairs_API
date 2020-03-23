@@ -35,7 +35,7 @@ namespace HackneyRepairs.Controllers
 		{
 			var serviceFactory = new HackneyAppointmentServiceFactory();
 			_configBuilder = new HackneyConfigurationBuilder((Hashtable)Environment.GetEnvironmentVariables(), ConfigurationManager.AppSettings);
-            _appointmentsService = serviceFactory.build(loggerAdapter, uhtRepository, drsRepository, cacheRepository);
+            _appointmentsService = serviceFactory.build(loggerAdapter, uhtRepository, drsRepository, cacheRepository, _configBuilder.getConfiguration());
 			var factory = new HackneyRepairsServiceFactory();
             _repairsService = factory.build(uhtRepository, uhwRepository, uHWWarehouseRepository, uHWebRepository, repairsLoggerAdapter);
 			_loggerAdapter = loggerAdapter;

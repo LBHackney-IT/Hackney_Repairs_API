@@ -1,31 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using DrsAppointmentsService;
 using HackneyRepairs.Actions;
 using HackneyRepairs.Interfaces;
 using HackneyRepairs.Models;
+using HackneyRepairs.Utils;
 
 namespace HackneyRepairs.Services
 {
     public class HackneyAppointmentsService : IHackneyAppointmentsService
     {
-        private const string CacheKeyAppointment = "appointment:workorder:{0}";
-        private const string CacheKeyAppointments = "appointments:workorder:{0}"; 
+        private const string CacheKeyAppointments_s_jobs = "appointments:s_job:workorder:";
+        private const string CacheKeyAppointments_p_jobs = "appointments:p_job:workorder:"; 
         private readonly SOAPClient _client;
         private IUhtRepository _uhtRepository;
         private ILoggerAdapter<AppointmentActions> _logger;
         private IDRSRepository _drsRepository;
-        private ICacheRepository _cacheRepository;        
+        private ICacheRepository _cacheRepository;
+        private NameValueCollection _configuration;
+        private DRSCacheHelper _cacheHelper;
 
-        public HackneyAppointmentsService(ILoggerAdapter<AppointmentActions> logger, IUhtRepository uhtRepository, IDRSRepository dRSRepository, ICacheRepository cacheRepository)
+        public HackneyAppointmentsService(ILoggerAdapter<AppointmentActions> logger, IUhtRepository uhtRepository, IDRSRepository dRSRepository, ICacheRepository cacheRepository, NameValueCollection configuration)
         {
             _client = new SOAPClient();
             _uhtRepository = uhtRepository;
             _drsRepository = dRSRepository;
             _cacheRepository = cacheRepository;
             _logger = logger;
+            _configuration = configuration;
+            _cacheHelper = new DRSCacheHelper(_configuration);
         }
 
         public Task<checkAvailabilityResponse> GetAppointmentsForWorkOrderReference(xmbCheckAvailability checkAvailabilityRequest)
@@ -85,13 +91,15 @@ namespace HackneyRepairs.Services
         }
 
 		public async Task<IEnumerable<DetailedAppointment>> GetAppointmentsByWorkOrderReference(string workOrderReference)
-        {
-            string cachekey = string.Format(CacheKeyAppointments, workOrderReference);
+        {            
             bool cacheNewRecord = false;
             _logger.LogInformation($@"HackneyAppointmentsService/GetCurrentAppointmentByWorkOrderReference(): 
                                     Check if there are appointments in the cache for Work Order ref: {workOrderReference}");
-            var cachedAppointments = _cacheRepository.GetCachedItemByKey<List<DetailedAppointment>>(cachekey);
-            if (cachedAppointments != null)
+            //var cachedAppointments = _cacheRepository.GetCachedItemByKey<List<DetailedAppointment>>(cachekey);
+            var cached_s_job_Appointments = _cacheRepository.GetCachedItemByKey<List<DetailedAppointment>>(string.Format(CacheKeyAppointments_s_jobs + workOrderReference));
+            var cached_p_job_Appointments = _cacheRepository.GetCachedItemByKey<List<DetailedAppointment>>(string.Format(CacheKeyAppointments_p_jobs + workOrderReference));
+            var cachedAppointments = (cached_p_job_Appointments ?? new List<DetailedAppointment>()).Union(cached_s_job_Appointments ?? new List<DetailedAppointment>());
+            if (cachedAppointments.Count() != 0)
             {
                 cachedAppointments = cachedAppointments.Select(x =>
                 {
@@ -113,7 +121,8 @@ namespace HackneyRepairs.Services
 			{
                 if (cacheNewRecord)
                 {
-                    _cacheRepository.PutCachedItem(drsResponse.ToList(), string.Format(CacheKeyAppointments, drsResponse.ToList()[0].Id));
+                    var status = drsResponse.ToList()[0].Status;
+                    _cacheRepository.PutCachedItem(drsResponse.ToList(), string.Format(CacheKeyAppointments_s_jobs + workOrderReference), _cacheHelper.getTTLForStatus(status));
                 }
 
                 return drsResponse;
@@ -127,17 +136,18 @@ namespace HackneyRepairs.Services
 
 		public async Task<DetailedAppointment> GetLatestAppointmentByWorkOrderReference(string workOrderReference)
         {
-            string cachekey = string.Format(CacheKeyAppointment, workOrderReference);
-            bool cacheNewRecord = false;
             _logger.LogInformation($@"HackneyAppointmentsService/GetCurrentAppointmentByWorkOrderReference(): 
                                     Check if there is an appointment in the cache for Work Order ref: {workOrderReference}");
 
-            var cachedAppointment = _cacheRepository.GetCachedItemByKey<DetailedAppointment>(cachekey);
-
-            if (cachedAppointment != null)
+            var cached_s_job_Appointments = _cacheRepository.GetCachedItemByKey<List<DetailedAppointment>>(string.Format(CacheKeyAppointments_s_jobs + workOrderReference));
+            var cached_p_job_Appointments = _cacheRepository.GetCachedItemByKey<List<DetailedAppointment>>(string.Format(CacheKeyAppointments_p_jobs + workOrderReference));
+            var cachedAppointments = (cached_p_job_Appointments ?? new List<DetailedAppointment>()).Union(cached_s_job_Appointments ?? new List<DetailedAppointment>());
+            DetailedAppointment app = cachedAppointments.OrderByDescending(a => a.CreationDate).FirstOrDefault();
+            bool cacheNewRecord;
+            if (app != null)
             {
-                cachedAppointment.SourceSystem = "CACHE";
-                return cachedAppointment;
+                app.SourceSystem = "CACHE";                   
+                return app;
             }
             else
             {
@@ -149,9 +159,14 @@ namespace HackneyRepairs.Services
 			var drsAppointment = await _drsRepository.GetLatestAppointmentByWorkOrderReference(workOrderReference);
 			if (drsAppointment != null)
 			{
+                List<DetailedAppointment> da = new List<DetailedAppointment>
+                {
+                    drsAppointment
+                };
                 if (cacheNewRecord)
-                {                
-                    _cacheRepository.PutCachedItem(drsAppointment, cachekey);
+                {
+                    var status = da[0].Status;
+                    _cacheRepository.PutCachedItem(da, CacheKeyAppointments_s_jobs + workOrderReference, _cacheHelper.getTTLForStatus(status));
                 }
 
 				return drsAppointment;
@@ -162,7 +177,12 @@ namespace HackneyRepairs.Services
 			var uhAppointment = await _uhtRepository.GetLatestAppointmentByWorkOrderReference(workOrderReference);
             if (cacheNewRecord && uhAppointment != null)
             {
-                _cacheRepository.PutCachedItem(uhAppointment, cachekey);
+                List<DetailedAppointment> da = new List<DetailedAppointment>
+                {
+                    drsAppointment
+                };
+                var status = da[0].Status;
+                _cacheRepository.PutCachedItem(da, CacheKeyAppointments_s_jobs + workOrderReference, _cacheHelper.getTTLForStatus(status));
             }
 
             return uhAppointment;

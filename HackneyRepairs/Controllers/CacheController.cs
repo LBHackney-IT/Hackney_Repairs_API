@@ -32,12 +32,12 @@ namespace HackneyRepairs.Controllers
         }
 
         [HttpPut]
-        public async Task<JsonResult> PutCacheItem([FromBody]string bodyToCache, string key)
+        public async Task<JsonResult> PutCacheItem([FromBody]string bodyToCache, string key, TimeSpan ttl)
         {
             try
             {
                 CacheActions actions = new CacheActions(_cacheService, _loggerAdapter);
-                var result = actions.PutCachedItem(bodyToCache, key);
+                var result = actions.PutCachedItem(bodyToCache, key, ttl);
                 return ResponseBuilder.Ok(result);
             }
             catch (Exception ex)

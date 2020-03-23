@@ -43,9 +43,26 @@ namespace HackneyRepairs.Repository
                 _logger.LogInformation($"Cache hit for {key}");
                 return JsonConvert.DeserializeObject<T>(cachedItem);
             }
-        }             
+        }
 
-        public bool PutCachedItem<T>(T objectToBeCached, string key)
+        public bool PutCachedItemNoTTL<T>(T objectToBeCached, string key)
+        {
+            try
+            {
+                var jAppointment = JsonConvert.SerializeObject(objectToBeCached);
+                var cache = CacheManager.Cache;
+                var objectType = objectToBeCached.GetType();
+                _logger.LogInformation($"Setting {key} for {objectType.Name} in cache");
+                return cache.StringSet(key, jAppointment);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                throw new CacheRepositoryException(ex.Message);
+            }
+        }
+
+        public bool PutCachedItem<T>(T objectToBeCached, string key, TimeSpan ttl)
         {
             try
             {
@@ -53,7 +70,7 @@ namespace HackneyRepairs.Repository
                 var cache = CacheManager.Cache;
                 var objectType = objectToBeCached.GetType();
                 _logger.LogInformation($"Setting {key} for {objectType.Name} in cache");
-                return cache.StringSet(key, jAppointment);
+                return cache.StringSet(key, jAppointment, ttl);
             }
             catch (Exception ex)
             {

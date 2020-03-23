@@ -2,6 +2,7 @@
 using HackneyRepairs.Actions;
 using KeyFaxService;
 using System.Threading.Tasks;
+using System;
 
 namespace HackneyRepairs.Services
 {
@@ -22,10 +23,10 @@ namespace HackneyRepairs.Services
             return _cacheRepository.GetCachedItemByKey<T>(key);
         }
 
-        public bool PutCachedItem<T>(T objectToBeCached, string key)
+        public bool PutCachedItem<T>(T objectToBeCached, string key, TimeSpan ttl)
         {
             _logger.LogInformation($"CacheService/PutCachedItem(): Sent PUT request for cache item {key}");
-            return _cacheRepository.PutCachedItem<T>(objectToBeCached, key);
+            return _cacheRepository.PutCachedItem<T>(objectToBeCached, key, ttl);
         }
 
         public bool DeleteCacheItem(string key)

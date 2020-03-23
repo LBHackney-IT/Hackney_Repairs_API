@@ -20,10 +20,10 @@ namespace HackneyRepairs.Actions
             _logger = logger;
         }
 
-        public bool PutCachedItem<T>(T objectToBeCached, string key)
+        public bool PutCachedItem<T>(T objectToBeCached, string key, TimeSpan ttl)
         {
             _logger.LogInformation($"Adding cache item at {key}");
-            return _cacheService.PutCachedItem(objectToBeCached, key);
+            return _cacheService.PutCachedItem(objectToBeCached, key, ttl);
         }
 
         public object GetCacheItem(string key)
