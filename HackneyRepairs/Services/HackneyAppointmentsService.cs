@@ -99,6 +99,8 @@ namespace HackneyRepairs.Services
             var cached_s_job_Appointments = _cacheRepository.GetCachedItemByKey<List<DetailedAppointment>>(string.Format(CacheKeyAppointments_s_jobs + workOrderReference));
             var cached_p_job_Appointments = _cacheRepository.GetCachedItemByKey<List<DetailedAppointment>>(string.Format(CacheKeyAppointments_p_jobs + workOrderReference));
             var cachedAppointments = (cached_p_job_Appointments ?? new List<DetailedAppointment>()).Union(cached_s_job_Appointments ?? new List<DetailedAppointment>());
+
+           //run each time
             if (cachedAppointments.Count() != 0)
             {
                 cachedAppointments = cachedAppointments.Select(x =>
@@ -122,6 +124,8 @@ namespace HackneyRepairs.Services
                 if (cacheNewRecord)
                 {
                     var status = drsResponse.ToList()[0].Status;
+
+                    //Set source to CACHE once
                     _cacheRepository.PutCachedItem(drsResponse.ToList(), string.Format(CacheKeyAppointments_s_jobs + workOrderReference), _cacheHelper.getTTLForStatus(status));
                 }
 
@@ -130,6 +134,7 @@ namespace HackneyRepairs.Services
 
 			_logger.LogInformation($@"HackneyAppointmentsService/GetAppointmentsByWorkOrderReference(): 
                 Sent request to get appointments for workOrderReference from UHT: {workOrderReference})");
+            //TODO: Check item is CACHED, CACHE ITEM?
             var uhtResponse = await _uhtRepository.GetAppointmentsByWorkOrderReference(workOrderReference);
 			return uhtResponse;
         }
@@ -174,6 +179,8 @@ namespace HackneyRepairs.Services
 
             _logger.LogInformation($@"HackneyAppointmentsService/GetCurrentAppointmentByWorkOrderReference(): 
                                     Check if there is an appointment in UHT for Work Order ref: {workOrderReference}");
+
+            //TODO: Check if item is CACHED? 
 			var uhAppointment = await _uhtRepository.GetLatestAppointmentByWorkOrderReference(workOrderReference);
             if (cacheNewRecord && uhAppointment != null)
             {
