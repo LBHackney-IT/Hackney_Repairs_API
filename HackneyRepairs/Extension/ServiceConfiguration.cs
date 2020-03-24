@@ -16,6 +16,7 @@ namespace HackneyRepairs.Extension
             services.AddTransient<IUhWebRepository, UhWebRepository>();
             services.AddTransient<IDRSRepository, DRSRepository>();
             services.AddTransient(typeof(IUHWWarehouseRepository), typeof(UHWWarehouseRepository));
+            services.AddTransient<ICacheRepository, CacheRepository>();
         }
     }
 }
