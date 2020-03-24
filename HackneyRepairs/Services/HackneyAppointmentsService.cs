@@ -100,7 +100,8 @@ namespace HackneyRepairs.Services
             var cached_p_job_Appointments = _cacheRepository.GetCachedItemByKey<List<DetailedAppointment>>(string.Format(CacheKeyAppointments_p_jobs + workOrderReference));
             var cachedAppointments = (cached_p_job_Appointments ?? new List<DetailedAppointment>()).Union(cached_s_job_Appointments ?? new List<DetailedAppointment>());
 
-           //run each time
+           //run each time only needs to run at first cache?
+           //Matt
             if (cachedAppointments.Count() != 0)
             {
                 cachedAppointments = cachedAppointments.Select(x =>
@@ -134,7 +135,7 @@ namespace HackneyRepairs.Services
 
 			_logger.LogInformation($@"HackneyAppointmentsService/GetAppointmentsByWorkOrderReference(): 
                 Sent request to get appointments for workOrderReference from UHT: {workOrderReference})");
-            //TODO: Check item is CACHED, CACHE ITEM?
+            //TODO: Check UH record is in CACHE, If not CACHE ITEM?
             var uhtResponse = await _uhtRepository.GetAppointmentsByWorkOrderReference(workOrderReference);
 			return uhtResponse;
         }
