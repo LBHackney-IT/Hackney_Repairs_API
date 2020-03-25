@@ -106,6 +106,8 @@ namespace HackneyRepairs.Services
                     x.SourceSystem = "CACHE";
                     return x;
                 }).ToList();
+                _logger.LogInformation($@"HackneyAppointmentsService/GetAppointmentsByWorkOrderReference(): 
+                Cached item found for : {workOrderReference})");
                 return cachedAppointments;
             }
             else
@@ -122,6 +124,8 @@ namespace HackneyRepairs.Services
                 if (cacheNewRecord)
                 {
                     var status = drsResponse.ToList()[0].Status;
+                    _logger.LogInformation($@"HackneyAppointmentsService/GetAppointmentsByWorkOrderReference(): 
+                Cached item added for : {workOrderReference})");
                     _cacheRepository.PutCachedItem(drsResponse.ToList(), string.Format(CacheKeyAppointments_s_jobs + workOrderReference), _cacheHelper.getTTLForStatus(status));
                 }
 
@@ -131,7 +135,16 @@ namespace HackneyRepairs.Services
 			_logger.LogInformation($@"HackneyAppointmentsService/GetAppointmentsByWorkOrderReference(): 
                 Sent request to get appointments for workOrderReference from UHT: {workOrderReference})");
             var uhtResponse = await _uhtRepository.GetAppointmentsByWorkOrderReference(workOrderReference);
-			return uhtResponse;
+
+            if (cacheNewRecord && uhtResponse != null && uhtResponse.ToList()[0].BeginDate != null)
+            {
+                _logger.LogInformation($@"HackneyAppointmentsService/GetAppointmentsByWorkOrderReference(): 
+                Cached item added for : {workOrderReference})");
+                var status = uhtResponse.ToList()[0].Status;
+                _cacheRepository.PutCachedItem(uhtResponse, CacheKeyAppointments_s_jobs + workOrderReference, _cacheHelper.getTTLForStatus(status));
+            }
+
+            return uhtResponse;
         }
 
 		public async Task<DetailedAppointment> GetLatestAppointmentByWorkOrderReference(string workOrderReference)
@@ -146,6 +159,8 @@ namespace HackneyRepairs.Services
             bool cacheNewRecord;
             if (app != null)
             {
+                _logger.LogInformation($@"HackneyAppointmentsService/GetAppointmentsByWorkOrderReference(): 
+                Cached item found for : {workOrderReference})");
                 app.SourceSystem = "CACHE";                   
                 return app;
             }
@@ -165,6 +180,8 @@ namespace HackneyRepairs.Services
                 };
                 if (cacheNewRecord)
                 {
+                    _logger.LogInformation($@"HackneyAppointmentsService/GetAppointmentsByWorkOrderReference(): 
+                Cached item added for : {workOrderReference})");
                     var status = da[0].Status;
                     _cacheRepository.PutCachedItem(da, CacheKeyAppointments_s_jobs + workOrderReference, _cacheHelper.getTTLForStatus(status));
                 }
@@ -177,6 +194,8 @@ namespace HackneyRepairs.Services
 			var uhAppointment = await _uhtRepository.GetLatestAppointmentByWorkOrderReference(workOrderReference);
             if (cacheNewRecord && uhAppointment != null && uhAppointment.BeginDate != null)
             {
+                _logger.LogInformation($@"HackneyAppointmentsService/GetAppointmentsByWorkOrderReference(): 
+                Cached item added for : {workOrderReference})");
                 List<DetailedAppointment> da = new List<DetailedAppointment>
                 {
                     uhAppointment
