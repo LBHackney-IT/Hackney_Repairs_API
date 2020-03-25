@@ -175,11 +175,11 @@ namespace HackneyRepairs.Services
             _logger.LogInformation($@"HackneyAppointmentsService/GetCurrentAppointmentByWorkOrderReference(): 
                                     Check if there is an appointment in UHT for Work Order ref: {workOrderReference}");
 			var uhAppointment = await _uhtRepository.GetLatestAppointmentByWorkOrderReference(workOrderReference);
-            if (cacheNewRecord && uhAppointment != null)
+            if (cacheNewRecord && uhAppointment != null && uhAppointment.BeginDate != null)
             {
                 List<DetailedAppointment> da = new List<DetailedAppointment>
                 {
-                    drsAppointment
+                    uhAppointment
                 };
                 var status = da[0].Status;
                 _cacheRepository.PutCachedItem(da, CacheKeyAppointments_s_jobs + workOrderReference, _cacheHelper.getTTLForStatus(status));
