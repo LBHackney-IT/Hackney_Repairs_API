@@ -24,11 +24,11 @@ namespace HackneyRepairs.Utils
                 statusDictionary.Add(drsStatusLookupOptions[a].Split(',')[0], drsStatusLookupOptions[a].Split(',')[1]);
             }
 
-            if (statusDictionary.ContainsKey(status))
+            if (statusDictionary.ContainsKey(status.ToLower()))
             {
                 try
                 {
-                    return TimeSpan.Parse(statusDictionary[status]);
+                    return TimeSpan.Parse(statusDictionary[status.ToLower()]);
                 }
                 catch (Exception)
                 {
