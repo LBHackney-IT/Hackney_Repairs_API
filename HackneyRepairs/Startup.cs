@@ -57,7 +57,7 @@ namespace HackneyRepairs
                                                 options.UseMySql(Configuration.GetSection("DRSDb").Value));
             //services.AddSingleton(cacheManager => new CacheManager(Configuration.GetSection("RepairsCacheEndpoint").Value));   
             string environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            if (environment == "development")
+            if (environment == "localdevelopment")
             {
                 services.AddSingleton(CacheManager => new CacheManager(new ConfigurationOptions { EndPoints = { Configuration.GetSection("RepairsCacheEndpoint").Value }, Password = Configuration.GetSection("RepairsCachePassword").Value }));
             }
