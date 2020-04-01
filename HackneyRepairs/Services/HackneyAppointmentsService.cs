@@ -92,7 +92,6 @@ namespace HackneyRepairs.Services
 
 		public async Task<IEnumerable<DetailedAppointment>> GetAppointmentsByWorkOrderReference(string workOrderReference)
         {            
-            bool cacheNewRecord = false;
             _logger.LogInformation($@"HackneyAppointmentsService/GetCurrentAppointmentByWorkOrderReference(): 
                                     Check if there are appointments in the cache for Work Order ref: {workOrderReference}");
             //var cachedAppointments = _cacheRepository.GetCachedItemByKey<List<DetailedAppointment>>(cachekey);
@@ -100,19 +99,10 @@ namespace HackneyRepairs.Services
             var cached_p_job_Appointments = _cacheRepository.GetCachedItemByKey<List<DetailedAppointment>>(string.Format(CacheKeyAppointments_p_jobs + workOrderReference));
             var cachedAppointments = (cached_p_job_Appointments ?? new List<DetailedAppointment>()).Union(cached_s_job_Appointments ?? new List<DetailedAppointment>());
             if (cachedAppointments.Count() != 0)
-            {
-                cachedAppointments = cachedAppointments.Select(x =>
-                {
-                    x.SourceSystem = "CACHE";
-                    return x;
-                }).ToList();
+            {              
                 _logger.LogInformation($@"HackneyAppointmentsService/GetAppointmentsByWorkOrderReference(): 
                 Cached item found for : {workOrderReference})");
                 return cachedAppointments;
-            }
-            else
-            {
-                cacheNewRecord = true;
             }
 
             _logger.LogInformation($@"HackneyAppointmentsService/GetAppointmentsByWorkOrderReference(): 
@@ -121,13 +111,11 @@ namespace HackneyRepairs.Services
 
 			if (drsResponse.Any())
 			{
-                if (cacheNewRecord)
-                {
-                    var status = drsResponse.ToList()[0].Status;
-                    _logger.LogInformation($@"HackneyAppointmentsService/GetAppointmentsByWorkOrderReference(): 
-                Cached item added for : {workOrderReference})");
-                    _cacheRepository.PutCachedItem(drsResponse.ToList(), string.Format(CacheKeyAppointments_s_jobs + workOrderReference), _cacheHelper.getTTLForStatus(status));
-                }
+              var status = drsResponse.ToList()[0].Status;
+              var toBeCached = SetSourceSystem(drsResponse.ToList());
+              _logger.LogInformation($@"HackneyAppointmentsService/GetAppointmentsByWorkOrderReference(): 
+               Cached item added for : {workOrderReference})");
+              _cacheRepository.PutCachedItem(toBeCached, string.Format(CacheKeyAppointments_s_jobs + workOrderReference), _cacheHelper.getTTLForStatus(status));  
 
                 return drsResponse;
 			}
@@ -136,12 +124,13 @@ namespace HackneyRepairs.Services
                 Sent request to get appointments for workOrderReference from UHT: {workOrderReference})");
             var uhtResponse = await _uhtRepository.GetAppointmentsByWorkOrderReference(workOrderReference);
 
-            if (cacheNewRecord && uhtResponse != null && uhtResponse.ToList()[0].BeginDate != null)
+            if (uhtResponse != null && uhtResponse.ToList()[0].BeginDate != null)
             {
                 _logger.LogInformation($@"HackneyAppointmentsService/GetAppointmentsByWorkOrderReference(): 
                 Cached item added for : {workOrderReference})");
                 var status = uhtResponse.ToList()[0].Status;
-                _cacheRepository.PutCachedItem(uhtResponse, CacheKeyAppointments_s_jobs + workOrderReference, _cacheHelper.getTTLForStatus(status));
+                var toBeCached = SetSourceSystem(uhtResponse.ToList());
+                _cacheRepository.PutCachedItem(toBeCached, CacheKeyAppointments_s_jobs + workOrderReference, _cacheHelper.getTTLForStatus(status));
             }
 
             return uhtResponse;
@@ -205,6 +194,16 @@ namespace HackneyRepairs.Services
             }
 
             return uhAppointment;
+        }
+
+        private static List<DetailedAppointment> SetSourceSystem(List<DetailedAppointment> cachedAppointments)
+        {
+            cachedAppointments = cachedAppointments.Select(x =>
+            {
+                x.SourceSystem = "CACHE";
+                return x;
+            }).ToList();
+            return cachedAppointments;
         }
     }
 }
