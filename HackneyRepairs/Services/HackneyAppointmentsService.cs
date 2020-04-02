@@ -190,7 +190,7 @@ namespace HackneyRepairs.Services
             return uhAppointment;
         }
 
-        private static List<DetailedAppointment> SetSourceSystem(List<DetailedAppointment> cachedAppointments)
+        private List<DetailedAppointment> SetSourceSystem(List<DetailedAppointment> cachedAppointments)
         {
             cachedAppointments = cachedAppointments.Select(x =>
             {
