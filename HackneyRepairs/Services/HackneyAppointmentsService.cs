@@ -102,7 +102,7 @@ namespace HackneyRepairs.Services
             {              
                 _logger.LogInformation($@"HackneyAppointmentsService/GetAppointmentsByWorkOrderReference(): 
                 Cached item found for : {workOrderReference})");
-                cachedAppointments = SetSourceSystem(cachedAppointments.ToList());
+                cachedAppointments = SetSourceSystem(cachedAppointments);
                 return cachedAppointments;
             }
 
@@ -113,7 +113,7 @@ namespace HackneyRepairs.Services
 			if (drsResponse.Any())
 			{
               var status = drsResponse.ToList()[0].Status;
-              var toBeCached = SetSourceSystem(drsResponse.ToList());
+              var toBeCached = SetSourceSystem(drsResponse);
               _logger.LogInformation($@"HackneyAppointmentsService/GetAppointmentsByWorkOrderReference(): 
                Cached item added for : {workOrderReference})");
               _cacheRepository.PutCachedItem(toBeCached, string.Format(CacheKeyAppointments_s_jobs + workOrderReference), _cacheHelper.getTTLForStatus(status));  
@@ -130,7 +130,7 @@ namespace HackneyRepairs.Services
                 _logger.LogInformation($@"HackneyAppointmentsService/GetAppointmentsByWorkOrderReference(): 
                 Cached item added for : {workOrderReference})");
                 var status = uhtResponse.ToList()[0].Status;
-                var toBeCached = SetSourceSystem(uhtResponse.ToList());
+                var toBeCached = SetSourceSystem(uhtResponse);
                 _cacheRepository.PutCachedItem(toBeCached, CacheKeyAppointments_s_jobs + workOrderReference, _cacheHelper.getTTLForStatus(status));
             }
 
@@ -191,14 +191,14 @@ namespace HackneyRepairs.Services
             return uhAppointment;
         }
 
-        private List<DetailedAppointment> SetSourceSystem(List<DetailedAppointment> cachedAppointments)
+        private List<DetailedAppointment> SetSourceSystem(IEnumerable<DetailedAppointment> cachedAppointments)
         {
-            cachedAppointments = cachedAppointments.Select(x =>
+            var toBeCachedAppointments = cachedAppointments.Select(x =>
             {
                 x.SourceSystem = "CACHE";
                 return x;
             }).ToList();
-            return cachedAppointments;
+            return toBeCachedAppointments;
         }
     }
 }
