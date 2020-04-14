@@ -102,7 +102,6 @@ namespace HackneyRepairs.Services
             {              
                 _logger.LogInformation($@"HackneyAppointmentsService/GetAppointmentsByWorkOrderReference(): 
                 Cached item found for : {workOrderReference})");
-                //cachedAppointments = SetSourceSystem(cachedAppointments);
                 return cachedAppointments;
             }
 
@@ -116,7 +115,7 @@ namespace HackneyRepairs.Services
               var toBeCached = SetSourceSystem(drsResponse);
               _logger.LogInformation($@"HackneyAppointmentsService/GetAppointmentsByWorkOrderReference(): 
                Cached item added for : {workOrderReference})");
-              _cacheRepository.PutCachedItem(toBeCached, string.Format(CacheKeyAppointments_s_jobs + workOrderReference), _cacheHelper.getTTLForStatus(status));  
+              _cacheRepository.PutCachedItem(drsResponse, string.Format(CacheKeyAppointments_s_jobs + workOrderReference), _cacheHelper.getTTLForStatus(status));  
 
                 return drsResponse;
 			}
@@ -131,7 +130,7 @@ namespace HackneyRepairs.Services
                 Cached item added for : {workOrderReference})");
                 var status = uhtResponse.ToList()[0].Status;
                 var toBeCached = SetSourceSystem(uhtResponse);
-                _cacheRepository.PutCachedItem(toBeCached, CacheKeyAppointments_s_jobs + workOrderReference, _cacheHelper.getTTLForStatus(status));
+                _cacheRepository.PutCachedItem(uhtResponse, CacheKeyAppointments_s_jobs + workOrderReference, _cacheHelper.getTTLForStatus(status));
             }
 
             return uhtResponse;
@@ -167,7 +166,7 @@ namespace HackneyRepairs.Services
                 Cached item added for : {workOrderReference})");
                     var status = da[0].Status;
                     var toBeCached = SetSourceSystem(da);
-                    _cacheRepository.PutCachedItem(toBeCached, CacheKeyAppointments_s_jobs + workOrderReference, _cacheHelper.getTTLForStatus(status));
+                    _cacheRepository.PutCachedItem(da, CacheKeyAppointments_s_jobs + workOrderReference, _cacheHelper.getTTLForStatus(status));
 
 				return drsAppointment;
 			}
@@ -185,7 +184,7 @@ namespace HackneyRepairs.Services
                 };
                 var status = da[0].Status;
                 var toBeCached = SetSourceSystem(da);
-                _cacheRepository.PutCachedItem(toBeCached, CacheKeyAppointments_s_jobs + workOrderReference, _cacheHelper.getTTLForStatus(status));
+                _cacheRepository.PutCachedItem(da, CacheKeyAppointments_s_jobs + workOrderReference, _cacheHelper.getTTLForStatus(status));
             }
 
             return uhAppointment;
@@ -195,7 +194,7 @@ namespace HackneyRepairs.Services
         {
             var toBeCachedAppointments = cachedAppointments.Select(x =>
             {
-                x.SourceSystem = "CACH";
+                x.SourceSystem = "CACHE";
                 return x;
             }).ToList();
             return toBeCachedAppointments;
