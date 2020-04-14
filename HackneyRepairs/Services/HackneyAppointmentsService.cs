@@ -102,7 +102,7 @@ namespace HackneyRepairs.Services
             {              
                 _logger.LogInformation($@"HackneyAppointmentsService/GetAppointmentsByWorkOrderReference(): 
                 Cached item found for : {workOrderReference})");
-                cachedAppointments = SetSourceSystem(cachedAppointments.ToList());
+                cachedAppointments = SetSourceSystem(cachedAppointments);
                 return cachedAppointments;
             }
 
