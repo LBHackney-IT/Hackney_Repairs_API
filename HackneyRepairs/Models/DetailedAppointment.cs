@@ -1,7 +1,6 @@
 ﻿using System;
 namespace HackneyRepairs.Models
 {
-    [Serializable]
     public class DetailedAppointment : Appointment
     {
         public string Id { get; set; }
