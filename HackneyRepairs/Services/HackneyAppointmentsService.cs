@@ -196,13 +196,12 @@ namespace HackneyRepairs.Services
 
             cachedAppointments.ToList().CopyTo(da);
 
-          var toBeCachedAppointments = da.Select(x => { return x; }).ToList();
-            toBeCachedAppointments.Select(x =>
+          var toBeCachedAppointments = da.Select(x =>
             {
                 x.SourceSystem = "CACHE";
                 return x;
-            }).ToList();
-            return toBeCachedAppointments;
+            });
+            return toBeCachedAppointments.ToList();
         }
     }
 }
