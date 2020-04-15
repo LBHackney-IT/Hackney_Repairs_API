@@ -192,16 +192,13 @@ namespace HackneyRepairs.Services
 
         private List<DetailedAppointment> SetSourceSystem(IEnumerable<DetailedAppointment> cachedAppointments)
         {
-            DetailedAppointment[] da = new DetailedAppointment[cachedAppointments.Count()];
-
-            cachedAppointments.ToList().CopyTo(da);
-
-          var toBeCachedAppointments = da.Select(x =>
+          var toBeCachedAppointments = cachedAppointments.Select(x =>
             {
-                x.SourceSystem = "CACHE";
-                return x;
-            });
-            return toBeCachedAppointments.ToList();
+                var da = DRSCacheHelper.DeepClone(x);
+                da.SourceSystem = "CACHE";
+                return da;
+            }).ToList();
+            return toBeCachedAppointments;
         }
     }
 }
