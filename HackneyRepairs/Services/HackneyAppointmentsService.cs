@@ -192,11 +192,12 @@ namespace HackneyRepairs.Services
 
         private List<DetailedAppointment> SetSourceSystem(IEnumerable<DetailedAppointment> cachedAppointments)
         {
-            var toBeCachedAppointments = cachedAppointments.Select(x =>
+            var toBeCachedAppointments = new List<DetailedAppointment>(cachedAppointments);
+            toBeCachedAppointments.Select(x =>
             {
                 x.SourceSystem = "CACHE";
                 return x;
-            }).ToList();
+            });
             return toBeCachedAppointments;
         }
     }
