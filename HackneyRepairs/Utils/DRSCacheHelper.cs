@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
 
 namespace HackneyRepairs.Utils
@@ -13,6 +15,17 @@ namespace HackneyRepairs.Utils
         public DRSCacheHelper(NameValueCollection configuration)
         {
             _configuration = configuration;
+        }
+
+        public static T DeepClone<T>(T obj)
+        {
+            using (var ms = new MemoryStream())
+            {
+                var formatter = new BinaryFormatter();
+                formatter.Serialize(ms, obj);
+                ms.Position = 0;
+                return (T)formatter.Deserialize(ms);
+            }
         }
 
         public TimeSpan getTTLForStatus(string status)
@@ -39,10 +52,10 @@ namespace HackneyRepairs.Utils
             {
                 throw new InvalidStatusCodeException();
             }
-        }
+        }    
 
         public class InvalidStatusCodeException : Exception
         {
-        }
+        } 
     }
 }
