@@ -197,7 +197,7 @@ namespace HackneyRepairs.Services
             {
                 x.SourceSystem = "CACHE";
                 return x;
-            });
+            }).ToList();
             return toBeCachedAppointments;
         }
     }
