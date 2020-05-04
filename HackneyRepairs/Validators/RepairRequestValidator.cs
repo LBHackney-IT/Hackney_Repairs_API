@@ -81,7 +81,7 @@ namespace HackneyRepairs.Validators
                 });
             }
 
-            var priorityPattern = "^[UGINEZVMuginezvm]{1}$";
+            var priorityPattern = "^[UGINEZVMOuginezvmo]{1}$";
             if (!Regex.IsMatch(request.Priority, priorityPattern))
             {
                 validationResult.Valid = false;
