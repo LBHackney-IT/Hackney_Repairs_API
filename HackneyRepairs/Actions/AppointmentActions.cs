@@ -7,6 +7,7 @@ using HackneyRepairs.Interfaces;
 using HackneyRepairs.Models;
 using System.Collections.Specialized;
 using HackneyRepairs.Formatters;
+using Newtonsoft.Json;
 
 namespace HackneyRepairs.Actions
 {
@@ -67,6 +68,7 @@ namespace HackneyRepairs.Actions
                 count += 1;
             }
 
+            _logger.LogInformation($"Available slots: {JsonConvert.SerializeObject(slotList)}");
             // close session
             await CloseDrsServiceSession(sessionId);
             if (slotList.Any())
