@@ -325,6 +325,7 @@ namespace HackneyRepairs.Actions
                 throw new MissingSlotsException($"Missing the slots from the response string {responseString}");
             }
 
+            _logger.LogInformation($"Slots from DRS: {JsonConvert.SerializeObject(slots)}");
             var slotList = new List<Slot>();
             foreach (var slot in slots)
             {
