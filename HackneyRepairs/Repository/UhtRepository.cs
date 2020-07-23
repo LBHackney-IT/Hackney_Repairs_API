@@ -806,7 +806,7 @@ namespace HackneyRepairs.Repository
             DateTime dtCutoff = new DateTime(now.Year, now.Month, now.Day, 23, 0, 0);
 
             string environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            if (environment.ToLower() != "development" && environment.ToLower() != "local")
+            if (environment.ToLower() != "development" && environment.ToLower() != "local" && environment.ToLower() != "localdevelopment")
             {
                 dtCutoff = dtCutoff.AddDays(-1);
             }
