@@ -257,8 +257,8 @@ namespace HackneyRepairs.Actions
                 {
                     slots = daySlot.slotsForDay.Select(x => new Slot
                     {
-                        BeginDate = x.beginDate,
-                        EndDate = x.endDate,
+                        BeginDate = FormatToUkDate(x.beginDate),
+                        EndDate = FormatToUkDate(x.endDate),
                         BestSlot = x.bestSlot,
                         Available = x.available == availableValue.YES
                     }).ToList();
@@ -270,6 +270,25 @@ namespace HackneyRepairs.Actions
             }
 
           return slots;
+        }
+
+        /// <summary>
+        /// This is a bit hacky to try to get around issue with Linux and Windows dealing with DRS provided dates differently.
+        /// During Daylight savings time 2020-07-22T08:00:00+01:00 from DRS is shown as a time of 8:00 on Windows but 7:00 in Unix containers
+        /// So we're having to do some wizardry to change it if it's on Unix
+        /// </summary>
+        /// <param name="drsDate"></param>
+        /// <returns></returns>
+        private DateTime FormatToUkDate(DateTime drsDate)
+        {
+            //try to convert if the OSVersion isn't Windows
+            if (!Environment.OSVersion.VersionString.ToLower().Contains("windows"))
+            {
+                var ukTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/London");
+                drsDate = TimeZoneInfo.ConvertTime(drsDate, TimeZoneInfo.Local, ukTimeZone);
+            }
+
+            return drsDate;
         }
 
         private async Task<createOrderResponse> CreateWorkOrderInDrs(string workOrderReference, string sessionId, DrsOrder drsOrder)
