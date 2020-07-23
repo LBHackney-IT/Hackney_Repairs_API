@@ -77,22 +77,50 @@ namespace HackneyRepairs.Tests.Integration
 		[Fact]
 		public async Task return_a_json_object_for_valid_requests()
 		{
+			bool isWindows = Environment.OSVersion.VersionString.ToLower().Contains("windows");
 			var result = await _client.GetAsync("v1/work_orders/01550854/available_appointments");
 			string result_string = await result.Content.ReadAsStringAsync();
 			StringBuilder json = new StringBuilder();
 			json.Append("{\"results\":[{");
-			json.Append("\"beginDate\":\"2017-10-18T10:00:00Z\",");
-			json.Append("\"endDate\":\"2017-10-18T12:00:00Z\",");
+			if (isWindows)
+			{
+				json.Append("\"beginDate\":\"2017-10-18T10:00:00Z\",");
+				json.Append("\"endDate\":\"2017-10-18T12:00:00Z\",");
+			}
+			else
+			{
+				json.Append("\"beginDate\":\"2017-10-18T11:00:00Z\",");
+				json.Append("\"endDate\":\"2017-10-18T13:00:00Z\",");
+			}
+
 			json.Append("\"bestSlot\":true");
 			json.Append("},");
 			json.Append("{");
-			json.Append("\"beginDate\":\"2017-10-18T12:00:00Z\",");
-			json.Append("\"endDate\":\"2017-10-18T14:00:00Z\",");
+			if (isWindows)
+			{
+				json.Append("\"beginDate\":\"2017-10-18T12:00:00Z\",");
+				json.Append("\"endDate\":\"2017-10-18T14:00:00Z\",");
+			}
+			else
+			{
+				json.Append("\"beginDate\":\"2017-10-18T13:00:00Z\",");
+				json.Append("\"endDate\":\"2017-10-18T15:00:00Z\",");
+			}
+
 			json.Append("\"bestSlot\":false");
 			json.Append("},");
 			json.Append("{");
-			json.Append("\"beginDate\":\"2017-10-18T14:00:00Z\",");
-			json.Append("\"endDate\":\"2017-10-18T16:00:00Z\",");
+			if (isWindows)
+			{
+				json.Append("\"beginDate\":\"2017-10-18T14:00:00Z\",");
+				json.Append("\"endDate\":\"2017-10-18T16:00:00Z\",");
+			}
+			else
+			{
+				json.Append("\"beginDate\":\"2017-10-18T15:00:00Z\",");
+				json.Append("\"endDate\":\"2017-10-18T17:00:00Z\",");
+			}
+
 			json.Append("\"bestSlot\":false");
 			json.Append("}]}");
 			Assert.Equal(json.ToString(), result_string);
