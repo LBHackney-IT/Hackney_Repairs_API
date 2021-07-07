@@ -12,8 +12,8 @@ namespace HackneyRepairs.Formatters
         {
             return new
             {
-                beginDate = DateTimeFormatter.FormatDateTimeToUtc(appointment.BeginDate),
-                endDate = DateTimeFormatter.FormatDateTimeToUtc(appointment.EndDate),
+                beginDate = DateTimeFormatter.FormatDateTimeToGMT(appointment.BeginDate),
+                endDate = DateTimeFormatter.FormatDateTimeToGMT(appointment.EndDate),
             };
         }
     }
